@@ -71,12 +71,14 @@ function getClasses(size, success, error) {
 </script>
 <template>
   <div class="input-group">
-    <label v-if="label" :class="label.class">{{
+    <h6 v-if="label" :class="label.class" style="color:#4caf50; font-weight: 350;">{{ /* UPRAVIŤ predtým bol label tag */
       typeof label == "string" ? label : label.text
-    }}</label>
-    <span v-if="icon" class="input-group-text"
-      ><i class="fas" :class="`fa-${icon}`" aria-hidden="true"></i
+    }}</h6>
+      <div class="input-group-prepend">
+    <span v-if="icon" class="input-group-text p-2"
+      ><i class="" :class="`${icon}`" aria-hidden="true" style="color:#4caf50"></i
     ></span>
+  </div>
     <input
       :id="id"
       :type="type"
@@ -87,5 +89,6 @@ function getClasses(size, success, error) {
       :isRequired="isRequired"
       :disabled="isDisabled"
     />
+  
   </div>
 </template>

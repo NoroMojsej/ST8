@@ -5,6 +5,7 @@ import { onMounted } from "vue";
 import BaseLayout from "../../components/BaseLayout.vue";
 import View from "../../components/View.vue";
 
+
 // Forms page components
 import FormSimple from "./components/FormSimple.vue";
 
@@ -21,16 +22,8 @@ onMounted(() => {
 </script>
 <template>
   <BaseLayout
-    title="Forms"
-    :breadcrumb="[{ label: 'Input Areas', route: '#' }, { label: 'Forms' }]"
   >
-    <View
-      title="Form simple"
-      :code="formSimpleCode"
-      id="form-simple"
-      height="600"
-    >
       <FormSimple />
-    </View>
+      
   </BaseLayout>
 </template>

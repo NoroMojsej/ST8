@@ -2,7 +2,10 @@
 import { onMounted, onUnmounted } from "vue";
 import Typed from "typed.js";
 
+
 const body = document.getElementsByTagName("body")[0];
+let typedInstance;
+
 //hooks
 onMounted(() => {
   body.classList.add("about-us");
@@ -10,7 +13,7 @@ onMounted(() => {
 
   if (document.getElementById("typed")) {
     // eslint-disable-next-line no-unused-vars
-    var typed = new Typed("#typed", {
+    typedInstance = new Typed("#typed", {
       stringsElement: "#typed-strings",
       typeSpeed: 90,
       backSpeed: 90,
@@ -20,6 +23,14 @@ onMounted(() => {
     });
   }
 });
+
+onUnmounted(() => {
+      
+      if (typedInstance) {
+        typedInstance.destroy(); // Clean up Typed.js instance
+        typedInstance = null; // Ensure no memory leaks
+      }
+    });
 
 </script>
 <template>

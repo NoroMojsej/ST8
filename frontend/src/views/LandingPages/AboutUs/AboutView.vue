@@ -47,6 +47,8 @@ onUnmounted(() => {
       route: 'javascript:;',
       label: 'Buy Now',
       color: 'btn-white',
+      label: 'PRIHLÁSIŤ SA',
+      label2: 'REGISTRÁCIA'
     }"
     transparent
   />
