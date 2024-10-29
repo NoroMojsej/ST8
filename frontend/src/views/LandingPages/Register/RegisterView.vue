@@ -7,11 +7,10 @@ import DefaultNavbar from "@/examples/navbars/NavbarDefault.vue";
 import DefaultFooter from "@/examples/footers/FooterDefault.vue";
 
 //image
-import image from "@/assets/img/illustrations/laptop.jpg";
+import image from "@/assets/img/annie-spratt.jpg";
 
 //material components
 import MaterialInput from "@/components/MaterialInput.vue";
-import MaterialTextArea from "@/components/MaterialTextArea.vue";
 import MaterialButton from "@/components/MaterialButton.vue";
 
 // material-input
@@ -46,29 +45,31 @@ onMounted(() => {
               </div>
               <div class="card-body">
                 <div class="p-4 bg-white border-highlighted">
-                  <h3 class="text-black text-success mb-0 heading-highlighted">PRIHLÁSIŤ SA</h3>
+                  <h3 class="text-black text-success mb-0 heading-highlighted">REGISTRÁCIA</h3>
                   <p class="text-ordinary">
-                    Nový používateľ? <span class="text-highlighted"> Registrujte sa tu. </span>
-                  </p>
-                  <p class="text-ordinary">
-                    Pre prístup k bližším informáciám a svojim údajom súvisiacich
-                    so školskou vedeckou konferenciou sa môžete prihlásiť nižšie.
+                    Už máte u nás konto?
+                    <router-link :to="{ name: 'signin-basic' }" class="text-highlighted">
+                      Prihláste sa.
+                    </router-link>
                   </p>
                 </div>
-                <form id="contact-form" method="post" autocomplete="off">
+                <form id="register-form" method="post" autocomplete="off">
                   <div class="card-body p-0 my-3">
                     <div class="row">
-                      <MaterialInput icon="bi bi-person text-lg" class="input-group-static mt-2 mb-2" label="EMAIL"
+                      <MaterialInput id="name" icon="bi bi-person text-lg" class="input-group-static mt-2 mb-2" label="MENO"
+                        type="name" placeholder="Meno" />
+                        <MaterialInput id="surname" icon="bi bi-person text-lg" class="input-group-static mt-2 mb-2" label="PRIEZVISKO"
+                        type="surname" placeholder="Priezvisko" />
+                      <MaterialInput id="email" icon="bi bi-person text-lg" class="input-group-static mt-2 mb-2" label="EMAIL"
                         type="email" placeholder="hello@creative-tim.com" />
-                      <MaterialInput class="input-group-static mt-2 mb-4" icon="bi bi-lock text-lg" label="HESLO"
-                        type="password" placeholder="password" />
+                      <MaterialInput id="password" class="input-group-static mt-2 mb-4" icon="bi bi-lock text-lg" label="HESLO"
+                        type="password" placeholder="Heslo" />
+                      <MaterialInput class="input-group-static mt-2 mb-4" icon="bi bi-lock text-lg" label="ZOPAKOVAŤ HESLO"
+                        type="password" placeholder="Zopakovať Heslo" />
                     </div>
-                    <p class="text-highlighted-lighter">
-                      Zabudli ste heslo?
-                    </p>
                     <div class="row">
                       <div class="col-md-12 text-end">
-                        <MaterialButton variant="outline" color="success" class="w-25 me-2 mt-3 mb-0 btn">POTVRDIŤ
+                        <MaterialButton variant="outline" color="success" class="w-35 me-2 mt-3 mb-0 btn">VYTVORIŤ ÚČET
                         </MaterialButton>
                       </div>
                     </div>

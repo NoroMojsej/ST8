@@ -58,20 +58,20 @@ onMounted(() => {
                     so školskou vedeckou konferenciou sa môžete prihlásiť nižšie.
                   </p>
                 </div>
-                <form id="contact-form" method="post" autocomplete="off">
+                <form id="signin-form" method="post" autocomplete="off">
                   <div class="card-body p-0 my-3">
                     <div class="row">
-                      <MaterialInput icon="bi bi-person text-lg" class="input-group-static mt-2 mb-2" label="EMAIL"
+                      <MaterialInput id="email" icon="bi bi-person text-lg" class="input-group-static mt-2 mb-2" label="EMAIL"
                         type="email" placeholder="hello@creative-tim.com" />
-                      <MaterialInput class="input-group-static mt-2 mb-4" icon="bi bi-lock text-lg" label="HESLO"
-                        type="password" placeholder="password" />
+                      <MaterialInput id="password" class="input-group-static mt-2 mb-4" icon="bi bi-lock text-lg" label="HESLO"
+                        type="password" placeholder="Heslo" />
                     </div>
                     <p class="text-highlighted-lighter">
                       Zabudli ste heslo?
                     </p>
                     <div class="row">
                       <div class="col-md-12 text-end">
-                        <MaterialButton variant="outline" color="success" class="w-25 me-2 mt-3 mb-0 btn">POTVRDIŤ
+                        <MaterialButton variant="outline" color="success" class="w-35 me-2 mt-3 mb-0 btn">PRIHLÁSIŤ SA
                         </MaterialButton>
                       </div>
                     </div>
