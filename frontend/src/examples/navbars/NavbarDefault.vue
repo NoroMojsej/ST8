@@ -16,10 +16,11 @@ const props = defineProps({
     color: String,
     label: String,
     default: () => ({
-      route: "https://www.creative-tim.com/product/vue-material-kit",
+      route: { name: "signin-basic" },
+      route2: { name: "register-basic" },
       color: "bg-gradient-success",
       label: "PRIHLÁSIŤ SA",
-      label2: "REGISTROVAŤ SA"
+      label2: "REGISTRÁCIA"
     })
   },
   transparent: {
@@ -207,10 +208,10 @@ watch(
                       <div
                         class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1"
                       >
-                        Landing Pages
+                        Hlavné Stránky
                       </div>
                       <RouterLink
-                        :to="{ name: 'about' }"
+                        :to="{ name: 'home' }"
                         class="dropdown-item border-radius-md"
                       >
                         <span>Domov</span> <!--<span>About Us</span>-->
@@ -219,24 +220,13 @@ watch(
                         :to="{ name: 'contactus' }"
                         class="dropdown-item border-radius-md"
                       >
-                        <span>Contact Us</span>
+                        <span>Kontakt</span>
                       </RouterLink>
                       <RouterLink
                         :to="{ name: 'author' }"
                         class="dropdown-item border-radius-md"
                       >
-                        <span>Author</span>
-                      </RouterLink>
-                      <div
-                        class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-0 mt-3"
-                      >
-                        Account
-                      </div>
-                      <RouterLink
-                        :to="{ name: 'signin-basic' }"
-                        class="dropdown-item border-radius-md"
-                      >
-                        <span>Sign In</span>
+                        <span>Autori</span>
                       </RouterLink>
                     </div>
                   </div>
@@ -246,36 +236,25 @@ watch(
                 <div
                   class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-0"
                 >
-                  Landing Pages
+                  Hlavné Stránky
                 </div>
                 <RouterLink
                   :to="{ name: 'about' }"
                   class="dropdown-item border-radius-md"
                 >
-                  <span>About Us</span>
+                  <span>O nás</span>
                 </RouterLink>
                 <RouterLink
                   :to="{ name: 'contactus' }"
                   class="dropdown-item border-radius-md"
                 >
-                  <span>Contact Us</span>
+                  <span>Kontakt</span>
                 </RouterLink>
                 <RouterLink
                   :to="{ name: 'author' }"
                   class="dropdown-item border-radius-md"
                 >
-                  <span>Author</span>
-                </RouterLink>
-                <div
-                  class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-0 mt-3"
-                >
-                  Account
-                </div>
-                <RouterLink
-                  :to="{ name: 'signin-basic' }"
-                  class="dropdown-item border-radius-md"
-                >
-                  <span>Sign In</span>
+                  <span>Autori</span>
                 </RouterLink>
               </div>
             </div>
@@ -922,27 +901,29 @@ watch(
         </ul>
         <ul class="navbar-nav d-lg-block d-none p-2">
           <li class="nav-item">
-            <a 
-              :href="action.route"
+            <router-link
+              :to="action.route"
               class="btn btn-md mb-0"
               :class="action.color"
-              style="font-family: 'Montserrat', sans-serif;font-size: 12px;"
-              onclick="smoothToPricing('pricing-soft-ui')"
-              >{{ action.label }}</a
+              style="font-family: 'Montserrat', sans-serif; font-size: 12px;"
+              @click.native="smoothToPricing('pricing-soft-ui')"
             >
+            {{ action.label }}
+            </router-link>
           </li>
         </ul>
 
         <ul class="navbar-nav d-lg-block d-none p-2">
           <li class="nav-item">
-            <a
-              :href="action.route"
+            <router-link
+              :to="action.route2"
               class="btn btn-md mb-0"
               :class="action.color"
-              style="font-family: 'Montserrat', sans-serif;font-size: 12px;"
-              onclick="smoothToPricing('pricing-soft-ui')"
-             >{{ action.label2 }}</a
+              style="font-family: 'Montserrat', sans-serif; font-size: 12px;"
+              @click.native="smoothToPricing('pricing-soft-ui')"
             >
+            {{ action.label2 }}
+            </router-link>
           </li>
         </ul>
 
