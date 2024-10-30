@@ -226,7 +226,7 @@ watch(
                         :to="{ name: 'essay' }"
                         class="dropdown-item border-radius-md"
                       >
-                        <span>Práca</span>
+                        <span>Nahranie Práce</span>
                       </RouterLink>
                     </div>
                   </div>
@@ -254,7 +254,7 @@ watch(
                   :to="{ name: 'essay' }"
                   class="dropdown-item border-radius-md"
                 >
-                  <span>Práca</span>
+                  <span>Nahranie Práce</span>
                 </RouterLink>
               </div>
             </div>
