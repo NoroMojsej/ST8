@@ -223,10 +223,10 @@ watch(
                         <span>Kontakt</span>
                       </RouterLink>
                       <RouterLink
-                        :to="{ name: 'author' }"
+                        :to="{ name: 'essay' }"
                         class="dropdown-item border-radius-md"
                       >
-                        <span>Autori</span>
+                        <span>Práca</span>
                       </RouterLink>
                     </div>
                   </div>
@@ -251,10 +251,10 @@ watch(
                   <span>Kontakt</span>
                 </RouterLink>
                 <RouterLink
-                  :to="{ name: 'author' }"
+                  :to="{ name: 'essay' }"
                   class="dropdown-item border-radius-md"
                 >
-                  <span>Autori</span>
+                  <span>Práca</span>
                 </RouterLink>
               </div>
             </div>

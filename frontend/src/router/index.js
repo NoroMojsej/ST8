@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import PresentationView from "../views/Presentation/PresentationView.vue";
 import AboutView from "../views/LandingPages/AboutUs/AboutView.vue";
 import ContactView from "../views/LandingPages/ContactUs/ContactView.vue";
-import AuthorView from "../views/LandingPages/Author/AuthorView.vue";
+import EssayView from "../views/LandingPages/Essay/EssayView.vue";
 import SignInBasicView from "../views/LandingPages/SignIn/signInView.vue";
 import RegisterBasicView from "../views/LandingPages/Register/RegisterView.vue"
 import PageHeaders from "../layouts/sections/page-sections/page-headers/HeadersView.vue";
@@ -43,9 +43,9 @@ const router = createRouter({
       component: ContactView,
     },
     {
-      path: "/pages/landing-pages/author",
-      name: "author",
-      component: AuthorView,
+      path: "/pages/landing-pages/essay",
+      name: "essay",
+      component: EssayView,
     },
     {
       path: "/pages/landing-pages/sign-in",
