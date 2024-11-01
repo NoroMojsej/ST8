@@ -14,6 +14,7 @@
   import FileUpload from "@/components/FileUpload.vue";
 
   // material-input
+  import setMaterialInput from "@/assets/js/material-input";
   onMounted(() => {
     setMaterialInput();
   });
