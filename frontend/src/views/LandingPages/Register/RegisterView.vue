@@ -59,6 +59,8 @@ onMounted(() => {
                 <form id="register-form" method="post" autocomplete="off">
                   <div class="card-body p-0 my-3">
                     <div class="row">
+                      <MaterialInput id="degree" icon="bi bi-person text-lg" class="input-group-static mt-2 mb-2" label="TITUL"
+                        type="name" placeholder="Titul" />
                       <MaterialInput id="name" icon="bi bi-person text-lg" class="input-group-static mt-2 mb-2" label="MENO"
                         type="name" placeholder="Meno" />
                       <MaterialInput id="surname" icon="bi bi-person text-lg" class="input-group-static mt-2 mb-2" label="PRIEZVISKO"
@@ -75,15 +77,6 @@ onMounted(() => {
                       <label for="fakulta" class="form-label" style="color: #4CAF50;">FAKULTA</label>
                       <select id="fakulta" class="form-select" aria-label="Category">
                         <option selected disabled>Vyberte Fakultu</option>
-                        <!--Tieto údaje sa budú vkladať z databázy-->
-                        <option value="essay">Kat1</option>
-                        <option value="report">Kat2</option>
-                        <option value="thesis">Kat3</option>
-                        <option value="other">Kat4</option>
-                      </select>
-                      <label for="katedra" class="form-label" style="color: #4CAF50;">KATEDRA</label>
-                      <select id="katedra" class="form-select" aria-label="Category">
-                        <option selected disabled>Vyberte Katedru</option>
                         <!--Tieto údaje sa budú vkladať z databázy-->
                         <option value="essay">Kat1</option>
                         <option value="report">Kat2</option>
