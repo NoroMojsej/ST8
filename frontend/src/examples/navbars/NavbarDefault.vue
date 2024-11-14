@@ -228,6 +228,12 @@ watch(
                       >
                         <span>Nahranie Práce</span>
                       </RouterLink>
+                      <RouterLink
+                        :to="{ name: 'evaluation' }"
+                        class="dropdown-item border-radius-md"
+                      >
+                        <span>Hodnotenie článku</span>
+                      </RouterLink>
                     </div>
                   </div>
                 </div>
