@@ -5,7 +5,7 @@
   import DefaultNavbar from "@/examples/navbars/NavbarDefault.vue";
   import Header from "../../../examples/Header.vue";
   import DefaultFooter from "@/examples/footers/FooterDefault.vue";
-
+  import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
   //image
   import image from "@/assets/img/essay.jpeg";
 
@@ -21,32 +21,21 @@
 </script>
 
 <template>
-  <div class="container position-sticky z-index-sticky top-0">
-    <div class="row">
-      <div class="col-12">
-        <DefaultNavbar :sticky="true"/>
-      </div>
-    </div>
-  </div>
-
-  <Header>
-    <div
-      class="page-header min-height-400 justify-content-center"
-      :style="{ backgroundImage: `url(${image})` }"
-      loading="lazy"
-    >
-      <span class="mask bg-gradient-dark opacity-8">
-        <div class="mt-n4 pt-5 text-center">
-          <div style="margin-top: 180px;">
-            <h1 class="text-white mb-4">Nahranie Práce</h1>
+  <BaseLayout
+        title="Nahranie Práce"
+        :breadcrumb="[
+            { label: 'Domov', route: '/' },
+            { label: 'Nahranie Práce' },]"
+        >
+      
+        <div class="descriptive-div1">
+          <div class="descriptive-div2">
+              V tomto formulári môžete nahrať svoju vytvorenú prácu.
+              Po vyplnení formuláru nahrajte 2 súbory - PDF a dokument Word.
+              <br><br> <p class="p">DRŽÍME PALCE!</p>
           </div>
         </div>
-      </span>
-    </div>  
-</Header>
-
-  <div class="card card-body blur shadow-blur mx-3 mx-md-4 mb-4">
-    <section class="py-sm-5 py-5 position-relative">
+      
       <div class="container">
         <div class="row">
           <div class="col-24 mx-auto">
@@ -96,14 +85,14 @@
             </div>
           </div>
         </div>
-      </section>
-    </div>
-  <DefaultFooter />
+
+
+  </BaseLayout>
 </template>
 
 <style scoped>
   .bg-container {
-  background-color: rgba(194, 194, 194, 0.69);
+  background-color: rgba(223, 223, 223, 0.747);
   border-radius: 15px;
   padding: 20px;
   }
