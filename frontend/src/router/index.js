@@ -26,6 +26,9 @@ import ElToggles from "../layouts/sections/elements/toggles/TogglesView.vue";
 import ElTypography from "../layouts/sections/elements/typography/TypographyView.vue";
 import HeadersView from "../layouts/sections/page-sections/page-headers/HeadersView.vue";
 import EditAccountView from "../layouts/sections/page-sections/page-headers/EditAccountView.vue";
+import AdminHome from "../views/LandingPages/Admin/AdminHome.vue"
+import ConferenceManager from "../views/LandingPages/Admin/ConferenceManager.vue"
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -48,6 +51,16 @@ const router = createRouter({
       path: "/pages/landing-pages/essay",
       name: "essay",
       component: EssayView,
+     },
+     {
+      path: "/pages/landing-pages/admin-control-panel",
+      name: "adminhome",
+      component: AdminHome,
+     },
+     {
+      path: "/pages/landing-pages/admin-control-panel/conference-manager",
+      name: "conferenceman",
+      component: ConferenceManager,
      },
      {
       path: "/pages/landing-pages/headers-view",

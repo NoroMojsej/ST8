@@ -234,6 +234,12 @@ watch(
                       >
                         <span>Hodnotenie článku</span>
                       </RouterLink>
+                      <RouterLink
+                        :to="{ name: 'adminhome' }"
+                        class="dropdown-item border-radius-md"
+                      >
+                        <span>Admin Rozhranie</span>
+                      </RouterLink>
                     </div>
                   </div>
                 </div>
