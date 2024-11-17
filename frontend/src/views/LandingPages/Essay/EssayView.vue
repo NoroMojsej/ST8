@@ -2,16 +2,11 @@
   import { onMounted } from "vue";
 
   //example components
-  import DefaultNavbar from "@/examples/navbars/NavbarDefault.vue";
-  import Header from "../../../examples/Header.vue";
-  import DefaultFooter from "@/examples/footers/FooterDefault.vue";
   import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
   //image
-  import image from "@/assets/img/essay.jpeg";
-
   import MaterialInput from "@/components/MaterialInput.vue";
   import MaterialButton from "@/components/MaterialButton.vue";
-  import FileUpload from "@/components/FileUpload.vue";
+  import FileUpload from "@/views/LandingPages/Essay/components/FileUpload.vue";
 
   // material-input
   import setMaterialInput from "@/assets/js/material-input";

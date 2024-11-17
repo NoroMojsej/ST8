@@ -49,11 +49,14 @@ defineProps({
     },
     route: {
       type: String,
-      required: true,
+    },
+    to: {
+      type: [Object, String],
     },
   },
 });
 </script>
+
 <template>
   <div
     class="info-horizontal border-radius-xl d-block d-md-flex"
@@ -67,7 +70,18 @@ defineProps({
       <p :class="`text-${color.text ?? ''}`">
         {{ description }}
       </p>
+      <!-- Conditional rendering for routing or external links -->
+      <router-link
+        v-if="action.to"
+        :to="action.to"
+        class="icon-move-right"
+        :class="`text-${action.label.color ?? 'success'}`"
+      >
+        {{ action.label.text }}
+        <i class="fas fa-arrow-right text-sm ms-1"></i>
+      </router-link>
       <a
+        v-else-if="action.route"
         :href="action.route"
         class="icon-move-right"
         :class="`text-${action.label.color ?? 'success'}`"
@@ -78,3 +92,4 @@ defineProps({
     </div>
   </div>
 </template>
+
