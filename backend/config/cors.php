@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => ['*'], // frontend ip adresa, pre spojenie frontendu a backendu neskôr. Frontend bude z API získavať info pomocou HTTP requestov.
 
     'allowed_origins_patterns' => [],
 
