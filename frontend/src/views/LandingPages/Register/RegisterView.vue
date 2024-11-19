@@ -83,6 +83,15 @@ onMounted(() => {
                         <option value="thesis">Kat3</option>
                         <option value="other">Kat4</option>
                       </select>
+                      <label for="katedra" class="form-label" style="color: #4CAF50;">KATEDRA</label>
+                      <select id="katedra" class="form-select" aria-label="Category">
+                        <option selected disabled>Vyberte Katedru</option>
+                        <!--Tieto údaje sa budú vkladať z databázy-->
+                        <option value="essay">Kat1</option>
+                        <option value="report">Kat2</option>
+                        <option value="thesis">Kat3</option>
+                        <option value="other">Kat4</option>
+                      </select>
                       <MaterialInput id="email" icon="bi bi-person text-lg" class="input-group-static mt-2 mb-2" label="EMAIL"
                         type="email" placeholder="hello@creative-tim.com" />
                       <MaterialInput id="password" class="input-group-static mt-2 mb-4" icon="bi bi-lock text-lg" label="HESLO"

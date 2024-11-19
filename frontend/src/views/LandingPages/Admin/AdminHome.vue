@@ -61,7 +61,7 @@ onUnmounted(() => {
             class="p-4"
             :color="{ text: 'white', background: 'bg-gradient-success' }"
             :icon="{ component: 'precision_manufacturing', color: 'white' }"
-            title="Správca Recenzentov"
+            title="Správca Vysokých Škôl"
             description="Check the possible ways of working with our product and the necessary files for building your own project."
             :action="{
               route:
