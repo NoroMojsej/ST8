@@ -57,6 +57,9 @@ defineProps({
         <p :class="`text-${color.text ?? ''}`">{{ description }}</p>
       </div>
     </div>
-    <button class="btn btn-danger ms-3" @click="handleDelete">Odstrániť konferenciu</button>
+    <div class="d-flex gap-2 mt-3 mt-md-0">
+      <button class="btn btn-success" @click="handleEdit">Upraviť</button>
+      <button class="btn btn-danger" @click="handleDelete">Odstrániť</button>
+    </div>
   </div>
 </template>

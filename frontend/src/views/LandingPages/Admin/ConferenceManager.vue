@@ -47,9 +47,11 @@ onUnmounted(() => {
         </div>
       </div>
     </div>
+    <div class="d-flex justify-content-center">
     <button class="btn btn-success">
       Vytvoriť Konferenciu
     </button>
+    </div>
   </BaseLayout>
 </template>
 
