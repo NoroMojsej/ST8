@@ -87,7 +87,7 @@
 
 <style scoped>
   .bg-container {
-  background-color: rgba(223, 223, 223, 0.747);
+  background-color: rgba(253, 253, 253, 0.89);
   border-radius: 15px;
   padding: 20px;
   }

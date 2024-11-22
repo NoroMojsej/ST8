@@ -1,22 +1,10 @@
 <script setup>
-import { onMounted, onUnmounted } from "vue";
-
 //example components
 import FilledInfoCard from "@/examples/cards/infoCards/FilledInfoCard.vue";
 
 // sections
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 
-//hooks
-const body = document.getElementsByTagName("body")[0];
-onMounted(() => {
-  body.classList.add("presentation-page");
-  body.classList.add("bg-gray-200");
-});
-onUnmounted(() => {
-  body.classList.remove("presentation-page");
-  body.classList.remove("bg-gray-200");
-});
 </script>
 
 <template>  
