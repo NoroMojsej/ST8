@@ -1,28 +1,16 @@
 <script setup>
-import { onMounted, onUnmounted } from "vue";
-
 // Sections
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import ConferenceCard from "./components/ConferenceCard.vue";
 
-// Hooks
-const body = document.getElementsByTagName("body")[0];
-onMounted(() => {
-  body.classList.add("presentation-page");
-  body.classList.add("bg-gray-200");
-});
-onUnmounted(() => {
-  body.classList.remove("presentation-page");
-  body.classList.remove("bg-gray-200");
-});
 </script>
 
 <template>
   <BaseLayout
-    title="Správca Konferencii"
+    title="Správca Konferencií"
     :breadcrumb="[
       { label: 'Admin Rozhranie', route: '/pages/landing-pages/admin-control-panel' },
-      { label: 'Správca Konferencii' },
+      { label: 'Správca Konferencií' },
     ]"
   >
     <div class="container mb-4">
@@ -48,9 +36,9 @@ onUnmounted(() => {
       </div>
     </div>
     <div class="d-flex justify-content-center">
-    <button class="btn btn-success">
+    <Router-Link :to="{ name: 'conferenceadd' }" class="btn btn-success">
       Vytvoriť Konferenciu
-    </button>
+    </Router-Link>
     </div>
   </BaseLayout>
 </template>
