@@ -7,6 +7,7 @@ import MaterialInput from "@/components/MaterialInput.vue";
 
 // Hooks
 import setMaterialInput from "@/assets/js/material-input";
+
 onMounted(() => {
   setMaterialInput();
 });
@@ -27,16 +28,39 @@ onMounted(() => {
             <div class="col-lg-7 col-md-7 z-index-2 position-relative px-md-2 px-sm-5 mx-auto">
               <div class="row mt-4 mb-5 p-3 rounded shadow-sm bg-container">
                 <div class="mb-3">
-                  <MaterialInput id="conference-title" class="input-group-static mt-2" label="NÁZOV KONFERENCIE" type="name" placeholder="Názov Konferencie" />
+                  <MaterialInput
+                    id="conference-title"
+                    class="input-group-static mt-2"
+                    label="NÁZOV KONFERENCIE"
+                    type="name"
+                    placeholder="Názov Konferencie"
+                  />
                 </div>
-                
+
                 <div class="mb-3">
-                  <MaterialInput id="conference-abbreviation" class="input-group-static mt-2" label="SKRATKA" type="name" placeholder="Skratka Konferencie" />
+                  <label for="country" class="form-label" style="color: #4CAF50;">Krajina Konferencie</label>
+                  <select
+                    id="country"
+                    class="form-select"
+                    style="box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);"
+                  >
+                    <option value="" disabled selected>Vyberte krajinu</option>
+                    <option value="university1">Krajina 1</option>
+                    <option value="university2">Krajina 2</option>
+                    <option value="university3">Krajina 3</option>
+                    <option value="university4">Krajina 4</option>
+                  </select>
                 </div>
-                
+
                 <div class="mb-3">
                   <label for="description" class="form-label" style="color: #4CAF50;">POPIS</label>
-                  <textarea id="description" class="form-control" style="box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);" rows="4" placeholder="Popis konferencie..."></textarea>
+                  <textarea
+                    id="description"
+                    class="form-control"
+                    style="box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);"
+                    rows="4"
+                    placeholder="Popis konferencie..."
+                  ></textarea>
                 </div>
 
                 <div class="mb-3">
@@ -56,32 +80,25 @@ onMounted(() => {
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label" style="color: #4CAF50;">VYBERTE UNIVERZITY</label>
-                    <div class="d-flex flex-wrap gap-3">
-                        <div class="form-check" style="width: 48%;">
-                        <input class="form-check-input" type="checkbox" id="university1" value="university1" />
-                        <label class="form-check-label" for="university1">Univerzita 1</label>
-                        </div>
-                        <div class="form-check" style="width: 48%;">
-                        <input class="form-check-input" type="checkbox" id="university2" value="university2" />
-                        <label class="form-check-label" for="university2">Univerzita 2</label>
-                        </div>
-                        <div class="form-check" style="width: 48%;">
-                        <input class="form-check-input" type="checkbox" id="university3" value="university3" />
-                        <label class="form-check-label" for="university3">Univerzita 3</label>
-                        </div>
-                        <div class="form-check" style="width: 48%;">
-                        <input class="form-check-input" type="checkbox" id="university4" value="university4" />
-                        <label class="form-check-label" for="university4">Univerzita 4</label>
-                        </div>
-                    </div>
-                    </div>
-
+                  <label for="university" class="form-label" style="color: #4CAF50;">ORGANIZÁTOR</label>
+                  <select
+                    id="university"
+                    class="form-select"
+                    style="box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);"
+                  >
+                    <option value="" disabled selected>Vyberte univerzitu</option>
+                    <option value="university1">Univerzita 1</option>
+                    <option value="university2">Univerzita 2</option>
+                    <option value="university3">Univerzita 3</option>
+                    <option value="university4">Univerzita 4</option>
+                  </select>
                 </div>
-              <div class="d-flex justify-content-center">
-                <button class="btn btn-success">
-                  Vytvoriť
-                </button>
+
+                <div class="d-flex justify-content-center">
+                  <button class="btn btn-success">
+                    Vytvoriť
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -92,25 +109,25 @@ onMounted(() => {
 </template>
 
 <style scoped>
-  .bg-container {
-    background-color: rgba(253, 253, 253, 0.89);
-    border-radius: 15px;
-    padding: 20px;
-  }
+.bg-container {
+  background-color: rgba(253, 253, 253, 0.89);
+  border-radius: 15px;
+  padding: 20px;
+}
 
-  .form-select {
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
-  }
+.form-select {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
+}
 
-  .form-control {
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
-  }
+.form-control {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
+}
 
-  .gap-2 > * {
-    margin-right: 8px;
-  }
+.gap-2 > * {
+  margin-right: 8px;
+}
 
-  .gap-2 > *:last-child {
-    margin-right: 0;
-  }
+.gap-2 > *:last-child {
+  margin-right: 0;
+}
 </style>
