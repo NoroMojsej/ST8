@@ -1,88 +1,139 @@
 <script setup>
-import { onMounted } from "vue";
-import '@/assets/css/custom.css'
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import axiosInstance from '@/axios'; // Assuming axios instance is already configured
 
-//example components
-import DefaultNavbar from "@/examples/navbars/NavbarDefault.vue";
-import DefaultFooter from "@/examples/footers/FooterDefault.vue";
+// Router instance
+const router = useRouter();
 
-//image
-import image from "@/assets/img/illustrations/laptop.jpg";
+// Reactive properties for form fields
+const email = ref('');
+const password = ref('');
 
-//material components
-import MaterialInput from "@/components/MaterialInput.vue";
-import MaterialTextArea from "@/components/MaterialTextArea.vue";
-import MaterialButton from "@/components/MaterialButton.vue";
+// Error message
+const errorMessage = ref('');
 
-// material-input
-import setMaterialInput from "@/assets/js/material-input";
-onMounted(() => {
-  setMaterialInput();
-});
+// Method to handle the login request
+const login = async (event) => {
+  event.preventDefault(); // Prevent form submission to handle manually
+
+  errorMessage.value = ''; // Reset any previous error messages
+
+  // Logging values to ensure they are being correctly captured
+  console.log('Email:', email.value);
+  console.log('Password:', password.value);
+
+  try {
+    // Make API request to login using axios instance
+    const response = await axiosInstance.post('/login', {
+      email: email.value,
+      password: password.value,
+    });
+
+    // On success, store the token in localStorage
+    const token = response.data.access_token;
+    localStorage.setItem('auth_token', token);
+
+    alert('Login successful!');
+    router.push({ name: 'dashboard' }); // Redirect to dashboard or another page
+  } catch (error) {
+    // Handle error (invalid credentials or other issues)
+    if (error.response?.data?.message) {
+      errorMessage.value = error.response.data.message;
+    } else {
+      errorMessage.value = 'An unexpected error occurred.';
+    }
+  }
+};
+
+// Method to handle email change
+const handleEmailChange = (event) => {
+  email.value = event.target.value;
+};
+
+// Method to handle password change
+const handlePasswordChange = (event) => {
+  password.value = event.target.value;
+};
 </script>
+
 <template>
-  <div class="container position-sticky z-index-sticky top-0">
-    <div class="row">
-      <div class="col-12">
-        <DefaultNavbar :sticky="true"/>
+  <div class="login-container">
+    <h2>Login</h2>
+
+    <!-- Login Form -->
+    <form @submit="login">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          placeholder="Enter your email"
+          :value="email"
+          @input="handleEmailChange"
+          required
+        />
       </div>
-    </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          placeholder="Enter your password"
+          :value="password"
+          @input="handlePasswordChange"
+          required
+        />
+      </div>
+
+      <!-- Show error message if there is one -->
+      <div v-if="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <button type="submit">Login</button>
+    </form>
   </div>
-  <section>
-    <div class="page-header min-vh-100">
-      <div class="container">
-        <div class="row">
-          <div
-            class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 start-0 text-center justify-content-center flex-column">
-            <div class="position-relative h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center"
-              :style="{
-                backgroundImage: `url(${image})`,
-                backgroundSize: 'cover',
-              }" loading="lazy"></div>
-          </div>
-          <div class="mt-8 col-xl-5 col-lg-6 col-md-7 d-flex flex-column ms-auto me-auto ms-lg-auto me-lg-5">
-            <div class="card d-flex blur justify-content-center shadow-lg my-sm-0 my-sm-6 mt-8 mb-5">
-              <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
-              </div>
-              <div class="card-body">
-                <div class="p-4 bg-white border-highlighted">
-                  <h3 class="text-black text-success mb-0 heading-highlighted">PRIHLÁSIŤ SA</h3>
-                  <p class="text-ordinary">
-                    Nový používateľ? 
-                    <router-link :to="{ name: 'register-basic' }" class="text-highlighted">
-                      Registrujte sa tu.
-                    </router-link>
-                  </p>
-                  <p class="text-ordinary">
-                    Pre prístup k bližším informáciám a svojim údajom súvisiacich
-                    so školskou vedeckou konferenciou sa môžete prihlásiť nižšie.
-                  </p>
-                </div>
-                <form id="signin-form" method="post" autocomplete="off">
-                  <div class="card-body p-0 my-3">
-                    <div class="row">
-                      <MaterialInput id="email" icon="bi bi-person text-lg" class="input-group-static mt-2 mb-2" label="EMAIL"
-                        type="email" placeholder="hello@creative-tim.com" />
-                      <MaterialInput id="password" class="input-group-static mt-2 mb-4" icon="bi bi-lock text-lg" label="HESLO"
-                        type="password" placeholder="Heslo" />
-                    </div>
-                    <p class="text-highlighted-lighter">
-                      Zabudli ste heslo?
-                    </p>
-                    <div class="row">
-                      <div class="col-md-12 text-end">
-                        <MaterialButton variant="outline" color="success" class="w-35 me-2 mt-3 mb-0 btn">PRIHLÁSIŤ SA
-                        </MaterialButton>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <DefaultFooter />
 </template>
+
+<style scoped>
+/* Simple styles for form */
+.login-container {
+  max-width: 400px;
+  margin: auto;
+  padding: 2rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+input {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.2rem;
+  font-size: 1rem;
+}
+
+button {
+  width: 100%;
+  padding: 0.5rem;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9rem;
+}
+</style>
