@@ -7,9 +7,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable 
+class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasApiTokens;
+
+    //timestamps sa v databaze volaju created_on a updated_on tak som vypla default laravel timestamps created_at, updated_at
+    //treba na to mysliet vzdy ked budeme niekde nieco vytvarat/editovat aby sa vytvarali casy rucne cez now()
+//    public $timestamps = false;
 
     protected $table = 'user';
 
