@@ -240,6 +240,18 @@ watch(
                       >
                         <span>Admin Rozhranie</span>
                       </RouterLink>
+                      <RouterLink
+                        :to="{ name: 'edit_account' }"
+                        class="dropdown-item border-radius-md"
+                      >
+                        <span>Edit profilu</span>
+                      </RouterLink>
+                      <RouterLink
+                        :to="{ name: 'users_list' }"
+                        class="dropdown-item border-radius-md"
+                      >
+                        <span>Spravovanie užívateľov</span>
+                      </RouterLink>
                     </div>
                   </div>
                 </div>

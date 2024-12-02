@@ -5,6 +5,7 @@ import HeaderLine from "../../../../../HeaderLine.vue";
 import TableRow from "../../../../../TableRow.vue";
 import TableSelect from "../../../../../TableSelect.vue";
 import TableTextArea from "../../../../../TableTextArea.vue";
+import SelectComponent from "../../../../../SelectComponent.vue";
 
 
 // Sections components
@@ -26,7 +27,7 @@ onMounted(() => {
 });
 </script>
 
-<style setup>
+<style setup scoped>
 * {
   color: black;
   font-weight: 400;
@@ -138,15 +139,6 @@ textarea {
   border-radius: 0px !important;
 }
 
-.form-select {
-  border:solid !important;
-  border-color:  #66bb6a !important;
-  border-width: 0.1cap !important;
-  border-top: 0px !important;
-  border-left: 0px !important;
-  border-right: 0px !important;
-  border-radius: 0px !important ;
-}
 
 input {
   cursor: pointer;
@@ -176,9 +168,6 @@ input {
     text-align: center !important;
   }
 
-.form-select {
-  max-width: 50% !important;
-}
 
 textarea {
   max-width: 50%;
@@ -243,12 +232,12 @@ textarea {
   ></HeaderLine>
   <div class="wrapper">
    
-<table class="table table-striped caption-top">
+<table class="table caption-top">
   <!--<caption>List of users</caption>-->
   <thead>
     <tr>
       <th scope="col" class=""></th>
-      <th scope="col" class="th-header A"> A</th>
+      <th scope="col" class="th-header">A</th>
       <th scope="col" class="th-header">B</th>
       <th scope="col" class="th-header">C</th>
       <th scope="col" class="th-header">D</th>
@@ -259,8 +248,7 @@ textarea {
   <tbody>
 
     <TableRow
-      question="Zorientovanie sa študenta v danej problematike, 
-        predovšetkým analýzou domácej a zahraničnej literatúry"
+      question="Aktuálnosť a náročnosť práce"
         radio-number="3">
     </TableRow>
 
@@ -270,21 +258,36 @@ textarea {
     </TableRow>
 
     <TableRow
-      question="Zorientovanie sa študenta v danej problematike, 
-        predovšetkým analýzou domácej a zahraničnej literatúry">
+      question="Vhodnosť zvolených metód spracovania riešenej problematiky">
     </TableRow>
 
     <TableRow
-      question="Zorientovanie sa študenta v danej problematike, 
-        predovšetkým analýzou domácej a zahraničnej literatúry">
+      question="Rozsah a úroveň dosiahnutých výsledkov">
     </TableRow>
-
 
     <TableRow
-      question="Zorientovanie sa študenta v danej problematike, 
-        predovšetkým analýzou domácej a zahraničnej literatúry">
+      question="Analýza a interpretácia výsledkov a formulácia záverov práce">
     </TableRow>
-    
+
+    <TableRow
+      question="Prehľadnosť a logická štruktúra práce">
+    </TableRow>
+
+    <TableRow
+      question="Formálna, jazyková a štylistická úroveň práce">
+    </TableRow>
+
+    <TableRow
+      question="Analýza a interpretácia výsledkov a formulácia záverov práce">
+    </TableRow>
+
+    <TableRow
+      question="Prehľadnosť a logická štruktúra práce">
+    </TableRow>
+
+    <TableRow
+      question="Prehľadnosť a logická štruktúra práce">
+    </TableRow>
     
   </tbody>
 </table>
@@ -300,13 +303,61 @@ textarea {
   opinion="Zorientovanie sa študenta v danej problematike, 
       predovšetkým analýzou domácej a zahraničnej literatúry">
   </TableSelect>
+                                                              
+                                                            <!-- pre Git ovanim vymeniť : -->
 
-  <TableSelect
-  opinion="Zorientovanie sa študenta v danej problematike, 
-      predovšetkým analýzou domácej a zahraničnej literatúry">
+  
+ <TableSelect
+  opinion="Práca zodpovedá šablóne určenej pre ŠVK">
   </TableSelect>
 
+  <TableSelect
+  opinion="Chýba názov práce v slovenskom alebo anglickom jazyku">
+  </TableSelect>
 
+  <TableSelect
+  opinion="Chýba meno autora alebo školiteľa">
+  </TableSelect>
+
+  <TableSelect
+  opinion="Chýba pracovná emailová adresa autora alebo školiteľa">
+  </TableSelect>
+
+  <TableSelect
+  opinion="Chýba abstrakt v slovenskom alebo anglickom jazyku">
+  </TableSelect>
+
+  <TableSelect
+  opinion="Abstrakt nespĺňa rozsah 100 - 150 slov">
+  </TableSelect>
+
+  <TableSelect
+  opinion="Chýbajú kľúčové slová v slovenskom alebo v anglickom jazyku">
+  </TableSelect>
+
+  <TableSelect
+  opinion="Chýba 'Úvod', 'Výsledky a diskusia' alebo 'Záver'">
+  </TableSelect>
+
+  <TableSelect
+  opinion="Nie sú uvedené zdroje a použitá literatúra">
+  </TableSelect>
+
+  <TableSelect
+  opinion="V texte chýbajú referencie na zoznam bibliografie">
+  </TableSelect>
+
+  <TableSelect
+  opinion="V texte chýbajú referencie na použité obrázky alebo tabuľky">
+  </TableSelect>
+  
+  <TableSelect
+  opinion="Obrázkom alebo tabuľkám chýba popis">
+  </TableSelect>
+
+  <TableSelect
+  opinion="Chýba meno autora alebo školiteľa">
+  </TableSelect>
 <!--TABULKA 3-->
 
 <HeaderLine
@@ -314,16 +365,43 @@ textarea {
   ></HeaderLine>
 
   <TableTextArea
-  opinion="Zorientovanie sa študenta v danej problematike, 
-      predovšetkým analýzou domácej a zahraničnej literatúry">
+  opinion="Prínos (silné stránky) práce">
   </TableTextArea>
+
+  <TableTextArea
+  opinion="Nedostatky (slabé stránky) práce">
+  </TableTextArea>
+
+
+  <HeaderLine
+  label="CELKOVÉ STANOVISKO"
+  ></HeaderLine>
+
+  <section class="py-7 m-3 bg-gray-100">
+    <div class="container">
+      <div class="row justify-space-between text-center py-2">
+        <div class="col-6 mx-auto">
+          <div class="btn-group" role="group" aria-label="Basic example">
+            <MaterialButton size="lg" variant="outline" color="success">
+              SCHVAĽUJEM PRÁCU
+            </MaterialButton>
+            <MaterialButton size="lg" variant="outline" color="success">
+              NESCHVAĽUJEM PRÁCU
+            </MaterialButton>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
 
 <div class="button-holder">
           <MaterialButton
             variant="contained"
             color="success"
             class="w-auto me-2"
-            size="md"
+            size="lg"
             style="font-family: 'Open Sans' !important">
             ODOSLAŤ
           </MaterialButton>

@@ -1,4 +1,7 @@
 <script setup>
+
+import { ref, onMounted } from "vue";
+
 defineProps({
   label: {
     type: String,
@@ -9,6 +12,28 @@ defineProps({
     default: "" // Môžeš nastaviť aj predvolenú hodnotu
   }
 });
+
+// Reaktivní proměnná pro možnosti
+const options = ref([]);
+
+// Simulovaná funkce pro načítání dat z databáze
+const fetchOptions = async () => {
+  // Nahraďte tímto voláním API, pokud používáte backend
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve([
+        { value: 1, text: "UKF" },
+        { value: 2, text: "UCM" },
+        { value: 3, text: "UMB" },
+      ]);
+    }, 1000); // Simulace zpoždění
+  });
+};
+
+// Načítání dat při prvním vykreslení
+onMounted(async () => {
+  options.value = await fetchOptions();
+});
 </script>
 
 <template>
@@ -17,11 +42,16 @@ defineProps({
     <div class="row">
       <p :class="alignLabel"> {{ label }} </p>
     </div>
-    <div class="row">
-      <select class="form-select mb-3" aria-label="Large select example">
-    <option selected>Otvoriť možnosti</option>
-    <option value="1">Áno</option>
-    <option value="2">Nie</option>
+    <div class="row pad-fsel">
+      <select class="form-select mb-3">
+        <option disabled selected>Otvoriť možnosti</option>
+          <option
+            v-for="option in options"
+            :key="option.value"
+            :value="option.value"
+          >
+          {{ option.text }}
+        </option>
   </select>
     </div>
   </div>
@@ -60,5 +90,23 @@ select .form-select {
 
 .row {
     width:100% !important
+}
+
+.form-select {
+  border:solid !important;
+  border-color:  #66bb6a !important;
+  border-width: 0.1cap !important;
+  border-top: 0px !important;
+  border-left: 0px !important;
+  border-right: 0px !important;
+  border-radius: 0px !important ;
+}
+
+.pad-fsel {
+  padding: 0px 12px !important;
+}
+
+.container {
+  padding: 0px !important;
 }
 </style>

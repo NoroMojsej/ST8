@@ -30,6 +30,9 @@ import AdminHome from "../views/LandingPages/Admin/AdminHome.vue"
 import ConferenceManager from "../views/LandingPages/Admin/ConferenceManager.vue"
 import ConferenceAdd from "../views/LandingPages/Admin/ConferenceAdd.vue";
 
+import UsersManagementView from "../layouts/sections/page-sections/page-headers/UsersManagementView.vue";
+import UserManagementView from "../layouts/sections/page-sections/page-headers/UserManagementView.vue";
+import UsersListView from "../layouts/sections/page-sections/page-headers/UsersListView.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -78,7 +81,16 @@ const router = createRouter({
       name: "edit_account",
       component: EditAccountView,
     },
-    
+    {
+      path: "/pages/landing-pages/users-list",
+      name: "users_list",
+      component: UsersListView,
+    },
+    {
+      path: "/pages/landing-pages/users-list",
+      name: "user_management",
+      component: UserManagementView,
+    },
     {
       path: "/pages/landing-pages/sign-in",
       name: "signin-basic",

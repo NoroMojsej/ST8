@@ -15,7 +15,7 @@ defineProps({
 
 <tr>
       <td  scope="row" class="question-table text-wrap">
-        <p class="medium">
+        <p class="question">
        {{question}}
       </p>
     </td>
@@ -55,7 +55,7 @@ defineProps({
 
 </template>
 
-<style>
+<style scoped>
 
 th.question-table {
   align-items: center !important;
@@ -78,4 +78,15 @@ th.question-table {
   border-color: #66bb6a !important
 }
 
+.form-check {
+  display: flex !important;
+  justify-content: center !important;
+}
+
+.question {
+  align-items: center !important;
+  align-content: center !important;
+  display: flex !important;
+  justify-content: center !important;
+}
 </style>

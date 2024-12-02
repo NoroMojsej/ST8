@@ -25,7 +25,7 @@ defineProps({
 
   </template>
 
-<style setup>
+<style setup scoped>
 
 th.question-table {
   align-items: center !important;
@@ -42,11 +42,24 @@ th.question-table {
 
   .wrapper {
   width:100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-bottom: 35px;
   padding-top: 35px;
+}
+
+.form-group {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+textarea {
+  width: 50%;
+  border:solid !important;
+  border-color:  #66bb6a !important;
+  border-width: 0.1cap !important;
+  border-top: 0px !important;
+  border-left: 0px !important;
+  border-right: 0px !important;
+  border-radius: 0px !important ;
 }
 
 </style>

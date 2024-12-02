@@ -35,20 +35,37 @@ th.question-table {
   ;
 }
 
-.question {
-    text-align: center !important;
-  }
-
   .wrapper {
   width:100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: 35px;
   padding-top: 35px;
 }
 
 .container {
     padding-top: 30px
 }
+
+.form-select {
+  border:solid !important;
+  border-color:  #66bb6a !important;
+  border-width: 0.1cap !important;
+  border-top: 0px !important;
+  border-left: 0px !important;
+  border-right: 0px !important;
+  border-radius: 0px !important ;
+  max-width: 50% !important;
+}
+
+  .row.answear {
+  display: flex;
+  justify-content: center;
+}
+
+.question {
+  display: flex;
+  justify-content: center;
+}
+
 </style>
