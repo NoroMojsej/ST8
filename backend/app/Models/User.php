@@ -17,36 +17,37 @@ class User extends Authenticatable
 
     protected $table = 'user';
 
-    protected $primaryKey = 'iduser';
+    protected $primaryKey = 'id';
 
     // Toto bude treba možno ešte upraviť
     protected $fillable = [
-        'username', 'email', 'name', 'surname', 'country_idcountry', 'department_iddepartment', 'role_idrole', 'created_on', 'updated_on'
+        //'username', 'name', 'surname', 'email', 'password', 'country_idcountry', 'department_iddepartment', 'role_idrole', 'created_on', 'updated_on'
+        'name', 'surname', 'email', 'password_hash', 'created_on', 'updated_on'
     ];
 
     public function country()
     {
-        return $this->belongsTo(Country::class, 'country_idcountry');
+        return $this->belongsTo(Country::class, 'country_id');
     }
 
     public function department()
     {
-        return $this->belongsTo(Department::class, 'department_iddepartment');
+        return $this->belongsTo(Department::class, 'department_id');
     }
 
     public function role()
     {
-        return $this->belongsTo(Role::class, 'role_idrole');
+        return $this->belongsTo(Role::class, 'role_id');
     }
 
     public function papers()
     {
-        return $this->belongsToMany(Paper::class, 'user_has_paper', 'user_iduser', 'paper_idpaper');
+        return $this->belongsToMany(Paper::class, 'user_has_paper', 'user_id', 'paper_id');
     }
 
     public function reviews()
     {
-        return $this->hasMany(Review::class, 'user_iduser');
+        return $this->hasMany(Review::class, 'user_id');
     }
 
     protected $hidden = [
