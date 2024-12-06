@@ -38,7 +38,7 @@ defineProps({
     type: String,
     required: true,
   },
-  handleDelete: {
+  handleEdit: {
     type: Function,
     required: true,
   },
@@ -59,7 +59,6 @@ defineProps({
     </div>
     <div class="d-flex gap-2 mt-3 mt-md-0">
       <button class="btn btn-success" @click="handleEdit">Upraviť</button>
-      <button class="btn btn-danger" @click="handleDelete">Odstrániť</button>
     </div>
   </div>
 </template>

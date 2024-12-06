@@ -53,6 +53,21 @@ onMounted(() => {
                 </div>
 
                 <div class="mb-3">
+                  <label for="university" class="form-label" style="color: #4CAF50;">Organizuje Univerzita</label>
+                  <select
+                    id="university"
+                    class="form-select"
+                    style="box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);"
+                  >
+                    <option value="" disabled selected>Vyberte univerzitu</option>
+                    <option value="university1">Krajina 1</option>
+                    <option value="university2">Krajina 2</option>
+                    <option value="university3">Krajina 3</option>
+                    <option value="university4">Krajina 4</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
                   <label for="description" class="form-label" style="color: #4CAF50;">POPIS</label>
                   <textarea
                     id="description"

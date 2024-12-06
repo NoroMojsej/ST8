@@ -28,7 +28,7 @@ import ConferenceCard from "./components/ConferenceCard.vue";
                 :icon="{ component: 'flag', color: 'success' }"
                 :title="card.title"
                 :description="card.description"
-                :handleDelete="() => confirmDelete(index)"
+                :handleEdit="() => editCard(index)"
               />
             </div>
           </div>
@@ -77,14 +77,8 @@ export default {
   },
 
   methods: {
-    confirmDelete(index) {
-      const confirmed = window.confirm(
-        "Naozaj chcete odstrániť túto konferenciu? Táto akcia sa nedá vrátiť späť."
-      );
-
-      if (confirmed) {
-        this.cards.splice(index, 1);
-      }
+    editCard(index) {
+      this.$router.push({ name: "conferenceedit", params: { id: index } });
     },
   },
 };

@@ -1,12 +1,15 @@
 <script setup>
 import { onMounted } from "vue";
-
+import { useRoute } from "vue-router";
 // Sections
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import MaterialInput from "@/components/MaterialInput.vue";
 
 // Hooks
 import setMaterialInput from "@/assets/js/material-input";
+
+const route = useRoute();
+const conferenceId = route.params.id;
 
 onMounted(() => {
   setMaterialInput();
@@ -15,10 +18,10 @@ onMounted(() => {
 
 <template>
   <BaseLayout
-    title="Vytvoriť Konferenciu"
+    title="Upraviť Konferenciu"
     :breadcrumb="[
       { label: 'Správa Konferencií', route: '/pages/landing-pages/admin-control-panel/conference-manager' },
-      { label: 'Vytvoriť Konferenciu' },
+      { label: 'Upraviť Konferenciu' },
     ]"
   >
     <div class="container">
@@ -48,7 +51,22 @@ onMounted(() => {
                     <option value="university1">Krajina 1</option>
                     <option value="university2">Krajina 2</option>
                     <option value="university3">Krajina 3</option>
-                    <option value="university4">krajina 4</option>
+                    <option value="university4">Krajina 4</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label for="university" class="form-label" style="color: #4CAF50;">Organizuje Univerzita</label>
+                  <select
+                    id="university"
+                    class="form-select"
+                    style="box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);"
+                  >
+                    <option value="" disabled selected>Vyberte univerzitu</option>
+                    <option value="university1">Krajina 1</option>
+                    <option value="university2">Krajina 2</option>
+                    <option value="university3">Krajina 3</option>
+                    <option value="university4">Krajina 4</option>
                   </select>
                 </div>
 
