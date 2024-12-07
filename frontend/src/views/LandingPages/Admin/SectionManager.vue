@@ -1,0 +1,213 @@
+<script setup>
+import { ref } from "vue";
+import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
+
+const sections = ref([
+  { id: 1, section: "Mark Otto", isEditing: false },
+  { id: 2, section: "Jacob Thornton", isEditing: false },
+  { id: 3, section: "Larry Bird", isEditing: false },
+  { id: 4, section: "Larry Bird", isEditing: false },
+]);
+
+const isAdding = ref(false);
+
+const toggleEdit = (id) => {
+  const section = sections.value.find((section) => section.id === id);
+  if (section) {
+    section.isEditing = !section.isEditing;
+  }
+};
+
+const saveEdit = (id, newSectionValue) => {
+  const section = sections.value.find((section) => section.id === id);
+  if (section) {
+    section.section = newSectionValue;
+    section.isEditing = false;
+  }
+};
+
+const deleteUser = (id) => {
+  const isConfirmed = window.confirm("Ste si istý, že chcete odstrániť túto sekciu?");
+  if (isConfirmed) {
+    const index = sections.value.findIndex((section) => section.id === id);
+    if (index !== -1) {
+      sections.value.splice(index, 1);
+    }
+  }
+};
+
+const addSection = () => {
+  const newId = sections.value.length > 0 ? sections.value[sections.value.length - 1].id + 1 : 1;
+  sections.value.push({ id: newId, section: "", isEditing: true });
+  isAdding.value = true;
+};
+
+const saveNewSection = (id, newSectionValue) => {
+  if (newSectionValue.trim() === "") {
+    window.alert("Section name cannot be empty.");
+    return;
+  }
+  const section = sections.value.find((section) => section.id === id);
+  if (section) {
+    section.section = newSectionValue;
+    section.isEditing = false;
+    isAdding.value = false;
+  }
+};
+
+const cancelNewSection = (id) => {
+  const index = sections.value.findIndex((section) => section.id === id);
+  if (index !== -1) {
+    sections.value.splice(index, 1);
+  }
+  isAdding.value = false;
+};
+</script>
+
+<template>
+  <BaseLayout
+    title="Správca Sekcií"
+    :breadcrumb="[ 
+      { label: 'Admin Rozhranie', route: '/pages/landing-pages/admin-control-panel' },
+      { label: 'Správca Sekcií' },
+    ]"
+  >
+    <table class="table">
+      <thead>
+        <tr class="tr">
+          <th scope="col"></th>
+          <th scope="col"><div class="d-flex justify-content-center font">SEKCIA</div></th>
+          <th scope="col"><div class="d-flex justify-content-center"></div></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="section in sections" :key="section.id">
+          <th scope="row">
+            <div class="d-flex justify-content-center">{{ section.id }}</div>
+          </th>
+
+          <td>
+            <div class="d-flex justify-content-center">
+              <template v-if="section.isEditing">
+                <input
+                  type="text"
+                  v-model="section.section"
+                  @keyup.enter="section.isEditing ? saveEdit(section.id, section.section) : saveNewSection(section.id, section.section)"
+                  class="form-control text-center"
+                />
+              </template>
+              <template v-else>
+                {{ section.section }}
+              </template>
+            </div>
+          </td>
+
+          <td class="td-btn">
+            <div class="d-flex justify-content-center">
+              <button
+                v-if="!section.isEditing"
+                class="btn btn-success mx-1"
+                @click="toggleEdit(section.id)"
+              >
+                Upraviť
+              </button>
+              <button
+                v-if="section.isEditing && !isAdding"
+                class="btn btn-success mx-1"
+                @click="saveEdit(section.id, section.section)"
+              >
+                Uložiť
+              </button>
+              <button
+                v-if="section.isEditing && isAdding"
+                class="btn btn-success mx-1"
+                @click="saveNewSection(section.id, section.section)"
+              >
+                Uložiť
+              </button>
+              <button
+                v-if="section.isEditing && isAdding"
+                class="btn btn-danger mx-1"
+                @click="cancelNewSection(section.id)"
+              >
+                Zrušiť
+              </button>
+              <button v-if="!section.isEditing" class="btn btn-danger mx-1" @click="deleteUser(section.id)">
+                Odstrániť
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="d-flex justify-content-end mt-3">
+      <button
+        class="btn btn-success"
+        @click="addSection"
+        :disabled="isAdding"
+      >
+        Pridať Sekciu
+      </button>
+    </div>
+  </BaseLayout>
+</template>
+
+<style scoped>
+.btn {
+  margin-bottom: 0 !important;
+}
+
+td {
+  align-content: center !important;
+}
+
+.font {
+  font-weight: 500;
+  color: white;
+}
+
+table {
+  border: solid;
+  border-width: 0.1cap;
+  border-color: #66bb6a;
+}
+
+.table thead th {
+  border-bottom: #66bb6a !important;
+}
+
+.tr {
+  background-color: #66bb6a;
+}
+
+.searchbox {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: solid;
+  border-color: #66bb6a;
+  width: 100% !important;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: white;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: white;
+}
+
+.mx-1 {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
+
+.form-control {
+  width: 100%;
+  max-width: 300px;
+}
+</style>

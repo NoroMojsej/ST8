@@ -30,9 +30,9 @@ import AdminHome from "../views/LandingPages/Admin/AdminHome.vue"
 import ConferenceManager from "../views/LandingPages/Admin/ConferenceManager.vue"
 import ConferenceAdd from "../views/LandingPages/Admin/ConferenceAdd.vue";
 import ConferenceEdit from "../views/LandingPages/Admin/ConferenceEdit.vue"
-import UsersManagementView from "../layouts/sections/page-sections/page-headers/UsersManagementView.vue";
 import UserManagementView from "../layouts/sections/page-sections/page-headers/UserManagementView.vue";
 import UsersListView from "../layouts/sections/page-sections/page-headers/UsersListView.vue";
+import SectionManager from "../views/LandingPages/Admin/SectionManager.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -75,6 +75,11 @@ const router = createRouter({
       path: "/pages/landing-pages/admin-control-panel/conference-manager/edit/:id",
       name: "conferenceedit",
       component: ConferenceEdit,
+     },
+     {
+      path: "/pages/landing-pages/admin-control-panel/section-manager",
+      name: "sectionman",
+      component: SectionManager,
      },
      {
       path: "/pages/landing-pages/headers-view",

@@ -38,9 +38,8 @@ import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
             title="Správca Sekcií"
             description="Check the possible ways of working with our product and the necessary files for building your own project."
             :action="{
-              route:
-                'https://www.creative-tim.com/learning-lab/vue/overview/material-kit/',
-              label: { text: 'Prejsť na', color: 'white' }
+                to: { name: 'sectionman' },
+                label: { text: 'Prejsť na', color: 'white' }
             }"
           />
         </div>
