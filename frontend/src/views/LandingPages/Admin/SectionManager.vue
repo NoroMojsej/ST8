@@ -44,7 +44,7 @@ const addSection = () => {
 
 const saveNewSection = (id, newSectionValue) => {
   if (newSectionValue.trim() === "") {
-    window.alert("Section name cannot be empty.");
+    window.alert("Názov sekcie nemôže byť prázdny");
     return;
   }
   const section = sections.value.find((section) => section.id === id);

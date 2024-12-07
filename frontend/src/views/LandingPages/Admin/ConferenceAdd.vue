@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from "vue";
+import { ref, onMounted } from "vue";
 
 // Sections
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
@@ -8,17 +8,26 @@ import MaterialInput from "@/components/MaterialInput.vue";
 // Hooks
 import setMaterialInput from "@/assets/js/material-input";
 
+const entries = ref([]);
+
 onMounted(() => {
   setMaterialInput();
 });
+
+const addRow = () => {
+  entries.value.push({
+    section: "",
+  });
+};
+
 </script>
 
 <template>
   <BaseLayout
     title="Vytvoriť Konferenciu"
-    :breadcrumb="[
+    :breadcrumb="[ 
       { label: 'Správa Konferencií', route: '/pages/landing-pages/admin-control-panel/conference-manager' },
-      { label: 'Vytvoriť Konferenciu' },
+      { label: 'Vytvoriť Konferenciu' }
     ]"
   >
     <div class="container">
@@ -27,6 +36,7 @@ onMounted(() => {
           <div class="row">
             <div class="col-lg-7 col-md-7 z-index-2 position-relative px-md-2 px-sm-5 mx-auto">
               <div class="row mt-4 mb-5 p-3 rounded shadow-sm bg-container">
+                
                 <div class="mb-3">
                   <MaterialInput
                     id="conference-title"
@@ -109,7 +119,42 @@ onMounted(() => {
                   </select>
                 </div>
 
+                <table class="table">
+                  <thead>
+                    <tr class="tr">
+                      <th scope="col"></th>
+                      <th scope="col">
+                        <div class="d-flex justify-content-center font">Sekcia</div>
+                      </th>
+                      <th scope="col">
+                        <div class="d-flex justify-content-center"></div>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(entry, index) in entries" :key="index">
+                      <td></td>
+                      <td>
+                        <select v-model="entry.section" class="form-select" style="box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);">
+                          <option value="" disabled selected>Vyberte sekciu</option>
+                          <option value="Section 1">Sekcia 1</option>
+                          <option value="Section 2">Sekcia 2</option>
+                          <option value="Section 3">Sekcia 3</option>
+                          <option value="Section 4">Sekcia 4</option>
+                        </select>
+                      </td>
+                      <td class="d-flex justify-content-end">
+                        <button class="btn btn-danger" @click="entries.splice(index, 1)">Odstrániť</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
                 <div class="d-flex justify-content-center">
+                  <button class="btn btn-success" @click="addRow">Pridať sekciu</button>
+                </div>
+
+                <div class="d-flex justify-content-center mt-3">
                   <button class="btn btn-success">
                     Vytvoriť
                   </button>
