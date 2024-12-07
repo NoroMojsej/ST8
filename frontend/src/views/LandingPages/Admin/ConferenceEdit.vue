@@ -104,27 +104,12 @@ const addRow = () => {
                   </div>
                 </div>
 
-                <div class="mb-3">
-                  <label for="university" class="form-label" style="color: #4CAF50;">ORGANIZÁTOR</label>
-                  <select
-                    id="university"
-                    class="form-select"
-                    style="box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);"
-                  >
-                    <option value="" disabled selected>Vyberte univerzitu</option>
-                    <option value="university1">Univerzita 1</option>
-                    <option value="university2">Univerzita 2</option>
-                    <option value="university3">Univerzita 3</option>
-                    <option value="university4">Univerzita 4</option>
-                  </select>
-                </div>
-
                 <table class="table">
                   <thead>
                     <tr class="tr">
                       <th scope="col"></th>
                       <th scope="col">
-                        <div class="d-flex justify-content-center font">Sekcia</div>
+                        <div class="d-flex justify-content-center font">Sekcie Konferencie</div>
                       </th>
                       <th scope="col">
                         <div class="d-flex justify-content-center"></div>
@@ -156,7 +141,7 @@ const addRow = () => {
 
                 <div class="d-flex justify-content-center">
                   <button class="btn btn-success">
-                    Vytvoriť
+                    Upraviť Konferenciu
                   </button>
                 </div>
               </div>
