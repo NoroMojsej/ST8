@@ -30,6 +30,9 @@ import AdminHome from "../views/LandingPages/Admin/AdminHome.vue"
 import ConferenceManager from "../views/LandingPages/Admin/ConferenceManager.vue"
 import ConferenceAdd from "../views/LandingPages/Admin/ConferenceAdd.vue";
 import ConferenceEdit from "../views/LandingPages/Admin/ConferenceEdit.vue"
+import StudentHomeView from "../views/Student/StudentHomeView.vue";
+
+import UsersManagementView from "../layouts/sections/page-sections/page-headers/UsersManagementView.vue";
 import UserManagementView from "../layouts/sections/page-sections/page-headers/UserManagementView.vue";
 import UsersListView from "../layouts/sections/page-sections/page-headers/UsersListView.vue";
 import SectionManager from "../views/LandingPages/Admin/SectionManager.vue";
@@ -60,6 +63,11 @@ const router = createRouter({
       path: "/pages/landing-pages/admin-control-panel",
       name: "adminhome",
       component: AdminHome,
+     },
+     {
+      path: "/student/home",
+      name: "student_home",
+      component: StudentHomeView,
      },
      {
       path: "/pages/landing-pages/admin-control-panel/conference-manager",
@@ -207,6 +215,17 @@ const router = createRouter({
       component: ElTypography,
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('auth_token');
+  const isValid = localStorage.getItem('auth_valid') === 'true';
+
+  if (to.meta.requiresAuth && (!token || !isValid)) {
+    next({ name: 'home' }); // Redirect to login if session is invalid
+  } else {
+    next();
+  }
 });
 
 export default router;
