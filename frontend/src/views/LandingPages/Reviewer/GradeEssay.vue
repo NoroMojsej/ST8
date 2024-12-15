@@ -240,45 +240,45 @@ textarea {
   <tbody>
 
     <TableRow
-      question="Aktuálnosť a náročnosť práce"
+      id="grade1" question="Aktuálnosť a náročnosť práce"
         radio-number="3">
     </TableRow>
 
     <TableRow
-      question="Zorientovanie sa študenta v danej problematike, 
+      id="grade2" question="Zorientovanie sa študenta v danej problematike, 
         predovšetkým analýzou domácej a zahraničnej literatúry">
     </TableRow>
 
     <TableRow
-      question="Vhodnosť zvolených metód spracovania riešenej problematiky">
+      id="grade3" question="Vhodnosť zvolených metód spracovania riešenej problematiky">
     </TableRow>
 
     <TableRow
-      question="Rozsah a úroveň dosiahnutých výsledkov">
+      id="grade4" question="Rozsah a úroveň dosiahnutých výsledkov">
     </TableRow>
 
     <TableRow
-      question="Analýza a interpretácia výsledkov a formulácia záverov práce">
+      id="grade5" question="Analýza a interpretácia výsledkov a formulácia záverov práce">
     </TableRow>
 
     <TableRow
-      question="Prehľadnosť a logická štruktúra práce">
+      id="grade6" question="Prehľadnosť a logická štruktúra práce">
     </TableRow>
 
     <TableRow
-      question="Formálna, jazyková a štylistická úroveň práce">
+      id="grade7" question="Formálna, jazyková a štylistická úroveň práce">
     </TableRow>
 
     <TableRow
-      question="Analýza a interpretácia výsledkov a formulácia záverov práce">
+      id="grade8" question="Analýza a interpretácia výsledkov a formulácia záverov práce">
     </TableRow>
 
     <TableRow
-      question="Prehľadnosť a logická štruktúra práce">
+      id="grade9" question="Prehľadnosť a logická štruktúra práce">
     </TableRow>
 
     <TableRow
-      question="Prehľadnosť a logická štruktúra práce">
+      id="grade10" question="Prehľadnosť a logická štruktúra práce">
     </TableRow>
     
   </tbody>
@@ -292,7 +292,7 @@ textarea {
   ></HeaderLine>
 
   <TableSelect
-  opinion="Zorientovanie sa študenta v danej problematike, 
+   id="yesno1" opinion="Zorientovanie sa študenta v danej problematike, 
       predovšetkým analýzou domácej a zahraničnej literatúry">
   </TableSelect>
                                                               
@@ -300,55 +300,55 @@ textarea {
 
   
  <TableSelect
-  opinion="Práca zodpovedá šablóne určenej pre ŠVK">
+  id="yesno2" opinion="Práca zodpovedá šablóne určenej pre ŠVK">
   </TableSelect>
 
   <TableSelect
-  opinion="Chýba názov práce v slovenskom alebo anglickom jazyku">
+  id="yesno3" opinion="Chýba názov práce v slovenskom alebo anglickom jazyku">
   </TableSelect>
 
   <TableSelect
-  opinion="Chýba meno autora alebo školiteľa">
+  id="yesno4" opinion="Chýba meno autora alebo školiteľa">
   </TableSelect>
 
   <TableSelect
-  opinion="Chýba pracovná emailová adresa autora alebo školiteľa">
+  id="yesno5" opinion="Chýba pracovná emailová adresa autora alebo školiteľa">
   </TableSelect>
 
   <TableSelect
-  opinion="Chýba abstrakt v slovenskom alebo anglickom jazyku">
+  id="yesno6" opinion="Chýba abstrakt v slovenskom alebo anglickom jazyku">
   </TableSelect>
 
   <TableSelect
-  opinion="Abstrakt nespĺňa rozsah 100 - 150 slov">
+  id="yesno7" opinion="Abstrakt nespĺňa rozsah 100 - 150 slov">
   </TableSelect>
 
   <TableSelect
-  opinion="Chýbajú kľúčové slová v slovenskom alebo v anglickom jazyku">
+  id="yesno8" opinion="Chýbajú kľúčové slová v slovenskom alebo v anglickom jazyku">
   </TableSelect>
 
   <TableSelect
-  opinion="Chýba 'Úvod', 'Výsledky a diskusia' alebo 'Záver'">
+  id="yesno9" opinion="Chýba 'Úvod', 'Výsledky a diskusia' alebo 'Záver'">
   </TableSelect>
 
   <TableSelect
-  opinion="Nie sú uvedené zdroje a použitá literatúra">
+  id="yesno10" opinion="Nie sú uvedené zdroje a použitá literatúra">
   </TableSelect>
 
   <TableSelect
-  opinion="V texte chýbajú referencie na zoznam bibliografie">
+  id="yesno11" opinion="V texte chýbajú referencie na zoznam bibliografie">
   </TableSelect>
 
   <TableSelect
-  opinion="V texte chýbajú referencie na použité obrázky alebo tabuľky">
+  id="yesno12" opinion="V texte chýbajú referencie na použité obrázky alebo tabuľky">
   </TableSelect>
   
   <TableSelect
-  opinion="Obrázkom alebo tabuľkám chýba popis">
+  id="yesno13" opinion="Obrázkom alebo tabuľkám chýba popis">
   </TableSelect>
 
   <TableSelect
-  opinion="Chýba meno autora alebo školiteľa">
+  id="yesno14" opinion="Chýba meno autora alebo školiteľa">
   </TableSelect>
 <!--TABULKA 3-->
 
