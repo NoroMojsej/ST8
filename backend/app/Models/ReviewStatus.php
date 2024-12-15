@@ -15,6 +15,8 @@ class ReviewStatus extends Model
 
     public $timestamps = false;
 
+    public $timestamps = false;
+
     protected $fillable = [
         'status', 'status_desc', 'valid_from', 'valid_to', 'created_on', 'updated_on'
     ];
