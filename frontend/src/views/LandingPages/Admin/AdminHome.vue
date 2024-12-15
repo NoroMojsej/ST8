@@ -48,11 +48,10 @@ import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
             class="p-4"
             :color="{ text: 'white', background: 'bg-gradient-success' }"
             :icon="{ component: 'precision_manufacturing', color: 'white' }"
-            title="Správca Vysokých Škôl"
+            title="Správca Univerzít"
             description="Check the possible ways of working with our product and the necessary files for building your own project."
             :action="{
-              route:
-                'https://www.creative-tim.com/learning-lab/vue/overview/material-kit/',
+              to: { name: 'universityman'},
               label: { text: 'Prejsť na', color: 'white' }
             }"
           />

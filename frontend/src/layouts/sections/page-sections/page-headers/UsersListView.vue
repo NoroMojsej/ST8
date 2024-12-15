@@ -1,7 +1,6 @@
 <script setup>
 
 import BaseLayout from "../../components/BaseLayout.vue";
-import MaterialButton from "@/components/MaterialButton.vue";
 import { RouterLink } from "vue-router";
 
 const users = [
@@ -15,10 +14,10 @@ const users = [
 
 <template scoped>
      <BaseLayout
-   title="Správa užívateľov, rolí, článkov"
+   title="Správca užívateľov, rolí, článkov"
       :breadcrumb="[
-        { label: 'Sekcie', route: '/sections/page-sections/page-headers' },
-        { label: 'Správa užívateľov, rolí, článkov' },
+        { label: 'Admin Rozhranie', route: '/pages/landing-pages/admin-control-panel' },
+        { label: 'Správca užívateľov' },
       ]"
     >
 

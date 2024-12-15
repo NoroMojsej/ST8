@@ -1,7 +1,7 @@
 <script setup>
 // Sections
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
-import ConferenceCard from "./components/ConferenceCard.vue";
+import ListCard from "./components/ListCard.vue";
 
 </script>
 
@@ -22,13 +22,14 @@ import ConferenceCard from "./components/ConferenceCard.vue";
         <div class="col-12">
           <div class="d-flex align-items-center">
             <div class="flex-grow-1">
-              <ConferenceCard
+              <ListCard
                 class="px-lg-1 mt-lg-0 mt-4 p-4"
                 height="h-100"
                 :icon="{ component: 'flag', color: 'success' }"
                 :title="card.title"
                 :description="card.description"
                 :handleEdit="() => editCard(index)"
+                :buttonText="'Spravovať'"
               />
             </div>
           </div>
