@@ -9,6 +9,7 @@ class Role extends Model
     use HasFactory;
 
     protected $table = 'role';
+    protected $primaryKey = 'idrole';
 
     protected $fillable = [
         'code', 'description', 'validfrom', 'validto', 'created_on', 'updated_on'
@@ -16,11 +17,11 @@ class Role extends Model
 
     public function users()
     {
-        return $this->hasMany(User::class, 'role_idrole');
+        return $this->hasMany(User::class, 'role_idrole', 'idrole');
     }
 
     public function permissions()
     {
-        return $this->hasMany(Permission::class, 'role_idrole');
+        return $this->belongsToMany(Permission::class, 'role_has_permission', 'role_idrole', 'permission_idpermission');
     }
 }

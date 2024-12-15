@@ -7,7 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable // done
 {
     use HasFactory, Notifiable, HasApiTokens;
 
@@ -16,10 +16,9 @@ class User extends Authenticatable
 //    public $timestamps = false;
 
     protected $table = 'user';
+    protected $primaryKey = 'iduser';
 
-    protected $primaryKey = 'id';
-
-    // Toto bude treba možno ešte upraviť
+    // toto si upravte keď ste to menili, má tam byť ale všetko.
     protected $fillable = [
         //'username', 'name', 'surname', 'email', 'password', 'country_idcountry', 'department_iddepartment', 'role_idrole', 'created_on', 'updated_on'
         'name', 'surname', 'email', 'password_hash', 'created_on', 'updated_on'
@@ -27,30 +26,31 @@ class User extends Authenticatable
 
     public function country()
     {
-        return $this->belongsTo(Country::class, 'country_id');
+        return $this->belongsTo(Country::class, 'country_idcountry', 'idcountry'); // related, FK, ownerkey, relationship (úprimne netuším čo by v relationship malo byť, ak vôbec niečo)
     }
 
     public function department()
     {
-        return $this->belongsTo(Department::class, 'department_id');
+        return $this->belongsTo(Department::class,'department_iddepartment', 'iddepartment');        
     }
 
     public function role()
     {
-        return $this->belongsTo(Role::class, 'role_id');
+        return $this->belongsTo(Role::class, 'role_idrole', 'idrole');
     }
 
     public function papers()
     {
-        return $this->belongsToMany(Paper::class, 'user_has_paper', 'user_id', 'paper_id');
+        return $this->belongsToMany(Degree::class, 'user_has_paper', 'user_iduser', 'paper_idpaper', 'iduser', 'idpaper');
     }
 
-    public function reviews()
+    public function degrees()
     {
-        return $this->hasMany(Review::class, 'user_id');
+       // return $this->belongsToMany(Degree::class, 'user_has_degree', 'user_iduser', 'degree_iddegree'); - možnosť
+       return $this->belongsToMany(Degree::class, 'user_has_degree', 'user_iduser', 'degree_iddegree', 'iduser', 'iddegree'); // takto to bude treba podľa všetkého
     }
 
     protected $hidden = [
-        'password',
+        'password'
     ];
 }

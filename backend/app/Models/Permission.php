@@ -5,18 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Permission extends Model
+class Permission extends Model // done
 {
-    use HasFactory;
-
-    protected $table = 'persmission';  // Note: chyba v databáze, permission nie persmission.
+    protected $table = 'permission';
+    protected $primaryKey = 'idpermission';
 
     protected $fillable = [
-        'code', 'description', 'validfrom', 'validto', 'created_on', 'updated_on', 'role_idrole'
+        'code', 'description', 'validfrom', 'validto', 'created_on', 'updated_on'
     ];
 
-    public function role()
+    public function roles()
     {
-        return $this->belongsTo(Role::class, 'role_idrole');
+        return $this->belongsToMany(Role::class, 'role_has_permission', 'permission_idpermission', 'role_idrole', 'idpermission', 'idrole');
     }
 }

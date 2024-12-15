@@ -16,6 +16,6 @@ class ReviewStatus extends Model
 
     public function reviews()
     {
-        return $this->hasMany(Review::class, 'review_status_idreview_status');
+        return $this->hasMany(Review::class, 'review_status_idreview_status', 'idreview_status');
     }
 }

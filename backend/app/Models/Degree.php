@@ -7,16 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Degree extends Model
 {
-    use HasFactory;
-
     protected $table = 'degree';
+    protected $primaryKey = 'iddegree';
 
     protected $fillable = [
-        'abbreviation', 'description'
+        'abbreviation', 'description', 'created_on', 'updated_on'  // - úprimne netuším načo created_on', 'updated_on' tam je
     ];
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_has_degree', 'degree_iddegree', 'user_iduser');
+        return $this->belongsToMany(User::class, 'user_has_degree', 'degree_iddegree', 'user_iduser', 'iddegree', 'iduser');
     }
 }

@@ -16,11 +16,11 @@ class Department extends Model
 
     public function faculty()
     {
-        return $this->belongsTo(Faculty::class, 'faculty_idfaculty');
+        return $this->belongsTo(Faculty::class, 'faculty_idfaculty', 'idfaculty');
     }
 
     public function users()
     {
-        return $this->hasMany(User::class, 'department_iddepartment');
+        return $this->hasMany(User::class, 'department_iddepartment', 'iddepartment');
     }
 }

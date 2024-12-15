@@ -6,9 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Review extends Model
 {
-    use HasFactory;
-
     protected $table = 'review';
+    protected $primaryKey = 'idreview';
 
     protected $fillable = [
         'grade1', 'grade2', 'grade3', 'grade4', 'grade5', 'grade6', 'grade7', 'grade8', 'grade9', 'grade10',
@@ -16,18 +15,13 @@ class Review extends Model
         'txt_plus', 'txt_minus', 'txt_general', 'review_status_idreview_status', 'user_iduser', 'created_on', 'updated_on'
     ]; // ???????
 
-    public function status()
+    public function reviewStatus()
     {
-        return $this->belongsTo(ReviewStatus::class, 'review_status_idreview_status');
+        return $this->belongsTo(ReviewStatus::class, 'review_status_idreview_status', 'idreview_status');
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_iduser');
-    }
-
-    public function papers()
-    {
-        return $this->hasMany(Paper::class, 'review_idreview');
+        return $this->belongsTo(User::class, 'user_iduser', 'iduser');
     }
 }
