@@ -5,24 +5,28 @@ defineProps({
     default: "",
   }
 });
+
+defineEmits(["update:modelValue"]);
 </script>
 
 <template>
-    
-<div class="wrapper">
-
-    <div class="container">
-    <div class="row">
-      <p class="question"> {{ opinion }} </p>
+    <div class="wrapper">
+      <div class="container">
+        <div class="row">
+          <p class="question"> {{ opinion }} </p>
+        </div>
+        <div class="row answear">
+          <div class="form-group">
+            <textarea 
+              class="form-control" 
+              id="exampleFormControlTextarea1" 
+              rows="3" 
+              @input="$emit('update:modelValue', $event.target.value)"
+            ></textarea>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="row answear">
-      <div class="form-group">
-      <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-    </div>
-    </div>
-  </div>
-</div>
-
   </template>
 
 <style setup scoped>

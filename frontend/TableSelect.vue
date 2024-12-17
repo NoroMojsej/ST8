@@ -5,24 +5,30 @@ defineProps({
     default: "",
   }
 });
+
+defineEmits(["update:modelValue"]);
 </script>
 
-<template setup scoped>
-<div class="wrapper">
-    <div class="container">
-    <div class="row">
-      <p class="question"> {{ opinion }} </p>
+  <template setup scoped>
+    <div class="wrapper">
+      <div class="container">
+        <div class="row">
+          <p class="question"> {{ opinion }} </p>
+        </div>
+        <div class="row answear">
+          <select 
+            class="form-select form-select-lg mb-3" 
+            aria-label="Large select example"
+            @change="$emit('update:modelValue', $event.target.value)"
+          >
+            <option selected>Otvoriť možnosti</option>
+            <option value="1">Áno</option>
+            <option value="2">Nie</option>
+          </select>
+        </div>
+      </div>
     </div>
-    <div class="row answear">
-      <select class="form-select form-select-lg mb-3" aria-label="Large select example">
-    <option selected>Otvoriť možnosti</option>
-    <option value="1">Áno</option>
-    <option value="2">Nie</option>
-  </select>
-    </div>
-  </div>
-  </div>
-</template>
+  </template>
 
 <style setup scoped>
 

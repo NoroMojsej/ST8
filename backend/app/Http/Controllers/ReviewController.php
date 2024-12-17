@@ -47,8 +47,8 @@ class ReviewController extends Controller
         ]);
 
         $reviewStatus = ReviewStatus::create([
-            'status' => $request->positive_status,
-            'status_desc' => $request->positive_description,
+            'status' => $request->status,
+            'status_desc' => $request->status_desc,
             'valid_from' => $request->valid_from,
             'valid_to' => $request->valid_to,
 
@@ -84,7 +84,7 @@ class ReviewController extends Controller
             'txt_general' => $request->txt_general,
 
             'review_status_idreview_status' => $reviewStatus->id,
-            'user_iduser' => $request->user_iduser,         //treba zmenit na id usera ktoreho praca sa reviewuje
+            'user_iduser' => $request->user_iduser,      
         ]);        
 
     
