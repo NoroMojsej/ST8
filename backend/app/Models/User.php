@@ -13,7 +13,7 @@ class User extends Authenticatable // done
 
     //timestamps sa v databaze volaju created_on a updated_on tak som vypla default laravel timestamps created_at, updated_at
     //treba na to mysliet vzdy ked budeme niekde nieco vytvarat/editovat aby sa vytvarali casy rucne cez now()
-//    public $timestamps = false;
+    public $timestamps = false;
 
     protected $table = 'user';
     protected $primaryKey = 'iduser';
@@ -21,7 +21,7 @@ class User extends Authenticatable // done
     // toto si upravte keď ste to menili, má tam byť ale všetko.
     protected $fillable = [
         //'username', 'name', 'surname', 'email', 'password', 'country_idcountry', 'department_iddepartment', 'role_idrole', 'created_on', 'updated_on'
-        'name', 'surname', 'email', 'password_hash', 'created_on', 'updated_on'
+        'name', 'surname', 'email', 'password_hash', 'created_on', 'updated_on', 'country_idcountry', 'department_iddepartment', 'role_idrole'
     ];
 
     public function country()
@@ -50,7 +50,22 @@ class User extends Authenticatable // done
        return $this->belongsToMany(Degree::class, 'user_has_degree', 'user_iduser', 'degree_iddegree', 'iduser', 'iddegree'); // takto to bude treba podľa všetkého
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'user_id');
+    }
+
     protected $hidden = [
-        'password'
+        'password_hash' // mozno to tu padne
     ];
+
+    /**
+     * Get the password for the authentication.
+     *
+     * @return string
+     */
+    public function getAuthPassword()
+    {
+        return $this->password_hash;  // Return the 'password_hash' column instead of 'password'
+    }
 }

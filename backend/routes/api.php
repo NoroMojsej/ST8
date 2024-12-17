@@ -4,6 +4,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\CountryController;
+use App\Http\Controllers\DegreeController;
+use App\Http\Controllers\UniversityController;
+use App\Http\Controllers\FacultyController;
+use App\Http\Controllers\DepartmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +30,8 @@ Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth:san
 Route::middleware('auth:sanctum')->get('user', [LoginController::class, 'user']);
 
 Route::post('/register', [RegisterController::class, 'register']);
+Route::get('/countries', [CountryController::class, 'countries']);
+Route::get('/degrees', [DegreeController::class, 'index']);
+Route::get('/universities/{countryId}', [UniversityController::class, 'getByCountry']);
+Route::get('/faculties/{universityId}', [FacultyController::class, 'getFaculties']);
+Route::get('/departments/{facultyId}', [DepartmentController::class, 'getDepartments']);

@@ -27,10 +27,20 @@ class LoginController extends Controller
         // vytvorenie tokenu
         /** @var \App\Models\User $user **/
         $user = Auth::user();
+        if (!$user) {
+            return response()->json(['message' => 'User not authenticated'], 401);
+        }
+
+        $sessionData = [
+            'user_id' => $user->id, // Ukladáme 'id' používateľa do session ako 'user_id'
+            'user_name' => $user->name, // Ukladáme meno používateľa
+         ];
+
         $token = $user->createToken('auth_token')->plainTextToken; // create token mi hádže v IDE chybu, ale nakoľko robím vo VS Code s random intellisense z marketplacu, to môže byť chyba toho.
         // fixnuté s @var...
         return response()->json([
             'message' => 'Prihlásenie úspešné',
+            'session' => $sessionData,
             'access_token' => $token,
             'token_type' => 'Bearer',
         ]);
