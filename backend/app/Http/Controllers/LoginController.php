@@ -32,7 +32,8 @@ class LoginController extends Controller
         }
 
         $sessionData = [
-            'user_id' => $user->id, // Ukladáme 'id' používateľa do session ako 'user_id'
+            'user_id' => $user->iduser, // Ukladáme 'id' používateľa do session ako 'user_id'
+            'user_role' => $user->role_idrole,
             'user_name' => $user->name, // Ukladáme meno používateľa
          ];
 

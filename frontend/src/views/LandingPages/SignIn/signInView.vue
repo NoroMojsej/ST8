@@ -44,7 +44,12 @@ const login = async () => {
     // console.log("session usera "+JSON.stringify(session));
 
     alert('Login successful!');
+    console.log("ROLA "+ JSON.stringify(session));
+    if(session.user_role == 2) {
+      router.push({ name: 'adminhome' });
+    } else {
     router.push({ name: 'student_home' }); // Redirect to dashboard or another page
+  }
    } catch (error) {
     // Check if the error response contains a message
     if (error.response) {

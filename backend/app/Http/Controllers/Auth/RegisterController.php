@@ -40,14 +40,15 @@ class RegisterController extends Controller
         $user->degrees()->attach($request->degrees);
 
         $sessionData = [
-           'user_id' => $user->id, // Ukladáme 'id' používateľa do session ako 'user_id'
+           'user_id' => $user->iduser, // Ukladáme 'id' používateľa do session ako 'user_id'
+           'user_role' => $user->role_idrole,
            'user_name' => $user->name, // Ukladáme meno používateľa
         ];
 
         $token = $user->createToken('auth_token')->plainTextToken; // create token mi hádže v IDE chybu, ale nakoľko robím vo VS Code s random intellisense z marketplacu, to môže byť chyba toho.
         // fixnuté s @var...
         return response()->json([
-            'message' => 'Registrácia úspešná',
+            'message' => 'Prihlásenie úspešné',
             'access_token' => $token,
             'session' => $sessionData,
             'token_type' => 'Bearer',

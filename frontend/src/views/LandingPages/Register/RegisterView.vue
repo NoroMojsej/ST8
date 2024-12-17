@@ -199,8 +199,9 @@ const register = async () => {
     });
 
     const session = response.data.session;
-    const token = response.data.token;
+    const token = response.data.access_token;
     console.log('Session data:', session);
+    console.log('Token data:', token);
 
 // Store session in localStorage (convert to JSON string)
 localStorage.setItem('session', JSON.stringify(session));
