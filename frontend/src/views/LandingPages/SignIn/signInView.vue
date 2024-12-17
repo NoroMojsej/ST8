@@ -38,15 +38,27 @@ const login = async () => {
     });
 
     const token = response.data.access_token;
-    localStorage.setItem('auth_token', token); // Store the token in localStorage
+    const session = response.data.session;
+    localStorage.setItem('auth_token', JSON.stringify(token)); // Store the token in localStorage
+    localStorage.setItem('session', JSON.stringify(session));
+    // console.log("session usera "+JSON.stringify(session));
 
     alert('Login successful!');
-    router.push({ name: 'dashboard' }); // Redirect to dashboard or another page
-  } catch (error) {
-    if (error.response?.data?.message) {
-      errorMessage.value = error.response.data.message;
+    router.push({ name: 'student_home' }); // Redirect to dashboard or another page
+   } catch (error) {
+    // Check if the error response contains a message
+    if (error.response) {
+      console.error("Error response:", error.response); // Log full error response for better debugging
+
+      if (error.response.data?.message) {
+        errorMessage.value = error.response.data.message;  // Set error message from response
+      } else {
+        errorMessage.value = 'An unexpected error occurred (response).';
+      }
     } else {
-      errorMessage.value = 'An unexpected error occurred.';
+      // No response, network issue or error not related to HTTP
+      console.error("Error:", error);  // Log the error object to see more details
+      errorMessage.value = 'An unexpected error occurred (no response).';
     }
   }
 };

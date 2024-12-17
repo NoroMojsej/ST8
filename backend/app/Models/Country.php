@@ -23,6 +23,6 @@ class Country extends Model
 
     public function users()
     {
-        return $this->hasMany(User::class, 'country_idcountry');
+        return $this->hasMany(User::class, 'country_idcountry', 'idcountry');
     }
 }

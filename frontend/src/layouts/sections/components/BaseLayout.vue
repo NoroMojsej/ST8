@@ -1,5 +1,7 @@
 <script setup>
 import DefaultNavbar from "@/examples/navbars/NavbarDefault.vue";
+import NavbarStudent from "../../../examples/navbars/NavbarStudent.vue";
+import NavbarStnd from "../../../examples/navbars/NavbarStnd.vue";
 import CenteredFooter from "@/examples/footers/FooterCentered.vue";
 import Breadcrumbs from "@/examples/Breadcrumbs.vue";
 
@@ -11,11 +13,17 @@ defineProps({
   title: {
     type: String,
     required: true,
-  },
+  }
 });
+
+
 </script>
+
+
 <template>
-  <DefaultNavbar light />
+
+<NavbarStnd></NavbarStnd>
+
   <div class="text-sans-serif container mt-5">
     <div class="row">
       <div class="col-lg-12 mx-auto">
