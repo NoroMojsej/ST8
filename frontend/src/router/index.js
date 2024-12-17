@@ -36,6 +36,9 @@ import UsersManagementView from "../layouts/sections/page-sections/page-headers/
 import UserManagementView from "../layouts/sections/page-sections/page-headers/UserManagementView.vue";
 import UsersListView from "../layouts/sections/page-sections/page-headers/UsersListView.vue";
 import SectionManager from "../views/LandingPages/Admin/SectionManager.vue";
+import UniversityManager from "../views/LandingPages/Admin/UniversityManager.vue";
+import FacultyManager from "../views/LandingPages/Admin/FacultyManager.vue";
+import DepartmentManager from "../views/LandingPages/Admin/DepartmentManager.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -88,6 +91,21 @@ const router = createRouter({
       path: "/pages/landing-pages/admin-control-panel/section-manager",
       name: "sectionman",
       component: SectionManager,
+     },
+     {
+      path: "/pages/landing-pages/admin-control-panel/uni-manager",
+      name: "universityman",
+      component: UniversityManager,
+     },
+     {
+      path: "/pages/landing-pages/admin-control-panel/faculty-manager/:id",
+      name: "facultyman",
+      component: FacultyManager,
+     },
+     {
+      path: "/pages/landing-pages/admin-control-panel/department-manager/:id",
+      name: "departmentman",
+      component: DepartmentManager,
      },
      {
       path: "/pages/landing-pages/headers-view",

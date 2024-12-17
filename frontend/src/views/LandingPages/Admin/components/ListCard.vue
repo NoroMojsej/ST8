@@ -42,8 +42,13 @@ defineProps({
     type: Function,
     required: true,
   },
+  buttonText: {
+    type: String,
+    default: 'Upraviť' // Default button text
+  }
 });
 </script>
+
 
 <template>
   <div
@@ -58,7 +63,8 @@ defineProps({
       </div>
     </div>
     <div class="d-flex gap-2 mt-3 mt-md-0">
-      <button class="btn btn-success" @click="handleEdit">Upraviť</button>
+      <button class="btn btn-success" @click="handleEdit">{{ buttonText }}</button>
     </div>
   </div>
 </template>
+

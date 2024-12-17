@@ -72,6 +72,22 @@ const cancelNewSection = (id) => {
       { label: 'Správca Sekcií' },
     ]"
   >
+
+  <div class="row pt-4 pb-4">
+    <div class="col-6">
+              <div class="row">
+                <div class="col fst">
+                <input class="searchbox" type="text" v-model="input" placeholder="Hľadať užívateľa"/>
+              </div>
+              <div class="col-6 scnd">
+                <div class="lupa">
+              <i class="bi bi-search icon-color"></i>
+            </div>
+            </div>
+            </div>
+          </div>
+        </div>
+
     <table class="table">
       <thead>
         <tr class="tr">
