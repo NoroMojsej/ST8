@@ -9,6 +9,7 @@ use App\Http\Controllers\DegreeController;
 use App\Http\Controllers\UniversityController;
 use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\PaperController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,3 +36,6 @@ Route::get('/degrees', [DegreeController::class, 'index']);
 Route::get('/universities/{countryId}', [UniversityController::class, 'getByCountry']);
 Route::get('/faculties/{universityId}', [FacultyController::class, 'getFaculties']);
 Route::get('/departments/{facultyId}', [DepartmentController::class, 'getDepartments']);
+Route::post('/upload-paper', [PaperController::class, 'uploadPaper'])->middleware('auth:sanctum'); // pre istotu aby vedeli len prihlásení ludia uploadovať
+Route::put('/update-paper/{id}', [PaperController::class, 'updatePaper'])->middleware('auth:sanctum'); // môže sa použiť post ale whatever, PUT je dobre podla dokumentácie.
+
