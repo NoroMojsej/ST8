@@ -8,7 +8,7 @@ use App\Models\Paper;
 
 class PaperController extends Controller
 {
-    public function updateEssay(Request $request, $id)
+    public function updatePaper(Request $request, $id)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -108,5 +108,34 @@ class PaperController extends Controller
             'paper_id' => $paper->idpaper, // nie moc potrebné ale môže sa zísť neskôr
             'file_paths' => $filePaths, // nie moc potrebné ale môže sa zísť neskôr
         ]);
+    }
+
+    public function deletePaper($id) // Mazanie "Papers" (usermode, nie pre adminov)
+    {
+        $paper = Paper::find($id);
+
+        if (!$paper) {
+            return response()->json(['message' => 'Paper not found'], 404);
+        }
+
+        $userId = auth()->id();
+        $isAuthorized = $paper->users()->where('iduser', $userId)->exists();
+
+        if (!$isAuthorized) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+        if (!empty($paper->path_filesystem)) {
+            $filePaths = json_decode($paper->path_filesystem, true);
+
+            foreach ($filePaths as $filePath) {
+                if (Storage::disk('public')->exists($filePath)) {
+                    Storage::disk('public')->delete($filePath);
+                }
+            }
+        }
+
+        $paper->delete();
+
+        return response()->json(['message' => 'Paper deleted successfully']);
     }
 }
