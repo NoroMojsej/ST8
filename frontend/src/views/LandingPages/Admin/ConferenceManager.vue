@@ -31,6 +31,12 @@ import ListCard from "./components/ListCard.vue";
                 :handleEdit="() => editCard(index)"
                 :buttonText="'Upraviť'"
               />
+              <router-link
+                  :to="{ name: '' }"
+                  class="btn btn-success ms-3 mt-n3"
+                >
+                  Stiahnuť Všetky Práce
+              </router-link>
             </div>
           </div>
         </div>
