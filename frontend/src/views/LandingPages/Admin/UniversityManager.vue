@@ -5,16 +5,16 @@ import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import ListCard from "./components/ListCard.vue";
 
 const schools = ref([
-  { id: 1, uni: "UKF", desc: "Adresa napr." },
-  { id: 2, uni: "SPU", desc: "Adresa napr." },
-  { id: 3, uni: "MUNI", desc: "Adresa napr." },
-  { id: 4, uni: "UK", desc: "Adresa napr." },
+  { id: 1, uni: "Uni 1", desc: "Popis" },
+  { id: 2, uni: "Uni 2", desc: "Popis" },
+  { id: 3, uni: "Uni 3", desc: "Popis" },
+  { id: 4, uni: "Uni 4", desc: "Popis" },
 ]);
 
 const router = useRouter();
 
 function handleEdit(id) {
-  router.push({ name: "facultyman", params: { id } });
+  router.push({ name: "universityedit", params: { id } });
 }
 </script>
 
@@ -41,18 +41,24 @@ function handleEdit(id) {
                 :title="school.uni"
                 :description="school.desc"
                 :handleEdit="() => handleEdit(school.id)"
-                :buttonText="'Fakulty'"
+                :buttonText="'Upraviť'"
               />
-            </div>
+                <router-link
+                  :to="{ name: 'facultyman', params: { id: school.id } }"
+                  class="btn btn-success ms-3 mt-n3"
+                >
+                  Fakulty
+                </router-link>
           </div>
         </div>
       </div>
     </div>
     <div class="d-flex justify-content-center">
-    <Router-Link :to="{ name: '' }" class="btn btn-success">
-      Pridať Univerzitu
-    </Router-Link>
+      <Router-Link :to="{ name: 'universityadd' }" class="btn btn-success">
+        Pridať Univerzitu
+      </Router-Link>
     </div>
+  </div>
   </BaseLayout>
 </template>
 

@@ -10,19 +10,19 @@ const router = useRouter();
 const facultyId = ref(null);
 
 const department = ref([
-  { id: 1, dep: "Fakulta 1", desc: "Adresa napr." },
-  { id: 2, dep: "Fakulta 2", desc: "Adresa napr." },
-  { id: 3, dep: "Fakulta 3", desc: "Adresa napr." },
-  { id: 4, dep: "Fakulta 4", desc: "Adresa napr." },
+  { id: 1, dep: "Katedra 1", desc: "Popis" },
+  { id: 2, dep: "Katedra 2", desc: "Popis" },
+  { id: 3, dep: "Katedra 3", desc: "Popis" },
+  { id: 4, dep: "Katedra 4", desc: "Popis" },
 ]);
-
-function handleDelete(id) {
-  department.value = department.value.filter((dep) => dep.id !== id);
-}
 
 onMounted(() => {
   facultyId.value = route.params.id;
 });
+
+function handleEdit(id) {
+  router.push({ name: "departmentedit", params: { id } });
+}
 </script>
 
 <template>
@@ -50,16 +50,15 @@ onMounted(() => {
                 :description="dep.desc"
                 :handleEdit="() => handleEdit(dep.id)"
               />
-            </div>
-            <button class="btn btn-danger ms-3 mt-n3" @click="() => handleDelete(dep.id)">Vymazať</button>
-          </div>
         </div>
       </div>
     </div>
+    </div>
     <div class="d-flex justify-content-center">
-    <Router-Link :to="{ name: '' }" class="btn btn-success">
+    <Router-Link :to="{ name: 'departmentadd' }" class="btn btn-success">
       Pridať Katedru
     </Router-Link>
+    </div>
     </div>
   </BaseLayout>
 </template>
