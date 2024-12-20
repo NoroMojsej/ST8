@@ -1,10 +1,10 @@
 <script setup>
-
+import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
 import BaseLayout from "../../components/BaseLayout.vue";
 import HeaderLine from "../../../../../HeaderLine.vue";
 import DescriptionComponent from "../../../../../DescriptionComponent.vue";
 
-import { ref } from "vue";
 let input = ref("");
 const fruits = ["apple", "banana", "orange"];
 function filteredList() {
@@ -21,6 +21,12 @@ function usersList() {
   );
 }
 
+const userId = ref(null);
+const route = useRoute();
+
+onMounted(() => {
+  userId.value = route.params.id;
+});
 
 </script>
 
@@ -28,7 +34,7 @@ function usersList() {
     <BaseLayout
    title="Správa rolí, článkov"
       :breadcrumb="[
-        { label: 'Sekcie', route: '/sections/page-sections/page-headers' },
+        { label: 'Správca Používateľov', route: '/pages/landing-pages/users-list' },
         { label: 'Správa rolí, článkov' },
       ]"
     >

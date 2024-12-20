@@ -159,7 +159,7 @@ const router = createRouter({
       component: UsersListView,
     },
     {
-      path: "/pages/landing-pages/users-list",
+      path: "/pages/landing-pages/users-list/:id",
       name: "user_management",
       component: UserManagementView,
     },
