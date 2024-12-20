@@ -29,7 +29,7 @@ import ListCard from "./components/ListCard.vue";
                 :title="card.title"
                 :description="card.description"
                 :handleEdit="() => editCard(index)"
-                :buttonText="'Spravovať'"
+                :buttonText="'Upraviť'"
               />
             </div>
           </div>
@@ -50,27 +50,27 @@ export default {
     return {
       cards: [
         {
-          title: "Správca Konferencii",
+          title: "Konferencia 1",
           description:
-            "Check the possible ways of working with our product and the necessary files for building your own project.",
+            "Popis",
           icon: "precision_manufacturing",
         },
         {
-          title: "Správca Sekcií",
+          title: "Konferencia 2",
           description:
-            "Check the possible ways of working with our product and the necessary files for building your own project.",
+            "Popis",
           icon: "precision_manufacturing",
         },
         {
-          title: "Správca Recenzentov",
+          title: "Konferencia 3",
           description:
-            "Check the possible ways of working with our product and the necessary files for building your own project.",
+            "Popis",
           icon: "precision_manufacturing",
         },
         {
-          title: "Správca Používateľov",
+          title: "Konferencia 4",
           description:
-            "Check the possible ways of working with our product and the necessary files for building your own project.",
+            "Popis",
           icon: "precision_manufacturing",
         },
       ],

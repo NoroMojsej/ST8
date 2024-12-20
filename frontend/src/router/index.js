@@ -154,12 +154,12 @@ const router = createRouter({
       component: EditAccountView,
     },
     {
-      path: "/pages/landing-pages/users-list",
+      path: "/pages/landing-pages/admin-control-panel/users-list",
       name: "users_list",
       component: UsersListView,
     },
     {
-      path: "/pages/landing-pages/users-list/:id",
+      path: "/pages/landing-pages/admin-control-panel/users-list/:id",
       name: "user_management",
       component: UserManagementView,
     },

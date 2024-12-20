@@ -1,9 +1,7 @@
 <script setup>
-//example components
-import FilledInfoCard from "@/examples/cards/infoCards/FilledInfoCard.vue";
 
-// sections
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
+import InfoCardCustom from "../../../examples/cards/infoCards/InfoCardCustom.vue";
 
 </script>
 
@@ -18,41 +16,38 @@ import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
     <div class="container mb-4">
       <div class="row">
         <div class="col-lg-4">
-          <FilledInfoCard
+          <InfoCardCustom
             class="p-4"
             :color="{ text: 'white', background: 'bg-gradient-success' }"
-            :icon="{ component: 'precision_manufacturing', color: 'white' }"
             title="Správca Konferencii"
             description="Check the possible ways of working with our product and the necessary files for building your own project."
             :action="{
                 to: { name: 'conferenceman' },
-                label: { text: 'Prejsť na', color: 'white' }
+                label: { color: 'white' }
             }"
           />
         </div>
         <div class="col-lg-4">
-          <FilledInfoCard
+          <InfoCardCustom
             class="p-4"
             :color="{ text: 'white', background: 'bg-gradient-success' }"
-            :icon="{ component: 'precision_manufacturing', color: 'white' }"
             title="Správca Sekcií"
             description="Check the possible ways of working with our product and the necessary files for building your own project."
             :action="{
                 to: { name: 'sectionman' },
-                label: { text: 'Prejsť na', color: 'white' }
+                label: { color: 'white' }
             }"
           />
         </div>
         <div class="col-lg-4">
-          <FilledInfoCard
+          <InfoCardCustom
             class="p-4"
             :color="{ text: 'white', background: 'bg-gradient-success' }"
-            :icon="{ component: 'precision_manufacturing', color: 'white' }"
             title="Správca Univerzít"
             description="Check the possible ways of working with our product and the necessary files for building your own project."
             :action="{
               to: { name: 'universityman'},
-              label: { text: 'Prejsť na', color: 'white' }
+              label: { color: 'white' }
             }"
           />
         </div>
@@ -61,15 +56,14 @@ import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
     <div class="container">
         <div class="row">
             <div class="col-lg-4">
-          <FilledInfoCard
+          <InfoCardCustom
             class="p-4"
             :color="{ text: 'white', background: 'bg-gradient-success' }"
-            :icon="{ component: 'precision_manufacturing', color: 'white' }"
             title="Správca Používateľov"
             description="Check the possible ways of working with our product and the necessary files for building your own project."
             :action="{
-              route: '/pages/landing-pages/users-list',
-              label: { text: 'Prejsť na', color: 'white' }
+              to: { name: 'users_list'},
+              label: { color: 'white' }
             }"
           />
         </div>

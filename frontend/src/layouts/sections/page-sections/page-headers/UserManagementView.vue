@@ -34,7 +34,7 @@ onMounted(() => {
     <BaseLayout
    title="Správa rolí, článkov"
       :breadcrumb="[
-        { label: 'Správca Používateľov', route: '/pages/landing-pages/users-list' },
+        { label: 'Správca Používateľov', route: '/pages/landing-pages/admin-control-panel/users-list' },
         { label: 'Správa rolí, článkov' },
       ]"
     >
