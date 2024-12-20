@@ -39,6 +39,12 @@ import SectionManager from "../views/LandingPages/Admin/SectionManager.vue";
 import UniversityManager from "../views/LandingPages/Admin/UniversityManager.vue";
 import FacultyManager from "../views/LandingPages/Admin/FacultyManager.vue";
 import DepartmentManager from "../views/LandingPages/Admin/DepartmentManager.vue";
+import CreateUniversity from "../views/LandingPages/Admin/CreateUniversity.vue";
+import EditUniversity from "../views/LandingPages/Admin/EditUniversity.vue";
+import CreateFaculty from "../views/LandingPages/Admin/CreateFaculty.vue";
+import EditFaculty from "../views/LandingPages/Admin/EditFaculty.vue";
+import CreateDepartment from "../views/LandingPages/Admin/CreateDepartment.vue";
+import EditDepartment from "../views/LandingPages/Admin/EditDepartment.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -98,14 +104,44 @@ const router = createRouter({
       component: UniversityManager,
      },
      {
+      path: "/pages/landing-pages/admin-control-panel/uni-manager/add-new",
+      name: "universityadd",
+      component: CreateUniversity,
+     },
+     {
+      path: "/pages/landing-pages/admin-control-panel/uni-manager/uni-edit/:id",
+      name: "universityedit",
+      component: EditUniversity,
+     },
+     {
       path: "/pages/landing-pages/admin-control-panel/faculty-manager/:id",
       name: "facultyman",
       component: FacultyManager,
      },
      {
+      path: "/pages/landing-pages/admin-control-panel/faculty-manager/add-new",
+      name: "facultyadd",
+      component: CreateFaculty,
+     },
+     {
+      path: "/pages/landing-pages/admin-control-panel/faculty-manager/fac-edit/:id",
+      name: "facultyedit",
+      component: EditFaculty,
+     },
+     {
       path: "/pages/landing-pages/admin-control-panel/department-manager/:id",
       name: "departmentman",
       component: DepartmentManager,
+     },
+     {
+      path: "/pages/landing-pages/admin-control-panel/department-manager/add-new",
+      name: "departmentadd",
+      component: CreateDepartment,
+     },
+     {
+      path: "/pages/landing-pages/admin-control-panel/department-manager/dep-edit/:id",
+      name: "departmentedit",
+      component: EditDepartment,
      },
      {
       path: "/pages/landing-pages/headers-view",
