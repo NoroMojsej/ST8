@@ -50,7 +50,7 @@ onMounted(() => {
                 </div>
 
                 <div class="mb-3">
-                  <label for="country" class="form-label" style="color: #4CAF50;">Krajina Konferencie</label>
+                  <label for="country" class="form-label" style="color: #4CAF50;">KRAJINA UNIVERZITY</label>
                   <select
                     id="country"
                     class="form-select"
