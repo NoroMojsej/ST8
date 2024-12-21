@@ -1,15 +1,21 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 
 const sections = ref([
-  { id: 1, section: "Mark Otto", isEditing: false },
-  { id: 2, section: "Jacob Thornton", isEditing: false },
-  { id: 3, section: "Larry Bird", isEditing: false },
-  { id: 4, section: "Larry Bird", isEditing: false },
+  { id: 1, section: "Sekcia 1", isEditing: false },
+  { id: 2, section: "Sekcia 2", isEditing: false },
+  { id: 3, section: "Sekcia 3", isEditing: false },
+  { id: 4, section: "Sekcia 4", isEditing: false },
 ]);
 
 const isAdding = ref(false);
+const input = ref("");
+const filteredSections = computed(() => {
+  return sections.value.filter(section =>
+    section.section.toLowerCase().includes(input.value.toLowerCase())
+  );
+});
 
 const toggleEdit = (id) => {
   const section = sections.value.find((section) => section.id === id);
@@ -97,7 +103,7 @@ const cancelNewSection = (id) => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="section in sections" :key="section.id">
+        <tr v-for="section in filteredSections" :key="section.id">
           <th scope="row">
             <div class="d-flex justify-content-center">{{ section.id }}</div>
           </th>
