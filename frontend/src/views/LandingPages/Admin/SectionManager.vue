@@ -83,7 +83,7 @@ const cancelNewSection = (id) => {
     <div class="col-6">
               <div class="row">
                 <div class="col fst">
-                <input class="searchbox" type="text" v-model="input" placeholder="Hľadať užívateľa"/>
+                <input class="searchbox" type="text" v-model="input" placeholder="Hľadať sekciu"/>
               </div>
               <div class="col-6 scnd">
                 <div class="lupa">
