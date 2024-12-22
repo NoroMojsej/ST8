@@ -5,7 +5,7 @@ import ContactView from "../views/LandingPages/ContactUs/ContactView.vue";
 import EssayView from "../views/LandingPages/Essay/EssayView.vue";
 import SignInBasicView from "../views/LandingPages/SignIn/signInView.vue";
 import RegisterBasicView from "../views/LandingPages/Register/RegisterView.vue"
-import PageHeaders from "../layouts/sections/page-sections/page-headers/HeadersView.vue";
+import PageHeaders from "../views/LandingPages/Reviewer/GradeEssay.vue";
 import PageFeatures from "../layouts/sections/page-sections/features/FeaturesView.vue";
 import NavigationNavbars from "../layouts/sections/navigation/navbars/NavbarsView.vue";
 import NavigationNavTabs from "../layouts/sections/navigation/nav-tabs/NavTabsView.vue";
@@ -24,7 +24,7 @@ import ElDropdowns from "../layouts/sections/elements/dropdowns/DropdownsView.vu
 import ElProgressBars from "../layouts/sections/elements/progress-bars/ProgressBarsView.vue";
 import ElToggles from "../layouts/sections/elements/toggles/TogglesView.vue";
 import ElTypography from "../layouts/sections/elements/typography/TypographyView.vue";
-import HeadersView from "../layouts/sections/page-sections/page-headers/HeadersView.vue";
+import GradeEssay from "../views/LandingPages/Reviewer/GradeEssay.vue";
 import EditAccountView from "../layouts/sections/page-sections/page-headers/EditAccountView.vue";
 import AdminHome from "../views/LandingPages/Admin/AdminHome.vue"
 import ConferenceManager from "../views/LandingPages/Admin/ConferenceManager.vue"
@@ -32,7 +32,6 @@ import ConferenceAdd from "../views/LandingPages/Admin/ConferenceAdd.vue";
 import ConferenceEdit from "../views/LandingPages/Admin/ConferenceEdit.vue"
 import StudentHomeView from "../views/Student/StudentHomeView.vue";
 
-import UsersManagementView from "../layouts/sections/page-sections/page-headers/UsersManagementView.vue";
 import UserManagementView from "../layouts/sections/page-sections/page-headers/UserManagementView.vue";
 import UsersListView from "../layouts/sections/page-sections/page-headers/UsersListView.vue";
 import SectionManager from "../views/LandingPages/Admin/SectionManager.vue";
@@ -46,6 +45,7 @@ import EditFaculty from "../views/LandingPages/Admin/EditFaculty.vue";
 import CreateDepartment from "../views/LandingPages/Admin/CreateDepartment.vue";
 import EditDepartment from "../views/LandingPages/Admin/EditDepartment.vue";
 import ConferenceEssays from "../views/LandingPages/Admin/ConferenceEssays.vue";
+import ReviewEssayList from "../views/LandingPages/Reviewer/ReviewEssayList.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -78,6 +78,11 @@ const router = createRouter({
       path: "/student/home",
       name: "student_home",
       component: StudentHomeView,
+     },
+     {
+      path: "/reviewer/home",
+      name: "reviewer_home",
+      component: ReviewEssayList,
      },
      {
       path: "/pages/landing-pages/admin-control-panel/conference-manager",
@@ -150,9 +155,9 @@ const router = createRouter({
       component: EditDepartment,
      },
      {
-      path: "/pages/landing-pages/headers-view",
+      path: "/pages/landing-pages/evaluation/:id",
       name: "evaluation",
-      component: HeadersView,
+      component: GradeEssay,
     },
     {
       path: "/pages/landing-pages/edit-account",

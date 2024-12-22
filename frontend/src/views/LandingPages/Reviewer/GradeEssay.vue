@@ -1,22 +1,14 @@
 <script setup>
 import { onMounted } from "vue";
 import MaterialButton from "@/components/MaterialButton.vue";
-import HeaderLine from "../../../../../HeaderLine.vue";
-import TableRow from "../../../../../TableRow.vue";
-import TableSelect from "../../../../../TableSelect.vue";
-import TableTextArea from "../../../../../TableTextArea.vue";
-import SelectComponent from "../../../../../SelectComponent.vue";
+import HeaderLine from "/HeaderLine.vue";
+import TableRow from "/TableRow.vue";
+import TableSelect from "/TableSelect.vue";
+import TableTextArea from "/TableTextArea.vue";
 
 
 // Sections components
-import BaseLayout from "../../components/BaseLayout.vue";
-import View from "../../components/View.vue";
-
-// Headers page components
-import HeaderOne from "./components/HeaderOne.vue";
-
-// Headers page components codes
-import { header1Code } from "./components/codes";
+import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 
 // nav-pills
 import setNavPills from "@/assets/js/nav-pills.js";
@@ -207,10 +199,10 @@ textarea {
 
 <template>
   <BaseLayout
- title="Hodnotenie článku"
+ title="Hodnotenie Práce"
     :breadcrumb="[
-      { label: 'Sekcie', route: '/sections/page-sections/page-headers' },
-      { label: 'Celkové hodnotenia' },
+      { label: 'Práce na Hodnotenie', route: '/reviewer/home' },
+      { label: 'Hodnotenie Práce' },
     ]"
   >
 
