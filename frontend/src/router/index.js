@@ -45,6 +45,7 @@ import CreateFaculty from "../views/LandingPages/Admin/CreateFaculty.vue";
 import EditFaculty from "../views/LandingPages/Admin/EditFaculty.vue";
 import CreateDepartment from "../views/LandingPages/Admin/CreateDepartment.vue";
 import EditDepartment from "../views/LandingPages/Admin/EditDepartment.vue";
+import ConferenceEssays from "../views/LandingPages/Admin/ConferenceEssays.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -92,6 +93,11 @@ const router = createRouter({
       path: "/pages/landing-pages/admin-control-panel/conference-manager/edit/:id",
       name: "conferenceedit",
       component: ConferenceEdit,
+     },
+     {
+      path: "/pages/landing-pages/admin-control-panel/conference-manager/essays/:id",
+      name: "conferenceessays",
+      component: ConferenceEssays,
      },
      {
       path: "/pages/landing-pages/admin-control-panel/section-manager",

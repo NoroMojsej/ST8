@@ -16,6 +16,9 @@ const router = useRouter();
 function handleEdit(id) {
   router.push({ name: "universityedit", params: { id } });
 }
+function facultyView(id) {
+  router.push({ name: "facultyman", params: { id } });
+}
 </script>
 
 <template>
@@ -42,13 +45,12 @@ function handleEdit(id) {
                 :description="school.desc"
                 :handleEdit="() => handleEdit(school.id)"
                 :buttonText="'Upraviť'"
+                :optionalButton="{
+                  text: 'Fakulty',
+                  onClick: () => facultyView(school.id),
+                  color: 'info'
+                }"
               />
-                <router-link
-                  :to="{ name: 'facultyman', params: { id: school.id } }"
-                  class="btn btn-success ms-3 mt-n3"
-                >
-                  Fakulty
-                </router-link>
           </div>
         </div>
       </div>
