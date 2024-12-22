@@ -30,13 +30,12 @@ import ListCard from "./components/ListCard.vue";
                 :description="card.description"
                 :handleEdit="() => editCard(index)"
                 :buttonText="'Upraviť'"
+                :optionalButton="{
+                  text: 'Práce',
+                  onClick: () => viewEssays(index),
+                  color: 'info'
+                }"
               />
-              <router-link
-                  :to="{ name: '' }"
-                  class="btn btn-success ms-3 mt-n3"
-                >
-                  Stiahnuť Všetky Práce
-              </router-link>
             </div>
           </div>
         </div>
@@ -86,6 +85,9 @@ export default {
   methods: {
     editCard(index) {
       this.$router.push({ name: "conferenceedit", params: { id: index } });
+    },
+    viewEssays(index) {
+      this.$router.push({ name: "conferenceessays", params: { id: index } });
     },
   },
 };

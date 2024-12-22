@@ -19,6 +19,9 @@ const faculty = ref([
 function handleEdit(id) {
   router.push({ name: "facultyedit", params: { id } });
 }
+function departmentView(id) {
+  router.push({ name: "departmentman", params: { id } });
+}
 
 onMounted(() => {
   schoolId.value = route.params.id;
@@ -50,13 +53,12 @@ onMounted(() => {
                 :description="fac.desc"
                 :handleEdit="() => handleEdit(fac.id)"
                 :buttonText="'Upraviť'"
+                :optionalButton="{
+                  text: 'Katedry',
+                  onClick: () => departmentView(fac.id),
+                  color: 'info'
+                }"
               />
-              <router-link
-                  :to="{ name: 'departmentman', params: { id: fac.id } }"
-                  class="btn btn-success ms-3 mt-n3"
-                >
-                  Katedry
-              </router-link>
         </div>
       </div>
     </div>
