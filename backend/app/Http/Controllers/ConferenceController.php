@@ -45,65 +45,11 @@ class ConferenceController extends Controller
             'take_place_to' => $data['conferenceTo'],
             'country_idcountry' => $data['country'],
             'description' => $data['description'],
-            'university' => $data['university'],
+            'university_iduniversity' => $data['university'],
         ]);
 
         $conference->sections()->sync($data['sections']);
 
         return response()->json(['message' => 'Conference created successfully'], 201);
-    }
-
-    // Show details of a specific conference
-    public function show(Conference $conference)
-    {
-        return response()->json($conference->load('sections'));
-    }
-
-    // Show the form for editing a specific conference
-    public function edit(Conference $conference)
-    {
-        // For web applications, return a view:
-        return view('conferences.edit', compact('conference'));
-    }
-
-    // Update a specific conference in the database
-    public function update(Request $request, Conference $conference)
-    {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'submissionDates.from' => 'required|date',
-            'submissionDates.to' => 'required|date',
-            'conferenceDates.from' => 'required|date',
-            'conferenceDates.to' => 'required|date',
-            'country' => 'required|string',
-            'university' => 'required|string',
-            'sections' => 'required|array',
-            'sections.*.name' => 'required|string|max:255',
-            'sections.*.description' => 'nullable|string|max:255',
-        ]);
-
-        $conference->update([
-            'name' => $data['name'],
-            'submissions_from' => $data['submissionDates']['from'],
-            'submissions_to' => $data['submissionDates']['to'],
-            'take_place_from' => $data['conferenceDates']['from'],
-            'take_place_to' => $data['conferenceDates']['to'],
-            'country' => $data['country'],
-            'university' => $data['university'],
-        ]);
-
-        $conference->sections()->delete(); // Remove old sections
-        foreach ($data['sections'] as $section) {
-            $conference->sections()->create($section);
-        }
-
-        return response()->json(['message' => 'Conference updated successfully']);
-    }
-
-    // Delete a specific conference
-    public function destroy(Conference $conference)
-    {
-        $conference->delete();
-        return response()->json(['message' => 'Conference deleted successfully']);
     }
 }

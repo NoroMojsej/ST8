@@ -57,12 +57,11 @@ const getAvailableSections = (index) => {
 
 
 //WATCHERY
-watch(
-  () => selectedUniversity,
-  (newValue) => {
-    console.log("Selected University ID:", newValue);
+watch(selectedUniversity, async (newUniversity) => {
+  if (newUniversity) {
+    console.log("UNIVERZITA " + newUniversity);
   }
-);
+});
 
 watch(selectedCountry, async (newCountry) => {
   if (newCountry) {
@@ -79,12 +78,12 @@ watch([submissionFrom, submissionTo], ([newFrom, newTo]) => {
   const conferenceFromDate = conferenceFrom.value ? new Date(conferenceFrom.value) : null;
   const conferenceToDate = conferenceTo.value ? new Date(conferenceTo.value) : null;
 
-  
+
   if (submissionFromDate && submissionToDate && submissionFromDate > submissionToDate) {
     console.error("Submission 'from' date cannot be after submission 'to' date.");
   }
 
-  
+
   if (conferenceFromDate && conferenceToDate) {
     if (submissionFromDate && submissionFromDate < conferenceFromDate) {
       console.error("Submission 'from' date must be on or after the conference 'from' date.");
@@ -103,12 +102,12 @@ watch([conferenceFrom, conferenceTo], ([newFrom, newTo]) => {
   const submissionFromDate = submissionFrom.value ? new Date(submissionFrom.value) : null;
   const submissionToDate = submissionTo.value ? new Date(submissionTo.value) : null;
 
-  
+
   if (conferenceFromDate && conferenceToDate && conferenceFromDate > conferenceToDate) {
     console.error("Conference 'from' date cannot be after conference 'to' date.");
   }
 
-  
+
   if (submissionFromDate && conferenceFromDate && submissionFromDate < conferenceFromDate) {
     console.error("Submission 'from' date must be on or after the conference 'from' date.");
   }
@@ -122,7 +121,7 @@ const fetchCountries = async () => {
   try {
     const response = await axiosInstance.get('/countries');
     countries.value = response.data;
-    
+
   } catch (error) {
     console.error('Error fetching countries:', error.message);
   }
@@ -131,7 +130,7 @@ const fetchCountries = async () => {
 
 const fetchUniversities = async () => {
   if (!selectedCountry.value) return;
-  
+
   try {
     const response = await axiosInstance.get(`/universities/${selectedCountry.value}`);
     universities.value = response.data;
@@ -153,7 +152,7 @@ const fetchSections = async () => {
 async function createConference() {
   try {
     console.log(entriesForSections.value.map(entry => entry.idSection));
-    console.log("sub "+submissionFrom.value)
+    console.log("sub " + submissionFrom.value)
     const response = await axiosInstance.post('/createConf', {
       title: conferenceTitle.value,
       country: selectedCountry.value,
@@ -165,7 +164,7 @@ async function createConference() {
       conferenceTo: conferenceTo.value,
       sections: entriesForSections.value.map(entry => entry.idSection),
     });
-    
+
     console.log(response);
 
   } catch (error) {
@@ -176,85 +175,68 @@ async function createConference() {
 </script>
 
 <template>
-  <BaseLayout
-    title="Vytvoriť Konferenciu"
-    :breadcrumb="[ 
-      { label: 'Správa Konferencií', route: '/pages/landing-pages/admin-control-panel/conference-manager' },
-      { label: 'Vytvoriť Konferenciu' }
-    ]"
-  >
+  <BaseLayout title="Vytvoriť Konferenciu" :breadcrumb="[
+    { label: 'Správa Konferencií', route: '/pages/landing-pages/admin-control-panel/conference-manager' },
+    { label: 'Vytvoriť Konferenciu' }
+  ]">
     <div class="container">
       <div class="row">
         <div class="col-24 mx-auto">
           <div class="row">
             <div class="col-lg-7 col-md-7 z-index-2 position-relative px-md-2 px-sm-5 mx-auto">
               <div class="row mt-4 mb-5 p-3 rounded shadow-sm bg-container">
-                
+
                 <div class="mb-3">
-                  <MaterialInput
-                    id="conference-title"
-                    class="input-group-static mt-2"
-                    label="NÁZOV KONFERENCIE"
-                    type="name"
-                    placeholder="Názov Konferencie"
-                    v-model="conferenceTitle"
-                  />
+                  <MaterialInput id="conference-title" class="input-group-static mt-2" label="NÁZOV KONFERENCIE"
+                    type="name" placeholder="Názov Konferencie" v-model="conferenceTitle" />
                 </div>
 
                 <div class="mb-3">
                   <label for="country" class="form-label" style="color: #4CAF50;">Krajina Konferencie</label>
-                  <select
-                    id="country"
-                    class="form-select"
-                    style="box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);"
-                    v-model="selectedCountry"
-                  >
-                  <option value="" disabled selected>Vyberte krajinu</option>
-                  <option v-for="country in countries" :key="country.idcountry" :value="country.idcountry">
-                    {{ country.name }}
-                  </option>
+                  <select id="country" class="form-select" style="box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);"
+                    v-model="selectedCountry">
+                    <option value="" disabled selected>Vyberte krajinu</option>
+                    <option v-for="country in countries" :key="country.idcountry" :value="country.idcountry">
+                      {{ country.name }}
+                    </option>
                   </select>
                 </div>
 
                 <div class="mb-3">
                   <label for="university" class="form-label" style="color: #4CAF50;">Organizuje Univerzita</label>
-                  <select
-                    id="university"
-                    class="form-select"
-                    style="box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);"
-                    v-model="selectedUniversity"
-                  >
-                  <option v-for="university in universities" :key="university.iduniversity" :value="university.iduniversity">
-                    {{ university.name }}
-                  </option>
+                  <select id="university" class="form-select" style="box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);"
+                    v-model="selectedUniversity">
+                    <option v-for="university in universities" :key="university.iduniversity"
+                      :value="university.iduniversity">
+                      {{ university.name }}
+                    </option>
                   </select>
                 </div>
 
                 <div class="mb-3">
                   <label for="description" class="form-label" style="color: #4CAF50;">POPIS</label>
-                  <textarea
-                    id="description"
-                    class="form-control"
-                    style="box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);"
-                    rows="4"
-                    placeholder="Popis konferencie..."
-                    v-model="description"
-                  ></textarea>
+                  <textarea id="description" class="form-control" style="box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);"
+                    rows="4" placeholder="Popis konferencie..." v-model="description"></textarea>
                 </div>
 
                 <div class="mb-3">
                   <label for="submission-dates" class="form-label" style="color: #4CAF50;">TERMÍNY NAHRANIA PRÁC</label>
                   <div class="d-flex gap-2">
-                    <input id="submission-from" type="date" class="form-control" placeholder="Od" v-model="submissionFrom"/>
-                    <input id="submission-to" type="date" class="form-control" placeholder="Do" v-model="submissionTo"/>
+                    <input id="submission-from" type="date" class="form-control" placeholder="Od"
+                      v-model="submissionFrom" />
+                    <input id="submission-to" type="date" class="form-control" placeholder="Do"
+                      v-model="submissionTo" />
                   </div>
                 </div>
 
                 <div class="mb-3">
-                  <label for="conference-dates" class="form-label" style="color: #4CAF50;">DÁTUM KONANIA KONFERENCIE</label>
+                  <label for="conference-dates" class="form-label" style="color: #4CAF50;">DÁTUM KONANIA
+                    KONFERENCIE</label>
                   <div class="d-flex gap-2">
-                    <input id="take-place-from" type="date" class="form-control" placeholder="Od" v-model="conferenceFrom"/>
-                    <input id="take-place-to" type="date" class="form-control" placeholder="Do" v-model="conferenceTo"/>
+                    <input id="take-place-from" type="date" class="form-control" placeholder="Od"
+                      v-model="conferenceFrom" />
+                    <input id="take-place-to" type="date" class="form-control" placeholder="Do"
+                      v-model="conferenceTo" />
                   </div>
                 </div>
 
@@ -274,9 +256,11 @@ async function createConference() {
                     <tr v-for="(entry, index) in entriesForSections" :key="index">
                       <td></td>
                       <td>
-                        <select v-model="entry.idSection" class="form-select" style="box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);">
+                        <select v-model="entry.idSection" class="form-select"
+                          style="box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);">
                           <option value="" disabled selected>Vyberte sekciu</option>
-                          <option v-for="section in getAvailableSections(index)" :key="section.idsection" :value="section.idsection">
+                          <option v-for="section in getAvailableSections(index)" :key="section.idsection"
+                            :value="section.idsection">
                             {{ section.text }}
                           </option>
                         </select>
@@ -323,11 +307,11 @@ async function createConference() {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
 }
 
-.gap-2 > * {
+.gap-2>* {
   margin-right: 8px;
 }
 
-.gap-2 > *:last-child {
+.gap-2>*:last-child {
   margin-right: 0;
 }
 </style>
