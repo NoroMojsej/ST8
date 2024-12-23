@@ -10,8 +10,15 @@ class Conference extends Model
 
     protected $table = 'conference';
 
+    const CREATED_AT = 'created_on';
+    const UPDATED_AT = 'updated_on';
+
     protected $fillable = [
-        'abbreviation', 'submissions_from', 'submissions_to', 'take_place_from', 'take_place_to', 'description', 'country_idcountry', 'university_iduniversity', 'created_on', 'updated_on'
+        'abbreviation', 'submissions_from', 'submissions_to', 'take_place_from', 'take_place_to', 'description', 'country_idcountry', 'university_iduniversity'
+    ];
+
+    protected $attributes = [
+        'abbreviation' => "", // Default value for abbreviation is null
     ];
 
     public function country()

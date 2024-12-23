@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 
 class UniversityController extends Controller
 {
+
+    public function index()
+    {
+        $universities = University::all();
+        return response()->json($universities);
+    }
+
     public function getByCountry($countryId)
     {
         $universities = University::where('country_idcountry', $countryId)->get();

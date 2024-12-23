@@ -9,6 +9,9 @@ use App\Http\Controllers\DegreeController;
 use App\Http\Controllers\UniversityController;
 use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\SectionController;
+use App\Http\Controllers\ConferenceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +35,10 @@ Route::middleware('auth:sanctum')->get('user', [LoginController::class, 'user'])
 Route::post('/register', [RegisterController::class, 'register']);
 Route::get('/countries', [CountryController::class, 'countries']);
 Route::get('/degrees', [DegreeController::class, 'index']);
+Route::get('/universities', [UniversityController::class, 'index']);
 Route::get('/universities/{countryId}', [UniversityController::class, 'getByCountry']);
 Route::get('/faculties/{universityId}', [FacultyController::class, 'getFaculties']);
 Route::get('/departments/{facultyId}', [DepartmentController::class, 'getDepartments']);
+Route::post('/submit-review', [ReviewController::class, 'submitReview']);
+Route::get('/sections', [SectionController::class, 'index']);
+Route::post('/createConf', [ConferenceController::class, 'store']);

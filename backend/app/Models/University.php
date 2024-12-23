@@ -15,6 +15,7 @@ class University extends Model
         'code', 'name', 'created_on', 'updated_on', 'country_idcountry'
     ];
 
+
     public function country()
     {
         return $this->belongsTo(Country::class, 'country_idcountry');
