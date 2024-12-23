@@ -10,6 +10,7 @@ class Section extends Model
     use HasFactory;
 
     protected $table = 'section';
+    protected $primaryKey = 'idsection';
 
     const CREATED_AT = 'created_on';
     const UPDATED_AT = 'updated_on';
@@ -22,4 +23,5 @@ class Section extends Model
     {
         return $this->belongsToMany(Conference::class, 'conference_has_section', 'section_idsection', 'conference_idconference');
     }
+    
 }

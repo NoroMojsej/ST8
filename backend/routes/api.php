@@ -41,4 +41,5 @@ Route::get('/faculties/{universityId}', [FacultyController::class, 'getFaculties
 Route::get('/departments/{facultyId}', [DepartmentController::class, 'getDepartments']);
 Route::post('/submit-review', [ReviewController::class, 'submitReview']);
 Route::get('/sections', [SectionController::class, 'index']);
+Route::get('/conferences', [ConferenceController::class, 'index']);
 Route::post('/createConf', [ConferenceController::class, 'store']);
