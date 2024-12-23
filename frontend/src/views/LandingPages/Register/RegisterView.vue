@@ -3,8 +3,7 @@ import { onMounted } from "vue";
 import '@/assets/css/custom.css'
 
 //example components
-import DefaultNavbar from "@/examples/navbars/NavbarDefault.vue";
-import DefaultFooter from "@/examples/footers/FooterDefault.vue";
+import DefaultNavbar from "../..//examples/navbars/NavbarDefault.vue";
 
 //image
 import image from "@/assets/img/annie-spratt.jpg";
@@ -332,7 +331,6 @@ const register = async () => {
       </div>
     </div>
   </section>
-  <DefaultFooter />
 </template>
 
 <style>
