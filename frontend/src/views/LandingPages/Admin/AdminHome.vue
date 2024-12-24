@@ -20,7 +20,7 @@ import InfoCardCustom from "../../../examples/cards/infoCards/InfoCardCustom.vue
             class="p-4"
             :color="{ text: 'white', background: 'bg-gradient-success' }"
             title="Správca Konferencii"
-            description="Check the possible ways of working with our product and the necessary files for building your own project."
+            description="Prehľad konferencií a stiahnutie prác. Vytvorte nové alebo spravujte existujúce konferencie."
             :action="{
                 to: { name: 'conferenceman' },
                 label: { color: 'white' }
@@ -32,7 +32,7 @@ import InfoCardCustom from "../../../examples/cards/infoCards/InfoCardCustom.vue
             class="p-4"
             :color="{ text: 'white', background: 'bg-gradient-success' }"
             title="Správca Sekcií"
-            description="Check the possible ways of working with our product and the necessary files for building your own project."
+            description="Prehľad existujúcich sekcií s možnosťou vytvorenia nových alebo upravenia existujúcich."
             :action="{
                 to: { name: 'sectionman' },
                 label: { color: 'white' }
@@ -44,7 +44,7 @@ import InfoCardCustom from "../../../examples/cards/infoCards/InfoCardCustom.vue
             class="p-4"
             :color="{ text: 'white', background: 'bg-gradient-success' }"
             title="Správca Univerzít"
-            description="Check the possible ways of working with our product and the necessary files for building your own project."
+            description="Prehľad existujúcich univerzít s možnosťou vytvorenie nových a úpravy existujúcich."
             :action="{
               to: { name: 'universityman'},
               label: { color: 'white' }
@@ -60,7 +60,7 @@ import InfoCardCustom from "../../../examples/cards/infoCards/InfoCardCustom.vue
             class="p-4"
             :color="{ text: 'white', background: 'bg-gradient-success' }"
             title="Správca Používateľov"
-            description="Check the possible ways of working with our product and the necessary files for building your own project."
+            description="Zmena rolí používateľov a priraďovanie prác recenzentom."
             :action="{
               to: { name: 'users_list'},
               label: { color: 'white' }

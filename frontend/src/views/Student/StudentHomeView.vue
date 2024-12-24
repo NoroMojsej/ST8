@@ -1,5 +1,4 @@
 <script setup>
-//example components
 import InfoCardCustom from "../../examples/cards/infoCards/InfoCardCustom.vue";
 
 // sections
@@ -7,29 +6,24 @@ import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import { useRouter } from 'vue-router';
 import { onMounted } from "vue";
 
-    
-// On mounted, check session
 onMounted(() => {
-  const router = useRouter(); // Get the router instance
-  const authorizedToken = localStorage.getItem('auth_token'); // Get the session string from localStorage
+  const router = useRouter(); 
+  const authorizedToken = localStorage.getItem('auth_token');
 
   console.log("Checking session...");
 
-  // Check if session exists and is valid
   if (!authorizedToken) {
     console.log("No session found. Redirecting to homepage.");
-    router.push('/'); // Redirect to homepage if no session
+    router.push('/');
   } else {
     try {
-      // Parse the session data if exists
       const session = JSON.parse(authorizedToken);
-      console.log("Session found:", session); // Log session data if it exists
+      console.log("Session found:", session); 
 
-      // You can use session data here if needed
       console.log("StudentHomeView", session);
     } catch (error) {
       console.error("Error parsing session data:", error);
-      router.push('/'); // Redirect in case of invalid session data
+      router.push('/');
     }
   }
 });
@@ -38,12 +32,12 @@ onMounted(() => {
 
 <template>  
    <BaseLayout
-    title="Konferencia X"
+    title="Študentské Rozhranie"
     :breadcrumb="[
       { label: 'Domov', route: '/' },
       { label: 'Študentské Rozhranie' }
     ]"
-  > <!--tu sa odovzdá session-->
+  >
 
     <div class="container mb-4">
       <div class="row">
@@ -54,9 +48,9 @@ onMounted(() => {
             :icon="{ component: 'precision_manufacturing', color: 'white' }"
             :customClass="'bi bi-cloud-upload fs-3 white'"
             title="Nahrať článok"
-            description="Check the possible ways of working with our product and the necessary files for building your own project."
+            description="Zvoľte konferenciu a nahrajte vytvorenú prácu."
             :action="{
-                to: { name: 'essay' },
+                to: { name: 'studentconference' },
                 label: {color: 'white' }
             }"
           />
@@ -68,9 +62,9 @@ onMounted(() => {
             :icon="{ component: 'precision_manufacturing', color: 'white' }"
             :customClass="'bi bi-pass fs-3 white'"
             title="Moje články"
-            description="Check the possible ways of working with our product and the necessary files for building your own project."
+            description="Pozrite si prehľad svojich prác a hodnotení."
             :action="{
-                to: { name: '' },
+                to: { name: 'myessays' },
                 label: {color: 'white' }
             }"
           />
