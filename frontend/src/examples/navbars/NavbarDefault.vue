@@ -223,12 +223,6 @@ watch(
                         <span>Kontakt</span>
                       </RouterLink>
                       <RouterLink
-                        :to="{ name: 'essay' }"
-                        class="dropdown-item border-radius-md"
-                      >
-                        <span>Nahranie Práce</span>
-                      </RouterLink>
-                      <RouterLink
                         :to="{ name: 'adminhome' }"
                         class="dropdown-item border-radius-md"
                       >
@@ -267,12 +261,6 @@ watch(
                   class="dropdown-item border-radius-md"
                 >
                   <span>Kontakt</span>
-                </RouterLink>
-                <RouterLink
-                  :to="{ name: 'essay' }"
-                  class="dropdown-item border-radius-md"
-                >
-                  <span>Nahranie Práce</span>
                 </RouterLink>
               </div>
             </div>

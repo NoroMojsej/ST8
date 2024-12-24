@@ -46,6 +46,8 @@ import CreateDepartment from "../views/LandingPages/Admin/CreateDepartment.vue";
 import EditDepartment from "../views/LandingPages/Admin/EditDepartment.vue";
 import ConferenceEssays from "../views/LandingPages/Admin/ConferenceEssays.vue";
 import ReviewEssayList from "../views/LandingPages/Reviewer/ReviewEssayList.vue";
+import MyEssays from "../views/Student/MyEssays.vue";
+import ConferenceList from "../views/Student/ConferenceList.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -65,7 +67,12 @@ const router = createRouter({
       component: ContactView,
     },
     {
-      path: "/pages/landing-pages/essay",
+      path: "/student/home/conference-list",
+      name: "studentconference",
+      component: ConferenceList,
+    },
+    {
+      path: "/student/home/conference-list/essay-upload/:id",
       name: "essay",
       component: EssayView,
      },
@@ -79,6 +86,11 @@ const router = createRouter({
       name: "student_home",
       component: StudentHomeView,
      },
+     {
+      path: "/student/home/my-essays",
+      name: "myessays",
+      component: MyEssays,
+    },
      {
       path: "/reviewer/home",
       name: "reviewer_home",

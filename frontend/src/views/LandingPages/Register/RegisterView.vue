@@ -3,7 +3,7 @@ import { onMounted } from "vue";
 import '@/assets/css/custom.css'
 
 //example components
-import DefaultNavbar from "../..//examples/navbars/NavbarDefault.vue";
+import DefaultNavbar from "../../../examples/navbars/NavbarDefault.vue";
 
 //image
 import image from "@/assets/img/annie-spratt.jpg";
