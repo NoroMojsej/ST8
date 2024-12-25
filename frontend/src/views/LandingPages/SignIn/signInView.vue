@@ -6,7 +6,6 @@ import "@/assets/css/custom.css";
 import axiosInstance from '@/axios'; // Import axios instance
 
 import DefaultNavbar from "@/examples/navbars/NavbarDefault.vue";
-import DefaultFooter from "@/examples/footers/FooterDefault.vue";
 import image from "@/assets/img/illustrations/laptop.jpg";
 
 // Import Material Input and Material Button components
@@ -140,5 +139,4 @@ const login = async () => {
       </div>
     </div>
   </section>
-  <DefaultFooter />
 </template>
