@@ -2,6 +2,7 @@
 import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import axiosInstance from '@/axios';
+import { useRouter } from "vue-router";
 // Sections
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import MaterialInput from "@/components/MaterialInput.vue";
@@ -18,6 +19,7 @@ onMounted(() => {
 });
 
 const route = useRoute();
+const router = useRouter();
 const conferenceId = route.params.id;
 
 const countries = ref([]);
@@ -139,7 +141,7 @@ async function updateConference() {
     });
 
     console.log(response.data);
-
+    router.push({ name: "conferenceman" });
   } catch (error) {
     console.error(error.message);
   }
