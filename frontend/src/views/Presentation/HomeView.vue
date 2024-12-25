@@ -3,7 +3,7 @@ import { onMounted, onUnmounted } from "vue";
 
 //example components
 import NavbarDefault from "../..//examples/navbars/NavbarDefault.vue";
-import DefaultFooter from "../../examples/footers/FooterDefault.vue";
+import CenteredFooter from "../../examples/footers/FooterCentered.vue";
 import InfoCardCustom from "../../examples/cards/infoCards/InfoCardCustom.vue";
 
 //Vue Material Kit 2 components
@@ -91,5 +91,5 @@ onUnmounted(() => {
       </div>
     </div>
   </div>
-  <DefaultFooter />
+  <CenteredFooter />
 </template>
