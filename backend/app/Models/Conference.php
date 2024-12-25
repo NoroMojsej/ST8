@@ -9,6 +9,7 @@ class Conference extends Model
     use HasFactory;
 
     protected $table = 'conference';
+    protected $primaryKey = 'idconference';
 
     const CREATED_AT = 'created_on';
     const UPDATED_AT = 'updated_on';
@@ -18,7 +19,7 @@ class Conference extends Model
     ];
 
     protected $attributes = [
-        'abbreviation' => "", // Default value for abbreviation is null
+        'abbreviation' => "",
     ];
 
     public function country()

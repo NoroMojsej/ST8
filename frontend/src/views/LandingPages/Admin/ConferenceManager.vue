@@ -1,9 +1,11 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import ListCard from "./components/ListCard.vue";
 import axiosInstance from '@/axios';
 
+const router = useRouter();
 const conferences = ref([]);
 
 onMounted(() => {
@@ -19,13 +21,18 @@ async function fetchConferences() {
   }
 }
 
-function editConference(index) {
-  console.log('Upravit konferenciu', index);
-}
+const navigateToEdit = (idconference) => {
+  router.push({
+    name: 'conferenceedit', // Používame názov routy definovaný v index.js
+    params: { id: idconference }, // Posielame ID konferencie ako parameter
+  });
+};
 
-function viewEssays(index) {
-  console.log('Zobraziť práce pre konferenciu', index);
-}
+const viewEssays = (idconference) => {
+  console.log("ID "+idconference)
+  router.push({ name: 'conferenceessays', params: { id: idconference } });
+};
+
 </script>
 
 <template>
@@ -51,11 +58,11 @@ function viewEssays(index) {
               :icon="{ component: 'flag', color: 'success' }"
               :title="conference.abbreviation"
               :description="conference.description"
-              :handleEdit="() => editConference(idconference)"
+              :handleEdit="() => navigateToEdit(conference.idconference)"
               :buttonText="'Upraviť'"
               :optionalButton="{
                 text: 'Práce',
-                onClick: () => viewEssays(idconference),
+                onClick: () => viewEssays(conference.idconference),
                 color: 'info'
               }"
             />

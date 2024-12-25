@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch, onMounted, computed } from "vue";
+import { useRouter } from "vue-router";
 
 // Sections
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
@@ -9,6 +10,7 @@ import axiosInstance from '@/axios';
 // Hooks
 import setMaterialInput from "@/assets/js/material-input";
 
+const router = useRouter();
 
 const countries = ref([]);
 const selectedCountry = ref("");
@@ -165,7 +167,7 @@ async function createConference() {
       sections: entriesForSections.value.map(entry => entry.idSection),
     });
 
-    console.log(response);
+    router.push({ name: 'conferenceman' });
 
   } catch (error) {
     console.error(error.message);

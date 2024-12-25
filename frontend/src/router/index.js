@@ -84,6 +84,7 @@ const router = createRouter({
       path: "/pages/landing-pages/admin-control-panel/conference-manager/essays/:id",
       name: "conferenceessays",
       component: ConferenceEssays,
+      props: true,
      },
      {
       path: "/pages/landing-pages/admin-control-panel/section-manager",

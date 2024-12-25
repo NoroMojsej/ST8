@@ -7,21 +7,17 @@ use Illuminate\Http\Request;
 
 class ConferenceController extends Controller
 {
-    // List all conferences
     public function index()
     {
         $conferences = Conference::with('sections')->get();
         return response()->json($conferences);
     }
 
-    // Show the form for creating a new conference
     public function create()
     {
-        // For web applications, return a view:
         return view('conferences.create');
     }
 
-    // Store a newly created conference in the database
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -51,5 +47,68 @@ class ConferenceController extends Controller
         $conference->sections()->sync($data['sections']);
 
         return response()->json(['message' => 'Conference created successfully'], 201);
+    }
+
+    public function show($conferenceId)
+    {
+        try {
+            // Načítanie konferencie so sekciami
+            $conference = Conference::with('sections')
+                ->findOrFail($conferenceId);
+
+            return response()->json($conference);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['message' => 'Konferencia neexistuje'], 404);
+        }
+    }
+
+    public function update(Request $request, int $idconference)
+    {
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'country' => 'required',
+            'university' => 'required',
+            'description' => 'required',
+            'submissionFrom' => 'required|date',
+            'submissionTo' => 'required|date',
+            'conferenceFrom' => 'required|date',
+            'conferenceTo' => 'required|date',
+            'sections' => 'required|array', // Pole ID sekcií
+            'sections.*' => 'integer|exists:section,idsection', // Každé ID musí existovať
+        ]);
+
+        $validatedData = [
+            'abbreviation' => $data['title'], //TOTO VYRIEŠIŤ
+            'submissions_from' => $data['submissionFrom'],
+            'submissions_to' => $data['submissionTo'],
+            'take_place_from' => $data['conferenceFrom'],
+            'take_place_to' => $data['conferenceTo'],
+            'country_idcountry' => $data['country'],
+            'description' => $data['description'],
+            'university_iduniversity' => $data['university'],
+        ];
+
+        $conference = Conference::findOrFail($idconference);
+
+        $conference->update($validatedData);
+
+        if (isset($data['sections'])) {
+            $conference->sections()->sync($data['sections']);
+        }
+
+        //NEPOUZIVAT TENTO KOD DOLE, NEFUNGUJE
+        /*$conference = Conference::where('idconference', $idconference);
+    $conference->update($validatedData);*/
+
+        // Update the sections relationship (many-to-many)
+        /*if (isset($data['sections'])) {
+        Conference::where('idconference', $idconference)->sections()->sync($data['sections']); // This will update the sections relationship
+    }*/
+
+        // Return a response
+        /* return response()->json([
+        'message' => 'Conference updated successfully.',
+        'conference' => $conference->fresh(),
+    ]);*/
     }
 }

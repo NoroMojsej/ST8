@@ -43,3 +43,5 @@ Route::post('/submit-review', [ReviewController::class, 'submitReview']);
 Route::get('/sections', [SectionController::class, 'index']);
 Route::get('/conferences', [ConferenceController::class, 'index']);
 Route::post('/createConf', [ConferenceController::class, 'store']);
+Route::get('/conferences/{conferenceId}', [ConferenceController::class, 'show']);
+Route::put('/conference/{conferenceId}', [ConferenceController::class, 'update']);
