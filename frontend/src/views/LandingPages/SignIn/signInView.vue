@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { onMounted } from "vue";
 import "@/assets/css/custom.css";
-import axiosInstance from '@/axios'; // Import axios instance
+import axiosInstance from '@/axios'; 
 
 import DefaultNavbar from "@/examples/navbars/NavbarDefault.vue";
 import image from "@/assets/img/illustrations/laptop.jpg";
@@ -16,19 +16,17 @@ import setMaterialInput from "@/assets/js/material-input";
 
 const router = useRouter();
 
-// Reactive state for email, password, and error message
 const email = ref('');
 const password = ref('');
 const errorMessage = ref('');
 
-// On component mount, initialize Material Input
 onMounted(() => {
   setMaterialInput();
 });
 
 // Handle login request
 const login = async () => {
-  errorMessage.value = ''; // Reset any previous error messages
+  errorMessage.value = ''; 
 
   try {
     const response = await axiosInstance.post('/login', {
@@ -38,30 +36,26 @@ const login = async () => {
 
     const token = response.data.access_token;
     const session = response.data.session;
-    localStorage.setItem('auth_token', JSON.stringify(token)); // Store the token in localStorage
+    localStorage.setItem('auth_token', JSON.stringify(token)); 
     localStorage.setItem('session', JSON.stringify(session));
-    // console.log("session usera "+JSON.stringify(session));
-
-    alert('Login successful!');
     console.log("ROLA "+ JSON.stringify(session));
     if(session.user_role == 2) {
       router.push({ name: 'adminhome' });
     } else {
-    router.push({ name: 'student_home' }); // Redirect to dashboard or another page
+    router.push({ name: 'student_home' }); 
   }
    } catch (error) {
-    // Check if the error response contains a message
     if (error.response) {
-      console.error("Error response:", error.response); // Log full error response for better debugging
+      console.error("Error response:", error.response); 
 
       if (error.response.data?.message) {
-        errorMessage.value = error.response.data.message;  // Set error message from response
+        errorMessage.value = error.response.data.message;  
       } else {
         errorMessage.value = 'An unexpected error occurred (response).';
       }
     } else {
-      // No response, network issue or error not related to HTTP
-      console.error("Error:", error);  // Log the error object to see more details
+     
+      console.error("Error:", error); 
       errorMessage.value = 'An unexpected error occurred (no response).';
     }
   }
