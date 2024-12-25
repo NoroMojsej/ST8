@@ -12,7 +12,6 @@ onMounted(() => {
   body.classList.add("bg-gray-200");
 
   if (document.getElementById("typed")) {
-    // eslint-disable-next-line no-unused-vars
     typedInstance = new Typed("#typed", {
       stringsElement: "#typed-strings",
       typeSpeed: 90,
@@ -27,14 +26,14 @@ onMounted(() => {
 onUnmounted(() => {
       
       if (typedInstance) {
-        typedInstance.destroy(); // Clean up Typed.js instance
-        typedInstance = null; // Ensure no memory leaks
+        typedInstance.destroy();
+        typedInstance = null; 
       }
     });
 
 </script>
 <template>
-  <div class="container mt-8"> <!--uprava aby navigacia nebola uplne nalepena na obrazku-->
+  <div class="container mt-8">
     <div
       class="page-header py-6 py-md-5 my-sm-3 mb-3 border-radius-xl"
       :style="{
@@ -63,13 +62,6 @@ onUnmounted(() => {
             <p class="lead text-white opacity-8">
               Študentská vedecká konferencia (ŠVK) je spoločné vedecké podujatie Fakulty prírodných vied a informatiky UKF v Nitre a Fakulty prírodných vied UMB v Banskej Bystrici a po prvýkrát aj Fakulty prírodných vied UCM v Trnave. Konferencia je určená pre študentov 1., 2. a 3. stupňa vysokoškolského štúdia.
             </p>
-      <!--    <a
-              href="https://www.creative-tim.com/learning-lab/vue/overview/material-kit/"
-              class="text-white icon-move-right"
-            >
-              Read docs
-              <i class="fas fa-arrow-right text-sm ms-1"></i>
-            </a> -->  
           </div>
         </div>
       </div>
