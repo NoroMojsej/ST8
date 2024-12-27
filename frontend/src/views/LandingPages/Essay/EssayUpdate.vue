@@ -17,15 +17,15 @@
 
 <template>
   <BaseLayout
-        title="Nahranie Práce"
+        title="Upraviť Prácu"
         :breadcrumb="[
-            { label: 'Výber Konferencie', route: '/student/home/conference-list' },
-            { label: 'Nahranie Práce' },]"
+            { label: 'Moje Práce', route: '/student/home/my-essays' },
+            { label: 'Upraviť Prácu' },]"
         >
       
         <div class="descriptive-div1">
           <div class="descriptive-div2">
-              V tomto formulári môžete nahrať svoju vytvorenú prácu.
+              V tomto formulári môžete upraviť svoju vytvorenú prácu.
               Po vyplnení formuláru nahrajte 2 súbory - PDF a dokument Word.
               <br><br> <p class="p">DRŽÍME PALCE!</p>
           </div>
@@ -72,7 +72,7 @@
                   <FileUpload />
 
                   <div class="col-md-12 text-center">
-                    <MaterialButton id=save-essay variant="outline" color="success" class="w-35 me-2 mt-3 mb-0 btn">PRIDAŤ PRÁCU
+                    <MaterialButton id=save-essay variant="outline" color="success" class="w-35 me-2 mt-3 mb-0 btn">UPRAVIŤ PRÁCU
                     </MaterialButton>
                   </div>
                 </div>

@@ -1,17 +1,22 @@
 <script setup>
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import ListCard from "@/views/LandingPages/Admin/components/ListCard.vue";
+import EssaySummary from "./components/EssaySummary.vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 const essays = [
-  { id: 1, name: "Práca 1", desc: "názov konferencie" },
-  { id: 2, name: "Práca 2", desc: "názov konferencie" },
-  { id: 3, name: "Práca 3", desc: "názov konferencie" },
-  { id: 4, name: "Práca 4", desc: "názov konferencie" },
+  { id: 1, name: "Práca 1", key: ["k1", "k2", "k3" ], conf: "Konferencia", sec: "sekcia", status: "status" },
+  { id: 2, name: "Práca 2", key: ["k1", "k2", "k3" ], conf: "Konferencia", sec: "sekcia", status: "status" },
+  { id: 3, name: "Práca 3", key: ["k1", "k2", "k3" ], conf: "Konferencia", sec: "sekcia", status: "status" },
+  { id: 4, name: "Práca 4", key: ["k1", "k2", "k3" ], conf: "Konferencia", sec: "sekcia", status: "status" },
 ];
 
 function handleEdit(id) {
+  router.push({ name: "essayUpdate", params: { id } });
+}
+
+function handleEval(id) {
   router.push({ name: "", params: { id } });
 }
 </script>
@@ -33,15 +38,17 @@ function handleEdit(id) {
         <div class="col-12">
           <div class="d-flex align-items-center">
             <div class="flex-grow-1">
-              <ListCard
-                class="px-lg-1 mt-lg-0 mt-4 p-4"
-                height="h-100"
-                :icon="{ component: 'school', color: 'success' }"
-                :title="essay.name"
-                :description="essay.desc"
-                :handleEdit="() => handleEdit(essay.id)"
-                :buttonText="'Detail práce'"
-              />
+              <EssaySummary
+                  :name="essay.name"
+                  :keywords="essay.key"
+                  :conferenceName="essay.conf"
+                  :section="essay.sec"
+                  :status="essay.status"
+                  :showEditButton="true" 
+                  :showEvaluationButton="true"
+                  :handleEdit="() => handleEdit(essay.id)"
+                  :handleEvaluation="() => handleEval(essay.id)"
+                />
             </div>
           </div>
         </div>

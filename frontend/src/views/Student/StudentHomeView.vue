@@ -61,7 +61,7 @@ onMounted(() => {
             :color="{ text: 'white', background: 'bg-gradient-success' }"
             :icon="{ component: 'precision_manufacturing', color: 'white' }"
             :customClass="'bi bi-pass fs-3 white'"
-            title="Moje články"
+            title="Moje Práce"
             description="Pozrite si prehľad svojich prác a hodnotení."
             :action="{
                 to: { name: 'myessays' },

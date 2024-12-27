@@ -27,6 +27,8 @@ import ConferenceEssays from "../views/LandingPages/Admin/ConferenceEssays.vue";
 import ReviewEssayList from "../views/LandingPages/Reviewer/ReviewEssayList.vue";
 import MyEssays from "../views/Student/MyEssays.vue";
 import ConferenceList from "../views/Student/ConferenceList.vue";
+import AccessDenied from "../layouts/sections/components/AccessDenied.vue";
+import EssayUpdate from "../views/LandingPages/Essay/EssayUpdate.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -34,6 +36,11 @@ const router = createRouter({
       path: "/",
       name: "home",
       component: PresentationView,
+    },
+    {
+      path: "/forbidden",
+      name: "noaccess",
+      component: AccessDenied,
     },
     {
       path: "/student/home/conference-list",
@@ -44,6 +51,11 @@ const router = createRouter({
       path: "/student/home/conference-list/essay-upload/:id",
       name: "essay",
       component: EssayView,
+     },
+     {
+      path: "/student/home/my-essays/essay-update/:id",
+      name: "essayUpdate",
+      component: EssayUpdate,
      },
      {
       path: "/pages/landing-pages/admin-control-panel",

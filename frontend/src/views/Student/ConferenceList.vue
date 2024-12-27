@@ -32,7 +32,7 @@ function essayUpload(id) {
     title="Výber Konferencie"
     :breadcrumb="[
       { label: 'Študent Rozhranie', route: '/student/home' },
-      { label: 'Nahranie Práce' },
+      { label: 'Výber Konferencie' },
     ]"
   >
     <div class="container mb-4">
