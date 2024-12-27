@@ -10,11 +10,11 @@ class University extends Model
     use HasFactory;
 
     protected $table = 'university';
+    protected $primaryKey = 'iduniversity';
 
     protected $fillable = [
         'code', 'name', 'created_on', 'updated_on', 'country_idcountry'
     ];
-
 
     public function country()
     {

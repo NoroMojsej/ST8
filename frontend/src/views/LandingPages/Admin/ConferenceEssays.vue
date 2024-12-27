@@ -2,14 +2,26 @@
 import { ref, computed } from "vue";
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import ListCard from "./components/ListCard.vue";
+import axiosInstance from '@/axios';
+
+const route = useRoute();
+const conferenceId = route.params.id;
 
 const input = ref("");
-const essays = [
-  { id: 1, essay: "Práca 1", info: "desc" },
-  { id: 2, essay: "Práca 2", info: "desc" },
-  { id: 3, essay: "Práca 3", info: "desc" },
-  { id: 4, essay: "Práca 4", info: "desc" },
-];
+const essays = ref([]);
+
+onMounted(() => {
+  fetchEssays();
+});
+
+async function fetchEssays() {
+  try {
+    const response = await axiosInstance.get(`/essays/${conferenceId}`);
+    essays.value = response.data;
+  } catch (error) {
+    console.error('Chyba pri načítaní esejí:', error);
+  }
+}
 
 const filteredEssays = computed(() => {
   return essays.filter(essay =>
@@ -83,8 +95,8 @@ function rejectedDownload() {
 
     <div class="container mb-4">
       <div
-        class="row mb-3"
-        v-for="essay in filteredEssays" :key="essay.id"
+        v-for="(essay, idessay) in essays"
+        :key="idessay"
       >
         <div class="col-12">
           <div class="d-flex align-items-center">
@@ -95,7 +107,7 @@ function rejectedDownload() {
                 :icon="{ component: 'receipt_long', color: 'success' }"
                 :title="essay.essay"
                 :description="essay.info"
-                :handleEdit="() => handleDownload(essay.id)"
+                :handleEdit="() => handleDownload(essay.idessay)"
                 :buttonText="'Stiahnuť'"
               />
             </div>

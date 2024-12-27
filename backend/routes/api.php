@@ -12,7 +12,8 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\ConferenceController;
-
+use App\Http\Controllers\PaperController;
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -31,8 +32,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth:sanctum');
 Route::middleware('auth:sanctum')->get('user', [LoginController::class, 'user']);
-
 Route::post('/register', [RegisterController::class, 'register']);
+Route::get('/user/{userId}', [UserController::class, 'getUserInfo']);
+Route::put('/user/changePassword/{userId}', [UserController::class, 'changePassword']);
+Route::put('/updateUser/{userId}', [UserController::class, 'update']);
 Route::get('/countries', [CountryController::class, 'countries']);
 Route::get('/degrees', [DegreeController::class, 'index']);
 Route::get('/universities', [UniversityController::class, 'index']);
@@ -45,3 +48,4 @@ Route::get('/conferences', [ConferenceController::class, 'index']);
 Route::post('/createConf', [ConferenceController::class, 'store']);
 Route::get('/conferences/{conferenceId}', [ConferenceController::class, 'show']);
 Route::put('/conference/{conferenceId}', [ConferenceController::class, 'update']);
+Route::get('/papers/conference/{conferenceId}', [PaperController::class, 'getPapersByConference']);

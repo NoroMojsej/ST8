@@ -9,6 +9,7 @@ class Department extends Model
     use HasFactory;
 
     protected $table = 'department';
+    protected $primaryKey = 'iddepartment';
 
     protected $fillable = [
         'code', 'name', 'valid_from', 'valid_to', 'faculty_idfaculty', 'created_on', 'updated_on',
@@ -16,11 +17,11 @@ class Department extends Model
 
     public function faculty()
     {
-        return $this->belongsTo(Faculty::class, 'faculty_idfaculty', 'idfaculty');
+        return $this->belongsTo(Faculty::class, 'faculty_idfaculty');
     }
 
     public function users()
     {
-        return $this->hasMany(User::class, 'department_iddepartment', 'iddepartment');
+        return $this->hasMany(User::class, 'department_iddepartment');
     }
 }

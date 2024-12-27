@@ -29,7 +29,7 @@ class ConferenceController extends Controller
             'submissionTo' => 'required|date',
             'conferenceFrom' => 'required|date',
             'conferenceTo' => 'required|date',
-            'sections' => 'required|array', // Pole ID sekcií
+            'sections' => 'required|array',
             'sections.*' => 'integer|exists:section,idsection', // Každé ID musí existovať
         ]);
 
@@ -52,7 +52,6 @@ class ConferenceController extends Controller
     public function show($conferenceId)
     {
         try {
-            // Načítanie konferencie so sekciami
             $conference = Conference::with('sections')
                 ->findOrFail($conferenceId);
 
@@ -73,8 +72,8 @@ class ConferenceController extends Controller
             'submissionTo' => 'required|date',
             'conferenceFrom' => 'required|date',
             'conferenceTo' => 'required|date',
-            'sections' => 'required|array', // Pole ID sekcií
-            'sections.*' => 'integer|exists:section,idsection', // Každé ID musí existovať
+            'sections' => 'required|array',
+            'sections.*' => 'integer|exists:section,idsection',
         ]);
 
         $validatedData = [
