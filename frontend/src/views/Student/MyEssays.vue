@@ -1,16 +1,33 @@
 <script setup>
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
-import ListCard from "@/views/LandingPages/Admin/components/ListCard.vue";
+import axiosInstance from '@/axios';
 import EssaySummary from "./components/EssaySummary.vue";
 import { useRouter } from "vue-router";
+import { ref, onMounted } from "vue";
+
+onMounted(() => {
+  const selectedStudentId = ref(null);
+  const selectedConference = 12;
+  const session = JSON.parse(localStorage.getItem('session'));
+  console.log("SESSION: " + JSON.stringify(session));
+  selectedStudentId.value = session?.user_id || null;
+
+  if (selectedStudentId.value) {
+    fetchEssays(selectedStudentId.value, selectedConference);
+  }
+});
 
 const router = useRouter();
-const essays = [
-  { id: 1, name: "Práca 1", key: ["k1", "k2", "k3" ], conf: "Konferencia", sec: "sekcia", status: "status" },
-  { id: 2, name: "Práca 2", key: ["k1", "k2", "k3" ], conf: "Konferencia", sec: "sekcia", status: "status" },
-  { id: 3, name: "Práca 3", key: ["k1", "k2", "k3" ], conf: "Konferencia", sec: "sekcia", status: "status" },
-  { id: 4, name: "Práca 4", key: ["k1", "k2", "k3" ], conf: "Konferencia", sec: "sekcia", status: "status" },
-];
+const essays = ref([]);
+
+const fetchEssays = async (studentId, conferenceId) => {
+  try {
+    const response = await axiosInstance.get(`/papers/student/${studentId}/conference/${conferenceId}`);
+    essays.value = response.data;
+  } catch (error) {
+    console.error("Chyba pri načítaní prác:", error);
+  }
+};
 
 function handleEdit(id) {
   router.push({ name: "essayUpdate", params: { id } });
@@ -22,36 +39,35 @@ function handleEval(id) {
 </script>
 
 <template>
-  <BaseLayout
-    title="Moje Práce"
-    :breadcrumb="[
-      { label: 'Študentské Rozhranie', route: '/student/home' },
-      { label: 'Moje Práce' },
-    ]"
-  >
+  <BaseLayout title="Moje Práce" :breadcrumb="[
+    { label: 'Študentské Rozhranie', route: '/student/home' },
+    { label: 'Moje Práce' },
+  ]">
 
     <div class="container mb-4">
-      <div
-        class="row mb-3"
-        v-for="essay in essays" :key="essay.id"
-      >
-        <div class="col-12">
-          <div class="d-flex align-items-center">
-            <div class="flex-grow-1">
-              <EssaySummary
-                  :name="essay.name"
-                  :keywords="essay.key"
-                  :conferenceName="essay.conf"
-                  :section="essay.sec"
-                  :status="essay.status"
-                  :showEditButton="true" 
-                  :showEvaluationButton="true"
-                  :handleEdit="() => handleEdit(essay.id)"
-                  :handleEvaluation="() => handleEval(essay.id)"
+      <div v-if="essays.length > 0">
+        <div class="row mb-3" v-for="essay in essays" :key="essay.id">
+          <div class="col-12">
+            <div class="d-flex align-items-center">
+              <div class="flex-grow-1">
+                <EssaySummary 
+                :name="essay.name"
+                :keywords=[essay.keywords_lang1,essay.keywords_lang2]
+                :conferenceName="essay.conference.abbreviation"
+                :section="essay.section.text"
+                :status="essay.paper_status.status_desc"
+                :showEditButton="true"
+                :showEvaluationButton="true"
+                :handleEdit="() => handleEdit(essay.idpaper)"
+                :handleEvaluation="() => handleEval(essay.idpaper)"
                 />
+              </div>
             </div>
           </div>
         </div>
+      </div>
+      <div v-else>
+        <p>Žiadne práce na zobrazenie.</p>
       </div>
     </div>
   </BaseLayout>

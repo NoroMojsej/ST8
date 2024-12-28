@@ -1,27 +1,31 @@
 <script setup>
-import { ref, computed } from "vue";
+import { onMounted, ref, computed } from "vue";
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import ListCard from "./components/ListCard.vue";
 import axiosInstance from '@/axios';
+import { useRoute } from "vue-router";
+
+
+
+onMounted(() => {
+  fetchEssaysByConference();
+});
 
 const route = useRoute();
 const conferenceId = route.params.id;
-
+console.log("Conference ID:", conferenceId);
 const input = ref("");
 const essays = ref([]);
 
-onMounted(() => {
-  fetchEssays();
-});
 
-async function fetchEssays() {
+const fetchEssaysByConference = async (conferenceId) => {
   try {
-    const response = await axiosInstance.get(`/essays/${conferenceId}`);
+    const response = await axiosInstance.get(`/conferences/${conferenceId}/essays`);
     essays.value = response.data;
   } catch (error) {
-    console.error('Chyba pri načítaní esejí:', error);
+    console.error('Error fetching essays:', error);
   }
-}
+};
 
 const filteredEssays = computed(() => {
   return essays.filter(essay =>
@@ -98,21 +102,21 @@ function rejectedDownload() {
         v-for="(essay, idessay) in essays"
         :key="idessay"
       >
-        <div class="col-12">
-          <div class="d-flex align-items-center">
-            <div class="flex-grow-1">
-              <ListCard
-                class="px-lg-1 mt-lg-0 mt-4 p-4"
-                height="h-100"
-                :icon="{ component: 'receipt_long', color: 'success' }"
-                :title="essay.essay"
-                :description="essay.info"
-                :handleEdit="() => handleDownload(essay.idessay)"
-                :buttonText="'Stiahnuť'"
-              />
-            </div>
-          </div>
-        </div>
+      <div class="col-12">
+    <div v-for="essay in essays" :key="essay.idessay" class="d-flex align-items-center">
+      <div class="flex-grow-1">
+        <ListCard
+          class="px-lg-1 mt-lg-0 mt-4 p-4"
+          height="h-100"
+          :icon="{ component: 'receipt_long', color: 'success' }"
+          :title="essay.essay"
+          :description="essay.info"
+          :handleEdit="() => handleDownload(essay.idessay)"
+          :buttonText="'Stiahnuť'"
+        />
+      </div>
+    </div>
+  </div>
       </div>
     </div>
   </BaseLayout>

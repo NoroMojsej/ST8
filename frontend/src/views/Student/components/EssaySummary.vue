@@ -1,4 +1,5 @@
 <script setup>
+
 defineProps({
   name: {
     type: String,
@@ -40,6 +41,7 @@ defineProps({
     default: null,
   },
 });
+
 </script>
 
 <template>
@@ -47,7 +49,7 @@ defineProps({
     <div>
       <h5 class="text-dark">{{ name }}</h5>
       <p class="text-muted">
-        <strong>Kľúčové Slová:</strong> {{ keywords.join(", ") }}
+        {{ (keywords && Array.isArray(keywords) ? keywords.join(", ") : "Žiadne kľúčové slová") }}
       </p>
       <p class="text-muted">
         <strong>Konferencia:</strong> {{ conferenceName }}

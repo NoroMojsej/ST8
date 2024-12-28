@@ -49,3 +49,4 @@ Route::post('/createConf', [ConferenceController::class, 'store']);
 Route::get('/conferences/{conferenceId}', [ConferenceController::class, 'show']);
 Route::put('/conference/{conferenceId}', [ConferenceController::class, 'update']);
 Route::get('/papers/conference/{conferenceId}', [PaperController::class, 'getPapersByConference']);
+Route::get('/papers/student/{studentId}/conference/{conferenceId}', [PaperController::class, 'getEssaysByStudentAndConference']);

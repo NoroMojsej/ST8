@@ -8,7 +8,10 @@ class ReviewStatus extends Model
 {
     use HasFactory;
 
-    protected $table = 'review_status';
+    protected $table = 'paper_status';
+    protected $primaryKey = 'idpaper_status';
+
+    public $timestamps = false;
 
     protected $fillable = [
         'status', 'status_desc', 'valid_from', 'valid_to', 'created_on', 'updated_on'
@@ -16,6 +19,6 @@ class ReviewStatus extends Model
 
     public function reviews()
     {
-        return $this->hasMany(Review::class, 'review_status_idreview_status', 'idreview_status');
+        return $this->hasMany(Review::class, 'review_status_idreview_status');
     }
 }
