@@ -160,7 +160,7 @@ async function changePswd() {
 
 <template scoped>
   <BaseLayout title="Editácia profilu" :breadcrumb="[
-    { label: 'Sekcie', route: '/sections/page-sections/page-headers' },
+    { label: 'Domov', route: '/' },
     { label: 'Editácia profilu' },
   ]">
 
