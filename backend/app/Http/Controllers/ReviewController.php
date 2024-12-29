@@ -83,7 +83,7 @@ class ReviewController extends Controller
             'txt_minus' => $request->txt_minus,
             'txt_general' => $request->txt_general,
 
-            'review_status_idreview_status' => $reviewStatus->id,
+            'review_status_idreview_status' => $reviewStatus->idreview_status,
             'user_iduser' => $request->user_iduser,         //treba zmenit na id usera ktoreho praca sa reviewuje
         ]);        
 
