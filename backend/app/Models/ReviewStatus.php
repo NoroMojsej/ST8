@@ -8,11 +8,11 @@ class ReviewStatus extends Model
 {
     use HasFactory;
 
-    protected $table = 'paper_status';
-    protected $primaryKey = 'idpaper_status';
+    protected $table = 'review_status';
+    protected $primaryKey = 'idreview_status';
 
     public $timestamps = false;
-    
+
     protected $fillable = [
         'status', 'status_desc', 'valid_from', 'valid_to', 'created_on', 'updated_on'
     ];

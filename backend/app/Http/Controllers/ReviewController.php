@@ -47,8 +47,8 @@ class ReviewController extends Controller
         ]);
 
         $reviewStatus = ReviewStatus::create([
-            'status' => $request->positive_status,
-            'status_desc' => $request->positive_description,
+            'status' => $request->status,
+            'status_desc' => $request->status_desc,
             'valid_from' => $request->valid_from,
             'valid_to' => $request->valid_to,
 
