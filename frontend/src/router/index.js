@@ -11,7 +11,7 @@ import ConferenceAdd from "../views/LandingPages/Admin/ConferenceAdd.vue";
 import ConferenceEdit from "../views/LandingPages/Admin/ConferenceEdit.vue"
 import StudentHomeView from "../views/Student/StudentHomeView.vue";
 
-import UserManagementView from "../layouts/sections/page-sections/page-headers/UserManagementView.vue";
+
 import UsersListView from "../layouts/sections/page-sections/page-headers/UsersListView.vue";
 import SectionManager from "../views/LandingPages/Admin/SectionManager.vue";
 import UniversityManager from "../views/LandingPages/Admin/UniversityManager.vue";
@@ -29,6 +29,7 @@ import MyEssays from "../views/Student/MyEssays.vue";
 import ConferenceList from "../views/Student/ConferenceList.vue";
 import AccessDenied from "../layouts/sections/components/AccessDenied.vue";
 import EssayUpdate from "../views/LandingPages/Essay/EssayUpdate.vue";
+import EssayAssign from "../layouts/sections/page-sections/page-headers/EssayAssign.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -164,9 +165,9 @@ const router = createRouter({
       component: UsersListView,
     },
     {
-      path: "/pages/landing-pages/admin-control-panel/users-list/:id",
-      name: "user_management",
-      component: UserManagementView,
+      path: "/pages/landing-pages/admin-control-panel/users-list/assign/:id",
+      name: "essayassign",
+      component: EssayAssign,
     },
     {
       path: "/pages/landing-pages/sign-in",
