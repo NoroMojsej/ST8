@@ -12,7 +12,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\ConferenceController;
-use App\Http\Controllers\ShowPaperController;
+use App\Http\Controllers\PaperController;
 use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
@@ -48,5 +48,5 @@ Route::get('/conferences', [ConferenceController::class, 'index']);
 Route::post('/createConf', [ConferenceController::class, 'store']);
 Route::get('/conferences/{conferenceId}', [ConferenceController::class, 'show']);
 Route::put('/conference/{conferenceId}', [ConferenceController::class, 'update']);
-Route::get('/papers/conference/{conferenceId}', [ShowPaperController::class, 'getPapersByConference']);
-Route::get('/papers/student/{studentId}/conference/{conferenceId}', [ShowController::class, 'getEssaysByStudentAndConference']);
+Route::get('/papers/conference/{conferenceId}', [PaperController::class, 'getPapersByConference']);
+Route::get('/papers/student/{studentId}/conference/{conferenceId}', [PaperController::class, 'getEssaysByStudentAndConference']);
