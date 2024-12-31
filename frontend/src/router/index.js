@@ -74,7 +74,7 @@ const router = createRouter({
       component: MyEssays,
     },
     {
-      path: "/student/home/my-essays/gradesummary",
+      path: "/student/home/my-essays/gradesummary/:id",
       name: "gradesummary",
       component: GradeSummary,
     },
