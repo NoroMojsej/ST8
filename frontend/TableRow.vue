@@ -4,56 +4,91 @@ defineProps({
     type: String,
     default: "",
   },
-  radioNumber:{
+  radioNumber: {
     type: String,
     default: "",
   },
 });
 </script>
 
-<template>
 
-<tr>
-      <td  scope="row" class="question-table text-wrap">
-        <p class="question">
-       {{question}}
-      </p>
+<template>
+  <tr>
+    <!-- Question Column -->
+    <td scope="row" class="question-table text-wrap">
+      <p class="question">{{ question }}</p>
     </td>
 
-      <td class="td-wrapper"><div class="form-check">
-        <input class="form-check-input" type="radio"  :name="`flexRadioDefault${radioNumber}`"
-        :id="`flexRadioDefault${radioNumber}`">
-  <label class="form-check-label" for="flexRadioDefault3">
-  </label>
-</div></td>
-      <td class="td-wrapper"><div class="form-check">
-  <input class="form-check-input" type="radio" name="flexRadioDefault3" id="flexRadioDefault3">
-  <label class="form-check-label" for="flexRadioDefault3">
-  </label>
-</div></td>
-      <td class="td-wrapper"><div class="form-check">
-  <input class="form-check-input" type="radio" name="flexRadioDefault3" id="flexRadioDefault3">
-  <label class="form-check-label" for="flexRadioDefault3">
-  </label>
-</div></td>
-<td class="td-wrapper"><div class="form-check">
-  <input class="form-check-input" type="radio" name="flexRadioDefault3" id="flexRadioDefault3">
-  <label class="form-check-label" for="flexRadioDefault3">
-  </label>
-</div></td>
-<td class="td-wrapper"><div class="form-check">
-  <input class="form-check-input" type="radio" name="flexRadioDefault3" id="flexRadioDefault3">
-  <label class="form-check-label" for="flexRadioDefault3">
-  </label>
-</div></td>
-<td class="td-wrapper"><div class="form-check">
-  <input class="form-check-input" type="radio" name="flexRadioDefault3" id="flexRadioDefault3">
-  <label class="form-check-label" for="flexRadioDefault3">
-  </label>
-</div></td>
-    </tr>
-
+    <!-- Radio Button Columns -->
+    <td class="td-wrapper">
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="radio"
+          :name="`radioGroup${radioNumber}`"
+          :id="`optionA${radioNumber}`"
+        />
+        <label class="form-check-label" :for="`optionA${radioNumber}`"></label>
+      </div>
+    </td>
+    <td class="td-wrapper">
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="radio"
+          :name="`radioGroup${radioNumber}`"
+          :id="`optionB${radioNumber}`"
+        />
+        <label class="form-check-label" :for="`optionB${radioNumber}`"></label>
+      </div>
+    </td>
+    <td class="td-wrapper">
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="radio"
+          :name="`radioGroup${radioNumber}`"
+          :id="`optionC${radioNumber}`"
+        />
+        <label class="form-check-label" :for="`optionC${radioNumber}`"></label>
+      </div>
+    </td>
+    <td class="td-wrapper">
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="radio"
+          :name="`radioGroup${radioNumber}`"
+          :id="`optionD${radioNumber}`"
+        />
+        <label class="form-check-label" :for="`optionD${radioNumber}`"></label>
+      </div>
+    </td>
+    <td class="td-wrapper">
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="radio"
+          :name="`radioGroup${radioNumber}`"
+          :id="`optionE${radioNumber}`"
+        />
+        <label class="form-check-label" :for="`optionE${radioNumber}`"></label>
+      </div>
+    </td>
+    <td class="td-wrapper">
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="radio"
+          :name="`radioGroup${radioNumber}`"
+          :id="`optionFX${radioNumber}`"
+        />
+        <label class="form-check-label" :for="`optionFX${radioNumber}`"></label>
+      </div>
+    </td>
+  </tr>
 </template>
+
 
 <style scoped>
 

@@ -241,44 +241,48 @@ textarea {
 
     <TableRow
       question="Aktuálnosť a náročnosť práce"
-        radio-number="3">
+        radio-number="1">
     </TableRow>
 
     <TableRow
       question="Zorientovanie sa študenta v danej problematike, 
-        predovšetkým analýzou domácej a zahraničnej literatúry">
+        predovšetkým analýzou domácej a zahraničnej literatúry"
+        radio-number="2">
     </TableRow>
 
     <TableRow
-      question="Vhodnosť zvolených metód spracovania riešenej problematiky">
+      question="Vhodnosť zvolených metód spracovania riešenej problematiky"
+      radio-number="3">
     </TableRow>
 
     <TableRow
-      question="Rozsah a úroveň dosiahnutých výsledkov">
+      question="Rozsah a úroveň dosiahnutých výsledkov"
+      radio-number="4">
     </TableRow>
 
     <TableRow
-      question="Analýza a interpretácia výsledkov a formulácia záverov práce">
+      question="Analýza a interpretácia výsledkov a formulácia záverov práce"
+      radio-number="5">
     </TableRow>
 
     <TableRow
-      question="Prehľadnosť a logická štruktúra práce">
+      question="Prehľadnosť a logická štruktúra práce"
+      radio-number="6">
     </TableRow>
 
     <TableRow
-      question="Formálna, jazyková a štylistická úroveň práce">
+      question="Formálna, jazyková a štylistická úroveň práce"
+      radio-number="7">
     </TableRow>
 
     <TableRow
-      question="Analýza a interpretácia výsledkov a formulácia záverov práce">
+      question="Analýza a interpretácia výsledkov a formulácia záverov práce"
+      radio-number="8">
     </TableRow>
 
     <TableRow
-      question="Prehľadnosť a logická štruktúra práce">
-    </TableRow>
-
-    <TableRow
-      question="Prehľadnosť a logická štruktúra práce">
+      question="Prehľadnosť a logická štruktúra práce"
+      radio-number="9">
     </TableRow>
     
   </tbody>
@@ -347,9 +351,6 @@ textarea {
   opinion="Obrázkom alebo tabuľkám chýba popis">
   </TableSelect>
 
-  <TableSelect
-  opinion="Chýba meno autora alebo školiteľa">
-  </TableSelect>
 <!--TABULKA 3-->
 
 <HeaderLine

@@ -34,7 +34,7 @@ function handleEdit(id) {
 }
 
 function handleEval(id) {
-  router.push({ name: "", params: { id } });
+  router.push({ name: "gradesummary", params: { id } });
 }
 </script>
 

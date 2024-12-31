@@ -11,7 +11,7 @@ import ConferenceAdd from "../views/LandingPages/Admin/ConferenceAdd.vue";
 import ConferenceEdit from "../views/LandingPages/Admin/ConferenceEdit.vue"
 import StudentHomeView from "../views/Student/StudentHomeView.vue";
 
-
+import GradeSummary from "../views/Student/GradeSummary.vue"
 import UsersListView from "../layouts/sections/page-sections/page-headers/UsersListView.vue";
 import SectionManager from "../views/LandingPages/Admin/SectionManager.vue";
 import UniversityManager from "../views/LandingPages/Admin/UniversityManager.vue";
@@ -72,6 +72,11 @@ const router = createRouter({
       path: "/student/home/my-essays",
       name: "myessays",
       component: MyEssays,
+    },
+    {
+      path: "/student/home/my-essays/gradesummary",
+      name: "gradesummary",
+      component: GradeSummary,
     },
      {
       path: "/reviewer/home",
@@ -150,7 +155,7 @@ const router = createRouter({
       component: EditDepartment,
      },
      {
-      path: "/pages/landing-pages/evaluation/:id",
+      path: "/reviewer/home/evaluation/:id",
       name: "evaluation",
       component: GradeEssay,
     },
