@@ -1,8 +1,9 @@
 <script setup>
-import { onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 
 //example components
 import NavbarDefault from "../..//examples/navbars/NavbarDefault.vue";
+import NavbarStnd from "../../examples/navbars/NavbarStnd.vue";
 import CenteredFooter from "../../examples/footers/FooterCentered.vue";
 import InfoCardCustom from "../../examples/cards/infoCards/InfoCardCustom.vue";
 
@@ -12,6 +13,28 @@ import MaterialSocialButton from "@/components/MaterialSocialButton.vue";
 // sections
 import Carousel from "./Components/Carousel.vue";
 
+// Získanie session pri načítaní komponenty
+onMounted(() => {
+  getSessionFromLocalStorage();
+});
+
+const sessionData = ref(null);
+
+// Funkcia na získanie session z localStorage
+function getSessionFromLocalStorage() {
+  const storedSession = localStorage.getItem("session");
+
+  if (storedSession) {
+    try {
+      sessionData.value = JSON.parse(storedSession);
+      console.log("Parsed session data:", sessionData.value);
+    } catch (error) {
+      console.error("Error parsing session data:", error);
+    }
+  } else {
+    console.warn("No session data found in localStorage.");
+  }
+}
 
 //hooks
 const body = document.getElementsByTagName("body")[0];
@@ -26,15 +49,11 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="container position-sticky z-index-sticky top-0">
-    <div class="row">
-      <div class="col-12">
-        <NavbarDefault :sticky="true" />
-      </div>
-    </div>
-  </div>
+  
+  <NavbarDefault v-if="!sessionData || Object.keys(sessionData).length === 0" :sticky="true" />
+  <NavbarStnd v-else :sticky="true" /> 
 
-  <div class="card card-body blur shadow-blur mx-3 mx-md-4 mt-n6">
+  <div class="card">
     <Carousel />
 
     <div class="container">

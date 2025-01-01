@@ -3,7 +3,7 @@ import { onMounted } from "vue";
 import '@/assets/css/custom.css'
 
 //example components
-import DefaultNavbar from "../../../examples/navbars/NavbarDefault.vue";
+import NavbarDefault from "../../../examples/navbars/NavbarDefault.vue";
 
 //image
 import image from "@/assets/img/annie-spratt.jpg";
@@ -205,14 +205,9 @@ const register = async () => {
 
 
 <template>
-  <div class="container position-sticky z-index-sticky top-0">
-    <div class="row">
-      <div class="col-12">
-        <DefaultNavbar :sticky="true" />
-      </div>
-    </div>
-  </div>
 
+        <NavbarDefault :sticky="true" />
+      
   <section>
     <div class="page-header min-vh-100">
       <div class="container">
@@ -225,7 +220,7 @@ const register = async () => {
                 backgroundSize: 'cover',
               }" loading="lazy"></div>
           </div>
-          <div class="mt-8 col-xl-5 col-lg-6 col-md-7 d-flex flex-column ms-auto me-auto ms-lg-auto me-lg-5">
+          <div class="mt-6 col-xl-5 col-lg-6 col-md-7 d-flex flex-column ms-auto me-auto ms-lg-auto me-lg-5">
             <div class="card d-flex blur justify-content-center shadow-lg my-sm-0 my-sm-6 mt-8 mb-5">
               <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
               </div>

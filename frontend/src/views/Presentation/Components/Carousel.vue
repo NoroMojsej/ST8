@@ -33,7 +33,7 @@ onUnmounted(() => {
 
 </script>
 <template>
-  <div class="container mt-8">
+  <div class="container mt-6">
     <div
       class="page-header py-6 py-md-5 my-sm-3 mb-3 border-radius-xl"
       :style="{

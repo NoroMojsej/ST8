@@ -1,13 +1,9 @@
 <script setup>
 
 import { RouterLink } from "vue-router";
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import { useWindowsWidth } from "../../assets/js/useWindowsWidth";
 
-// images
-import ArrDark from "@/assets/img/down-arrow-dark.svg";
-import downArrow from "@/assets/img/down-arrow.svg";
-import DownArrWhite from "@/assets/img/down-arrow-white.svg";
 
 
 
@@ -48,7 +44,13 @@ const props = defineProps({
 });
 
 const session = JSON.parse(localStorage.getItem('session'));
-console.log("Session data:", session);   
+console.log("Session data:", session);
+
+const getLink = computed(() => {
+  return session.user_role === 2
+    ? { name: 'adminhome' }
+    : { name: 'student_home' };
+});
 
 function logout() {
   // Clear the session data and redirect
@@ -56,31 +58,6 @@ function logout() {
   console.log("User logged out");
 }
 
-
-// set arrow  color
-function getArrowColor() {
-  if (props.transparent && textDark.value) {
-    return ArrDark;
-  } else if (props.transparent) {
-    return DownArrWhite;
-  } else {
-    return ArrDark;
-  }
-}
-
-// set text color
-const getTextColor = () => {
-  let color;
-  if (props.transparent && textDark.value) {
-    color = "#02925f";
-  } else if (props.transparent) {
-    color = "text-white";
-  } else {
-    color = "#02925f";
-  }
-
-  return color;
-};
 
 // set nav color on mobile && desktop
 
@@ -103,162 +80,161 @@ watch(
     }
   }
 );
+
 </script>
 
 
 <template>
-  <nav
-    class="navbar navbar-expand-lg top-0"
-    :class="{
-      'z-index-3 w-100 shadow-none navbar-transparent position-absolute my-3':
-        props.transparent,
-      'my-3 blur border-radius-lg z-index-3 py-2 shadow py-2 start-0 end-0 mx-4 position-absolute mt-4':
-        props.sticky,
-      'navbar-light bg-white py-3': props.light,
-      ' navbar-dark bg-gradient-dark z-index-3 py-3': props.dark
-    }"
-  >
-    <div
-      :class="
-        props.transparent || props.light || props.dark
-          ? 'container'
-          : 'container-fluid px-0'
-      "
-     
-    >
-     <!-- <RouterLink
-        class="navbar-brand d-none d-md-block"
-        :class="[
-          (props.transparent && textDark.value) || !props.transparent
-            ? 'text-dark font-weight-bolder ms-sm-3'
-            : 'text-white font-weight-bolder ms-sm-3'
-        ]"
-        :to="{ name: 'presentation' }"
-        rel="tooltip"
-        title="Designed and Coded by Creative Tim"
-        data-placement="bottom"
-      >
-        Material Kit 2
-      </RouterLink>
--->
 
-      <RouterLink
-        class="navbar-brand d-block d-md-none"
-        :class="
-          props.transparent || props.dark
-            ? 'text-white'
-            : 'font-weight-bolder ms-sm-3'
-        "
-        to="/"
-        rel="tooltip"
-        title="Designed and Coded by Creative Tim"
-        data-placement="bottom"
-      >
-        Material Design
-      </RouterLink>
-      <a
-        href="https://www.creative-tim.com/product/vue-material-kit-pro"
-        class="btn btn-sm bg-gradient-success mb-0 ms-auto d-lg-none d-block"
-        >Buy Now</a
-      >
-      <button
-        class="navbar-toggler shadow-none ms-2"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navigation"
-        aria-controls="navigation"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon mt-2">
-          <span class="navbar-toggler-bar bar1"></span>
-          <span class="navbar-toggler-bar bar2"></span>
-          <span class="navbar-toggler-bar bar3"></span>
-        </span>
-      </button>
-      
-      <div
-        class="collapse navbar-collapse w-100 pt-3 pb-2 py-lg-0"
-        id="navigation"
-      >
-        <ul class="navbar-nav navbar-nav-hover ms-auto">
-          <li class="nav-item dropdown dropdown-hover mx-2">
-            <a
-              role="button"
-              class="nav-link ps-2 d-flex cursor-pointer align-items-center"
-              :class="getTextColor()"
-              id="dropdownMenuPages"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-              style="font-family: 'Montserrat', sans-serif; font-size: 15px; font-weight: 700;"
-            >
-             
-                <i class="bi bi-person-circle display-6"></i>
-              <img
-                :src="getArrowColor()"
-                alt="down-arrow"
-                class="arrow ms-2 d-lg-block d-none"
-              />
-              <img
-                :src="getArrowColor()"
-                alt="down-arrow"
-                class="arrow ms-1 d-lg-none d-block ms-auto"
-              />
-            </a>
-            <div
-              class="dropdown-menu dropdown-menu-animation ms-n3 dropdown-md p-3 border-radius-xl mt-0 mt-lg-3"
-              aria-labelledby="dropdownMenuPages"
-            >
-              <div class="row d-none d-lg-block">
-                <div class="col-12 px-4 py-2">
-                  <div class="row">
-                    <div class="position-relative">
-                      <div
-                        class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1"
-                        v-if="session"
-                      >
-                      {{ session.user_name  }}
-                      </div>
-                      <RouterLink
-                        :to="{ name: 'edit_account' }"
-                        class="dropdown-item border-radius-md"
-                      >
-                        <span>Editovať profil</span>
-                      </RouterLink>
-                      <RouterLink
-                        :to="{ name: 'home' }"
-                        class="dropdown-item border-radius-md"
-                        @click="logout"
-                      >
-                        <span>Odhlásiť sa</span>
-                      </RouterLink>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-            </div>
-          </li>
-          
-          
-        </ul>
 
-      </div>
+  <nav class="navbar navbar-expand-lg bg-white" v-if="session">
+
+    <div class="home">
+      <RouterLink :to="{ name: 'home' }">
+        <i class="bi bi-house-fill"></i>
+      </RouterLink>
     </div>
 
+    <button class="navbar-toggler d-block d-lg-none" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="bi bi-person-circle display-6"></i> 
+      <div class="name1">
+      <span class="name2"> {{ session.user_first_name + " " +
+        session.user_last_name }}<i class="bi bi-chevron-down"></i>  </span> 
+      </div>
 
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav d-block d-lg-none">
+       
+  <li class="nav-item ">
+          <a class="nav-link" href="#">
+            <RouterLink
+    :to="getLink"
+    class="dropdown-item border-radius-md"
+  >
+    <span><i class="bi bi-display"></i> Tvoja dashboard</span>
+  </RouterLink>
+          </a>
+        </li>
+
+        <li class="nav-item ">
+          <a class="nav-link" href="#">
+            <RouterLink :to="{ name: 'edit_account' }" class="dropdown-item border-radius-md">
+              <span><i class="bi bi-pencil-square"></i> Editovať profil</span>
+            </RouterLink>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <RouterLink :to="{ name: 'home' }" class="dropdown-item border-radius-md" @click="logout">
+              <span> <i class="bi bi-arrow-bar-right"></i> Odhlásiť sa </span>
+            </RouterLink>
+          </a>
+        </li>
+      </ul>
+    
+      <div id="longScreen">
+        <ul>
+        <li class="nav-item dropdown d-none d-lg-block">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="bi bi-person-circle display-6"></i> <span class="name2"> {{ session.user_first_name + " " +
+              session.user_last_name }} </span>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+
+            <a class="dropdown-item" href="#">
+            <RouterLink
+    :to="getLink"
+    class="dropdown-item border-radius-md"
+  >
+    <span><i class="bi bi-display"></i> Dashboard</span>
+  </RouterLink>
+          </a>
+
+            <a class="dropdown-item" href="#">
+              <RouterLink :to="{ name: 'edit_account' }" class="dropdown-item border-radius-md">
+                <span><i class="bi bi-pencil-square"></i> Editovať profil</span>
+              </RouterLink>
+            </a>
+            <a class="dropdown-item" href="#">
+              <RouterLink :to="{ name: 'home' }" class="dropdown-item border-radius-md" @click="logout">
+                <span> <i class="bi bi-arrow-bar-right"></i> Odhlásiť sa</span>
+              </RouterLink>
+            </a>
+          </div>
+        </li>
+      
+      </ul>
+    </div>
+
+    </div>
   </nav>
   <!-- End Navbar -->
 </template>
 
 <style scoped>
 
-.dropdown.dropdown-hover .dropdown-menu, .dropdown .dropdown-menu {
-  margin-top:3.8125rem !important
+.home {
+  padding-left: 10%;
 }
 
-.navbar-expand-lg .navbar-nav {
-  padding-right: 10%
+.bi.bi-house-fill {
+  color: #344767 !important;
+  font-size: 1.5rem !important;
 }
 
+#navbarDropdownMenuLink::after {
+  display: inline-block;
+  margin-left: 0.5em;
+  vertical-align: 0.255em;
+  content: "";
+  border-top: 0.3em solid;
+  border-right: 0.3em solid transparent;
+  border-left: 0.3em solid transparent;
+}
+
+.nav-link.dropdown-toggle {
+  padding-bottom: 0px;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown:not(.dropdown-hover) .dropdown-menu.show{
+  margin-top: 10px !important;
+  top: 100% !important;
+  /* Posunie dropdown presne pod rodičovský element */
+  margin-top: 15px !important;
+}
+
+span.name1 {
+    display: flex !important; 
+    align-items: center !important;
+}
+
+span.name2 {
+  font-weight: bold !important;
+  font-size: large !important;
+  font-family: 'Montserrat', sans-serif !important;
+  padding-left: 5px !important
+}
+
+.navbar-collapse.collapse.show {
+  justify-content: right;
+  padding-right: 10%;
+}
+
+#longScreen {
+  width: 100% !important;
+  padding-right: 10% !important;
+  display: flex !important;
+  justify-content: right !important;
+}
+
+.navbar {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+  z-index: 1;
+}
 </style>
