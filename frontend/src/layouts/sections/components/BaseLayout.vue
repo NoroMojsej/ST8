@@ -1,5 +1,5 @@
 <script setup>
-import NavbarStnd from "../../../examples/navbars/NavbarStnd.vue";
+import NavbarSignedIn from "../../../examples/navbars/NavbarSingedIn.vue";
 import CenteredFooter from "@/examples/footers/FooterCentered.vue";
 import Breadcrumbs from "@/examples/Breadcrumbs.vue";
 
@@ -20,7 +20,7 @@ defineProps({
 
 <template>
 
-<NavbarStnd></NavbarStnd>
+<NavbarSignedIn></NavbarSignedIn>
 
   <div class="text-sans-serif container mt-5">
     <div class="row">

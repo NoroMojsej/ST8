@@ -1,26 +1,19 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
 
-//example components
 import NavbarDefault from "../..//examples/navbars/NavbarDefault.vue";
-import NavbarStnd from "../../examples/navbars/NavbarStnd.vue";
+import NavbarSignedIn from "../../examples/navbars/NavbarSingedIn.vue";
 import CenteredFooter from "../../examples/footers/FooterCentered.vue";
 import InfoCardCustom from "../../examples/cards/infoCards/InfoCardCustom.vue";
-
-//Vue Material Kit 2 components
 import MaterialSocialButton from "@/components/MaterialSocialButton.vue";
-
-// sections
 import Carousel from "./Components/Carousel.vue";
 
-// Získanie session pri načítaní komponenty
 onMounted(() => {
   getSessionFromLocalStorage();
 });
 
 const sessionData = ref(null);
 
-// Funkcia na získanie session z localStorage
 function getSessionFromLocalStorage() {
   const storedSession = localStorage.getItem("session");
 
@@ -36,7 +29,6 @@ function getSessionFromLocalStorage() {
   }
 }
 
-//hooks
 const body = document.getElementsByTagName("body")[0];
 onMounted(() => {
   body.classList.add("presentation-page");
@@ -49,9 +41,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  
+
   <NavbarDefault v-if="!sessionData || Object.keys(sessionData).length === 0" :sticky="true" />
-  <NavbarStnd v-else :sticky="true" /> 
+  <NavbarSignedIn v-else :sticky="true" />
 
   <div class="card">
     <Carousel />
@@ -59,30 +51,20 @@ onUnmounted(() => {
     <div class="container">
       <div class="row">
         <div class="col-lg-4 mb-3">
-          <InfoCardCustom
-            class="p-4"
-            :color="{ text: 'white', background: 'bg-gradient-success' }"
-            :icon="{ color: 'white' }"
-            title="Registrácia"
-            description="Nemáte u nás účet? Zaregistrujte sa a zúčastnite sa ŠVD!"
-            :action="{
-                to: { name: 'register-basic' },
-                label: {color: 'white' }
-            }"
-          />
+          <InfoCardCustom class="p-4" :color="{ text: 'white', background: 'bg-gradient-success' }"
+            :icon="{ color: 'white' }" title="Registrácia"
+            description="Nemáte u nás účet? Zaregistrujte sa a zúčastnite sa ŠVD!" :action="{
+              to: { name: 'register-basic' },
+              label: { color: 'white' }
+            }" />
         </div>
         <div class="col-lg-4 mb-3">
-          <InfoCardCustom
-            class="p-4"
-            :color="{ text: 'white', background: 'bg-gradient-success' }"
-            :icon="{ color: 'white' }"
-            title="Prihlásiť sa"
-            description="Už máte u nás účet? Prihláste sa a prezrite si aktuálne prebiehajúce konferencie!"
-            :action="{
-                to: { name: 'signin-basic' },
-                label: {color: 'white' }
-            }"
-          />
+          <InfoCardCustom class="p-4" :color="{ text: 'white', background: 'bg-gradient-success' }"
+            :icon="{ color: 'white' }" title="Prihlásiť sa"
+            description="Už máte u nás účet? Prihláste sa a prezrite si aktuálne prebiehajúce konferencie!" :action="{
+              to: { name: 'signin-basic' },
+              label: { color: 'white' }
+            }" />
         </div>
       </div>
     </div>
@@ -93,18 +75,9 @@ onUnmounted(() => {
             <h4 class="mb-1">Ďakujeme za účasť na ŠVD!</h4>
           </div>
           <div class="col-lg-5 me-lg-auto my-lg-auto text-lg-end mt-5">
-            <MaterialSocialButton
-              route="https://twitter.com/"
-              component="twitter"
-              color="twitter"
-              label="X"
-            />
-            <MaterialSocialButton
-              route="https://www.facebook.com/"
-              component="facebook-square"
-              color="facebook"
-              label="Facebook"
-            />
+            <MaterialSocialButton route="https://twitter.com/" component="twitter" color="twitter" label="X" />
+            <MaterialSocialButton route="https://www.facebook.com/" component="facebook-square" color="facebook"
+              label="Facebook" />
           </div>
         </div>
       </div>

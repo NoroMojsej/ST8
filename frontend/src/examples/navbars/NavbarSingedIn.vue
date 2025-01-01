@@ -4,9 +4,6 @@ import { RouterLink } from "vue-router";
 import { ref, watch, computed } from "vue";
 import { useWindowsWidth } from "../../assets/js/useWindowsWidth";
 
-
-
-
 const props = defineProps({
   action: {
     type: Object,
@@ -53,13 +50,15 @@ const getLink = computed(() => {
 });
 
 function logout() {
-  // Clear the session data and redirect
   localStorage.removeItem('session');
+  if (location.pathname === '/') {
+    console.log('You are at the root path');
+    location.reload();
+  } else {
+    console.log('You are not at the root path');
+  }
   console.log("User logged out");
 }
-
-
-// set nav color on mobile && desktop
 
 let textDark = ref(props.darkText);
 const { type } = useWindowsWidth();
@@ -172,7 +171,6 @@ watch(
 
     </div>
   </nav>
-  <!-- End Navbar -->
 </template>
 
 <style scoped>
@@ -205,7 +203,6 @@ watch(
 .dropdown:not(.dropdown-hover) .dropdown-menu.show{
   margin-top: 10px !important;
   top: 100% !important;
-  /* Posunie dropdown presne pod rodičovský element */
   margin-top: 15px !important;
 }
 
