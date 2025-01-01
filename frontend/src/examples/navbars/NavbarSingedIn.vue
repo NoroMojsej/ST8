@@ -1,4 +1,4 @@
-<script setup>
+ <script setup>
 
 import { RouterLink } from "vue-router";
 import { ref, watch, computed } from "vue";
@@ -44,9 +44,13 @@ const session = JSON.parse(localStorage.getItem('session'));
 console.log("Session data:", session);
 
 const getLink = computed(() => {
-  return session.user_role === 2
-    ? { name: 'adminhome' }
-    : { name: 'student_home' };
+  if (session.user_role === 2) {
+    return { name: 'adminhome' };
+  } else if (session.user_role === 3) {
+    return { name: 'reviewer_home' };
+  } else {
+    return { name: 'student_home' };
+  }
 });
 
 function logout() {

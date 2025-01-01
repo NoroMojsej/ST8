@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { onMounted } from "vue";
 import "@/assets/css/custom.css";
-import axiosInstance from '@/axios'; 
+import axiosInstance from '@/axios';
 
 import NavbarDefault from "../../../examples/navbars/NavbarDefault.vue";
 import image from "@/assets/img/illustrations/laptop.jpg";
@@ -26,7 +26,7 @@ onMounted(() => {
 
 // Handle login request
 const login = async () => {
-  errorMessage.value = ''; 
+  errorMessage.value = '';
 
   try {
     const response = await axiosInstance.post('/login', {
@@ -36,26 +36,28 @@ const login = async () => {
 
     const token = response.data.access_token;
     const session = response.data.session;
-    localStorage.setItem('auth_token', JSON.stringify(token)); 
+    localStorage.setItem('auth_token', JSON.stringify(token));
     localStorage.setItem('session', JSON.stringify(session));
-    console.log("ROLA "+ JSON.stringify(session));
-    if(session.user_role == 2) {
+    console.log("ROLA " + JSON.stringify(session));
+    if (session.user_role === 2) {
       router.push({ name: 'adminhome' });
+    } else if (session.user_role === 3) {
+      router.push({ name: 'reviewer_home' });
     } else {
-    router.push({ name: 'student_home' }); 
-  }
-   } catch (error) {
+      router.push({ name: 'student_home' });
+    }
+  } catch (error) {
     if (error.response) {
-      console.error("Error response:", error.response); 
+      console.error("Error response:", error.response);
 
       if (error.response.data?.message) {
-        errorMessage.value = error.response.data.message;  
+        errorMessage.value = error.response.data.message;
       } else {
         errorMessage.value = 'An unexpected error occurred (response).';
       }
     } else {
-     
-      console.error("Error:", error); 
+
+      console.error("Error:", error);
       errorMessage.value = 'An unexpected error occurred (no response).';
     }
   }
@@ -63,14 +65,16 @@ const login = async () => {
 </script>
 
 <template>
-  
-        <NavbarDefault :sticky="true" />
+
+  <NavbarDefault :sticky="true" />
   <section>
     <div class="page-header min-vh-100">
       <div class="container">
         <div class="row">
-          <div class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 start-0 text-center justify-content-center flex-column">
-            <div class="position-relative h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center" :style="{ backgroundImage: `url(${image})`, backgroundSize: 'cover' }"></div>
+          <div
+            class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 start-0 text-center justify-content-center flex-column">
+            <div class="position-relative h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center"
+              :style="{ backgroundImage: `url(${image})`, backgroundSize: 'cover' }"></div>
           </div>
           <div class="col-xl-5 col-lg-6 col-md-7 d-flex flex-column ms-auto me-auto ms-lg-auto me-lg-5">
             <div class="card d-flex blur justify-content-center shadow-lg my-sm-0 my-sm-6 mt-8 mb-5">
@@ -92,24 +96,11 @@ const login = async () => {
                 <form id="signin-form" method="post" autocomplete="off" @submit.prevent="login">
                   <div class="card-body p-0 my-3">
                     <div class="row">
-                      <MaterialInput
-                        v-model="email"
-                        id="email"
-                        icon="bi bi-person text-lg"
-                        class="input-group-static mt-2 mb-2"
-                        label="EMAIL"
-                        type="email"
-                        placeholder="hello@creative-tim.com"
-                      />
-                      <MaterialInput
-                        v-model="password"
-                        id="password"
-                        class="input-group-static mt-2 mb-4"
-                        icon="bi bi-lock text-lg"
-                        label="HESLO"
-                        type="password"
-                        placeholder="Heslo"
-                      />
+                      <MaterialInput v-model="email" id="email" icon="bi bi-person text-lg"
+                        class="input-group-static mt-2 mb-2" label="EMAIL" type="email"
+                        placeholder="hello@creative-tim.com" />
+                      <MaterialInput v-model="password" id="password" class="input-group-static mt-2 mb-4"
+                        icon="bi bi-lock text-lg" label="HESLO" type="password" placeholder="Heslo" />
                     </div>
                     <div v-if="errorMessage" class="text-danger mt-2">{{ errorMessage }}</div>
                     <div class="row">
