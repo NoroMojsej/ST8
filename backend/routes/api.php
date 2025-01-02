@@ -50,5 +50,7 @@ Route::get('/conferences/{conferenceId}', [ConferenceController::class, 'show'])
 Route::put('/conference/{conferenceId}', [ConferenceController::class, 'update']);
 Route::get('/papers/conference/{conferenceId}', [PaperController::class, 'getPapersByConference']);
 Route::get('/papers/student/{studentId}/conference/{conferenceId}', [PaperController::class, 'getEssaysByStudentAndConference']);
+Route::post('/sections/get-all-sections', [SectionController::class, 'getAllSections']);
+Route::post('/sections/save-section', [SectionController::class, 'saveSection']);
+Route::post('/sections/delete-section', [SectionController::class, 'deleteSection']);
 
-Route::post('/submit-review', [ReviewController::class, 'submitReview']);
