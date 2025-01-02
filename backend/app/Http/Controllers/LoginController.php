@@ -34,7 +34,8 @@ class LoginController extends Controller
         $sessionData = [
             'user_id' => $user->iduser, // Ukladáme 'id' používateľa do session ako 'user_id'
             'user_role' => $user->role_idrole,
-            'user_name' => $user->name, // Ukladáme meno používateľa
+            'user_first_name' => $user->name, // Ukladáme meno používateľa
+            'user_last_name' => $user->surname,
          ];
 
         $token = $user->createToken('auth_token')->plainTextToken; // create token mi hádže v IDE chybu, ale nakoľko robím vo VS Code s random intellisense z marketplacu, to môže byť chyba toho.

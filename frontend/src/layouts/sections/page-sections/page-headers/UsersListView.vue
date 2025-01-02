@@ -1,16 +1,16 @@
 <script setup>
 import { ref, computed } from "vue";
 import BaseLayout from "../../components/BaseLayout.vue";
-import ListCard from "../../../../views/LandingPages/Admin/components/ListCard.vue";
 import { useRouter } from "vue-router";
+import UserCard from "../../components/UserCard.vue";
 
 const router = useRouter();
 const input = ref("");
 const users = [
-  { id: 1, firstName: "Mark Otto", uni: "UKF" },
-  { id: 2, firstName: "Jacob Thornton", uni: "UBM" },
-  { id: 3, firstName: "Larry Bird", uni: "UKF" },
-  { id: 4, firstName: "Larry Bird", uni: "UKF" },
+  { id: 1, firstName: "Mark Otto", uni: "UKF", role: "Student" },
+  { id: 2, firstName: "Jacob Thornton", uni: "UBM", role: "Student" },
+  { id: 3, firstName: "Larry Bird", uni: "UKF", role: "Recenzent" },
+  { id: 4, firstName: "Larry Bird", uni: "UKF", role: "Student" },
 ];
 
 const filteredUsers = computed(() => {
@@ -19,8 +19,8 @@ const filteredUsers = computed(() => {
   );
 });
 
-function handleEdit(id) {
-  router.push({ name: "user_management", params: { id } });
+function handleEssayManager(id) {
+  router.push({ name: "essayassign", params: { id } });
 }
 </script>
 
@@ -60,14 +60,15 @@ function handleEdit(id) {
         <div class="col-12">
           <div class="d-flex align-items-center">
             <div class="flex-grow-1">
-              <ListCard
+              <UserCard
                 class="px-lg-1 mt-lg-0 mt-4 p-4"
                 height="h-100"
-                :icon="{ component: 'school', color: 'success' }"
+                :color="{ text: 'dark', background: 'primary' }"
+                :icon="{ component: 'edit', color: 'success' }"
                 :title="user.firstName"
                 :description="user.uni"
-                :handleEdit="() => handleEdit(user.id)"
-                :buttonText="'Spravovať'"
+                :handleEdit="() => handleEssayManager(user.id)"
+                :initialRole="user.role"
               />
             </div>
           </div>

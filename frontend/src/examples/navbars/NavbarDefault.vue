@@ -1,12 +1,8 @@
 <script setup>
 
 import { RouterLink } from "vue-router";
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useWindowsWidth } from "../../assets/js/useWindowsWidth";
-
-import ArrDark from "@/assets/img/down-arrow-dark.svg";
-import downArrow from "@/assets/img/down-arrow.svg";
-import DownArrWhite from "@/assets/img/down-arrow-white.svg";
 
 const props = defineProps({
   action: {
@@ -44,33 +40,26 @@ const props = defineProps({
   }
 });
 
-// set arrow  color
-function getArrowColor() {
-  if (props.transparent && textDark.value) {
-    return ArrDark;
-  } else if (props.transparent) {
-    return DownArrWhite;
-  } else {
-    return ArrDark;
+const sessionData = ref(null);
+
+function getSessionFromLocalStorage() {
+  const storedSession = localStorage.getItem("session");
+  if (storedSession) {
+    try {
+      sessionData.value = JSON.parse(storedSession);
+      console.log("HOME " + sessionData.value);
+    } catch (error) {
+      console.error("Error parsing session data from localStorage", error);
+    }
   }
 }
 
-// set text color
-const getTextColor = () => {
-  let color;
-  if (props.transparent && textDark.value) {
-    color = "#02925f";
-  } else if (props.transparent) {
-    color = "text-white";
-  } else {
-    color = "#02925f";
-  }
+onMounted(() => {
+  getSessionFromLocalStorage();
+});
 
-  return color;
-};
 
-// set nav color on mobile && desktop
-
+// Nastavenie farby navigácie na mobile a desktop
 let textDark = ref(props.darkText);
 const { type } = useWindowsWidth();
 
@@ -90,95 +79,74 @@ watch(
     }
   }
 );
+
+watch(sessionData, (newData) => {
+  console.log("Session data updated:", newData);
+});
+
 </script>
 
 
 <template>
-  <nav
-    class="navbar navbar-expand-lg top-0"
-    :class="{
-      'z-index-3 w-100 shadow-none navbar-transparent position-absolute my-3':
-        props.transparent,
-      'my-3 blur border-radius-lg z-index-3 py-2 shadow py-2 start-0 end-0 mx-4 position-absolute mt-4':
-        props.sticky,
-      'navbar-light bg-white py-3': props.light,
-      ' navbar-dark bg-gradient-dark z-index-3 py-3': props.dark
-    }"
-  >
-    <div
-      :class="
-        props.transparent || props.light || props.dark
-          ? 'container'
-          : 'container-fluid px-0'
-      "
-     
-    >
 
-      <RouterLink
-        class="navbar-brand d-block d-md-none"
-        :class="
-          props.transparent || props.dark
-            ? 'text-white'
-            : 'font-weight-bolder ms-sm-3'
-        "
-        to="/"
-        rel="tooltip"
-        title=""
-        data-placement="bottom"
-      >
-      ŠTUDENTSKÁ VEDECKÁ KONFERENCIA
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="home">
+      <RouterLink :to="{ name: 'home' }">
+        <i class="bi bi-house-fill"></i>
       </RouterLink>
-
-      <div
-        class="collapse navbar-collapse w-100 pt-3 pb-2 py-lg-0"
-        id="navigation"
-      >
-
-      <RouterLink
-              class="navbar-brand d-block ms-0"
-              :class="
-                props.transparent || props.dark
-                  ? 'text-white'
-                  : 'font-weight-bolder ms-sm-3'
-              "
-              to="/"
-              rel="tooltip"
-              title=""
-              data-placement="bottom"
-            >
-              ŠTUDENTSKÁ VEDECKÁ KONFERENCIA
-            </RouterLink>
-      <div class="d-lg-flex d-none p-2 ms-auto">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <router-link
-              :to="action.route"
-              class="btn btn-md mb-0"
-              :class="action.color"
-              style="font-family: 'Montserrat', sans-serif; font-size: 12px;"
-              @click.native="smoothToPricing('pricing-soft-ui')"
-            >
-              {{ action.label }}
-            </router-link>
-          </li>
-        </ul>
-        <ul class="navbar-nav ms-2">
-          <li class="nav-item">
-            <router-link
-              :to="action.route2"
-              class="btn btn-md mb-0"
-              :class="action.color"
-              style="font-family: 'Montserrat', sans-serif; font-size: 12px;"
-              @click.native="smoothToPricing('pricing-soft-ui')"
-            >
-              {{ action.label2 }}
-            </router-link>
-          </li>
-        </ul>
-      </div>
-
-
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="bi bi-arrow-down-short fs-1"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link active" href="#"> <router-link :to="action.route" class="btn btn-md mb-0"
+            :class="action.color" style="font-family: 'Montserrat', sans-serif; font-size: 12px;"
+            @click.native="smoothToPricing('pricing-soft-ui')">
+            {{ action.label }}
+          </router-link></a>
+        <a class="nav-item nav-link" href="#">
+          <router-link :to="action.route2" class="btn btn-md mb-0" :class="action.color"
+            style="font-family: 'Montserrat', sans-serif; font-size: 12px;"
+            @click.native="smoothToPricing('pricing-soft-ui')">
+            {{ action.label2 }}
+          </router-link>
+        </a>
       </div>
     </div>
   </nav>
+
 </template>
+
+<style scoped>
+.home {
+  padding-left: 10% !important;
+}
+
+.bi.bi-house-fill {
+  color: #344767 !important;
+  font-size: 1.7rem !important;
+}
+
+.log {
+  padding-right: 10% !important;
+}
+
+.navbar {
+  padding-top: 1%;
+  padding-bottom: 1%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+  z-index: 9999;
+}
+
+.bi.bi-arrow-down-short {
+  color: #344767 !important;
+}
+
+.navbar-nav {
+  width: 100% !important;
+  display: flex !important;
+  justify-content: end !important;
+}
+</style>

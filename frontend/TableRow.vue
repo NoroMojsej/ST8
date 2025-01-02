@@ -4,7 +4,7 @@ defineProps({
     type: String,
     default: "",
   },
-  radioNumber:{
+  radioNumber: {
     type: String,
     default: "",
   },
@@ -13,7 +13,7 @@ defineProps({
 const emit = defineEmits(["update"]);
 </script>
 
-<template>
+
 
 <tr>
   <td scope="row" class="question-table text-wrap">
@@ -110,7 +110,9 @@ const emit = defineEmits(["update"]);
     </div>
   </td>
 </tr>
+
 </template>
+
 
 <style scoped>
 

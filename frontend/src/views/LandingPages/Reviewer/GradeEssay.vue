@@ -336,6 +336,7 @@ textarea {
     <TableRow
       id="grade1" 
       question="Aktuálnosť a náročnosť práce"
+
       radio-number="1"
       @update="review.grade1 = $event"
       >
@@ -523,6 +524,7 @@ textarea {
     v-model="review.yesno14"
     >
   </TableSelect>
+
 <!--TABULKA 3-->
 
 <HeaderLine
