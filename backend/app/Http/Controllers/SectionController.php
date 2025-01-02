@@ -45,18 +45,37 @@ class SectionController extends Controller
 
     public function deleteSection(Request $request)
     {
-        $request->validate([
-            'section_id' => 'required|exists:section,idsection',
-        ]);
+        try {
+            $request->validate([
+                'section_id' => 'required',
+            ]);
 
-        $section = Section::findOrFail($request['section_id']);
-        $section->delete();
+            $section = Section::findOrFail($request['section_id']);
 
-        return response()->json([
-            'message' => 'Section deleted successfully',
-            'section_id' => $request['section_id'],
-        ], 200);
+            $section->delete();
+
+            return response()->json([
+                'message' => 'Section deleted successfully.',
+                'section_id' => $request['section_id'],
+            ], 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            //Validation Exceptions
+            return response()->json([
+                'message' => 'Validation failed.',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            //Not found Exceptions
+            return response()->json([
+                'message' => 'The section does not exist or has already been deleted.',
+                'section_id' => $request['section_id'] ?? null,
+            ], 404);
+        } catch (\Exception $e) {
+            // Handle other Exceptions
+            return response()->json([
+                'message' => 'An unexpected error occurred while trying to delete the section.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
-
-
 }
