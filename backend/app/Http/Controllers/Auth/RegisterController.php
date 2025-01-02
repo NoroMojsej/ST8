@@ -17,11 +17,11 @@ class RegisterController extends Controller
             'degrees' => 'required|array|min:1|exists:degree,iddegree',
             'name' => 'required|string|max:100',
             'surname' => 'required|string|max:100',
-            'country' => 'required|exists:country,idcountry', // Validate foreign key
-            'university' => 'required|exists:university,iduniversity', // Validate foreign key
-            'faculty' => 'required|exists:faculty,idfaculty',         // Validate foreign key
-            'department' => 'required|exists:department,iddepartment', // Validate foreign key
-            'email' => 'required|email|unique:user,email',             // Correct the table name
+            'country' => 'required|exists:country,idcountry',
+            'university' => 'required|exists:university,iduniversity',
+            'faculty' => 'required|exists:faculty,idfaculty',
+            'department' => 'required|exists:department,iddepartment',
+            'email' => 'required|email|unique:user,email',
             'password' => 'required|string|min:8'
         ]);
 
@@ -29,23 +29,24 @@ class RegisterController extends Controller
             'name' => $request->name,
             'surname' => $request->surname,
             'email' => $request->email,
-            'password_hash' => Hash::make($request->password),                // Correct the password field
-            'country_idcountry' => $request->country,          // Save the foreign key
-            'department_iddepartment' => $request->department,           // Save the department
-            'created_on' => now(),// Add the created_on column
-            'updated_on' => now(), // Add the created_on column
-            'role_idrole' => $request->role_idrole ?? 1,                 // Default role (e.g., student)
+            'password_hash' => Hash::make($request->password),
+            'country_idcountry' => $request->country,
+            'department_iddepartment' => $request->department,
+            'created_on' => now(),
+            'updated_on' => now(),
+            'role_idrole' => $request->role_idrole ?? 1,
         ]);
 
         $user->degrees()->attach($request->degrees);
 
         $sessionData = [
-           'user_id' => $user->iduser, // Ukladáme 'id' používateľa do session ako 'user_id'
-           'user_role' => $user->role_idrole,
-           'user_name' => $user->name, // Ukladáme meno používateľa
-        ];
+            'user_id' => $user->iduser,
+            'user_role' => $user->role_idrole,
+            'user_first_name' => $user->name,
+            'user_last_name' => $user->surname,
+         ];
 
-        $token = $user->createToken('auth_token')->plainTextToken; // create token mi hádže v IDE chybu, ale nakoľko robím vo VS Code s random intellisense z marketplacu, to môže byť chyba toho.
+        $token = $user->createToken('auth_token')->plainTextToken;
         // fixnuté s @var...
         return response()->json([
             'message' => 'Prihlásenie úspešné',
