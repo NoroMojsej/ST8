@@ -9,84 +9,108 @@ defineProps({
     default: "",
   },
 });
+
+const emit = defineEmits(["update"]);
 </script>
 
 
-<template>
-  <tr>
-    <!-- Question Column -->
-    <td scope="row" class="question-table text-wrap">
-      <p class="question">{{ question }}</p>
-    </td>
 
-    <!-- Radio Button Columns -->
-    <td class="td-wrapper">
-      <div class="form-check">
-        <input
-          class="form-check-input"
-          type="radio"
-          :name="`radioGroup${radioNumber}`"
-          :id="`optionA${radioNumber}`"
-        />
-        <label class="form-check-label" :for="`optionA${radioNumber}`"></label>
-      </div>
-    </td>
-    <td class="td-wrapper">
-      <div class="form-check">
-        <input
-          class="form-check-input"
-          type="radio"
-          :name="`radioGroup${radioNumber}`"
-          :id="`optionB${radioNumber}`"
-        />
-        <label class="form-check-label" :for="`optionB${radioNumber}`"></label>
-      </div>
-    </td>
-    <td class="td-wrapper">
-      <div class="form-check">
-        <input
-          class="form-check-input"
-          type="radio"
-          :name="`radioGroup${radioNumber}`"
-          :id="`optionC${radioNumber}`"
-        />
-        <label class="form-check-label" :for="`optionC${radioNumber}`"></label>
-      </div>
-    </td>
-    <td class="td-wrapper">
-      <div class="form-check">
-        <input
-          class="form-check-input"
-          type="radio"
-          :name="`radioGroup${radioNumber}`"
-          :id="`optionD${radioNumber}`"
-        />
-        <label class="form-check-label" :for="`optionD${radioNumber}`"></label>
-      </div>
-    </td>
-    <td class="td-wrapper">
-      <div class="form-check">
-        <input
-          class="form-check-input"
-          type="radio"
-          :name="`radioGroup${radioNumber}`"
-          :id="`optionE${radioNumber}`"
-        />
-        <label class="form-check-label" :for="`optionE${radioNumber}`"></label>
-      </div>
-    </td>
-    <td class="td-wrapper">
-      <div class="form-check">
-        <input
-          class="form-check-input"
-          type="radio"
-          :name="`radioGroup${radioNumber}`"
-          :id="`optionFX${radioNumber}`"
-        />
-        <label class="form-check-label" :for="`optionFX${radioNumber}`"></label>
-      </div>
-    </td>
-  </tr>
+<tr>
+  <td scope="row" class="question-table text-wrap">
+    <p class="question">{{ question }}</p>
+  </td>
+
+  <!-- A -->
+  <td class="td-wrapper">
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="radio"
+        :name="`flexRadioDefault${radioNumber}`"
+        :id="`flexRadioDefault${radioNumber}A`"
+        value="A"
+        @change="$emit('update', 'A')"
+      />
+      <label class="form-check-label" :for="`flexRadioDefault${radioNumber}A`"></label>
+    </div>
+  </td>
+
+  <!-- B -->
+  <td class="td-wrapper">
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="radio"
+        :name="`flexRadioDefault${radioNumber}`"
+        :id="`flexRadioDefault${radioNumber}B`"
+        value="B"
+        @change="$emit('update', 'B')"
+      />
+      <label class="form-check-label" :for="`flexRadioDefault${radioNumber}B`"></label>
+    </div>
+  </td>
+
+  <!-- C -->
+  <td class="td-wrapper">
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="radio"
+        :name="`flexRadioDefault${radioNumber}`"
+        :id="`flexRadioDefault${radioNumber}C`"
+        value="C"
+        @change="$emit('update', 'C')"
+      />
+      <label class="form-check-label" :for="`flexRadioDefault${radioNumber}C`"></label>
+    </div>
+  </td>
+
+  <!-- D -->
+  <td class="td-wrapper">
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="radio"
+        :name="`flexRadioDefault${radioNumber}`"
+        :id="`flexRadioDefault${radioNumber}D`"
+        value="D"
+        @change="$emit('update', 'D')"
+      />
+      <label class="form-check-label" :for="`flexRadioDefault${radioNumber}D`"></label>
+    </div>
+  </td>
+
+  <!-- E -->
+  <td class="td-wrapper">
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="radio"
+        :name="`flexRadioDefault${radioNumber}`"
+        :id="`flexRadioDefault${radioNumber}E`"
+        value="E"
+        @change="$emit('update', 'E')"
+      />
+      <label class="form-check-label" :for="`flexRadioDefault${radioNumber}E`"></label>
+    </div>
+  </td>
+
+  <!-- FX-->
+  <td class="td-wrapper">
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="radio"
+        :name="`flexRadioDefault${radioNumber}`"
+        :id="`flexRadioDefault${radioNumber}FX`"
+        value="FX"
+        @change="$emit('update', 'FX')"
+      />
+      <label class="form-check-label" :for="`flexRadioDefault${radioNumber}FX`"></label>
+    </div>
+  </td>
+</tr>
+
 </template>
 
 

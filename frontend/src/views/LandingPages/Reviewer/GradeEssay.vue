@@ -5,7 +5,8 @@ import HeaderLine from "/HeaderLine.vue";
 import TableRow from "/TableRow.vue";
 import TableSelect from "/TableSelect.vue";
 import TableTextArea from "/TableTextArea.vue";
-
+import { reactive } from "vue";
+import axiosInstance from '@/axios'; // Import axios instance
 
 // Sections components
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
@@ -197,6 +198,99 @@ textarea {
 }
 </style>
 
+<script>
+
+
+    const approveWork = () => {
+      review.status = 'YY';
+      review.status_desc = 'Work has been approved.';
+    };
+
+    const disapproveWork = () => {
+      review.status = 'NN';
+      review.status_desc = 'Work has not been approved.';
+    };
+
+
+    const today = () => {
+      const newDate = new Date();
+      const day = String(newDate.getDate()).padStart(2, '0');
+      const month = String(newDate.getMonth() + 1).padStart(2, '0');
+      const year = newDate.getFullYear();
+
+      return `${year}-${month}-${day}`;
+    };
+
+    const twoYearsFromNow = () => {
+      const newDate = new Date();
+      newDate.setFullYear(newDate.getFullYear() + 2);
+
+      const day = String(newDate.getDate()).padStart(2, '0');
+      const month = String(newDate.getMonth() + 1).padStart(2, '0');
+      const year = newDate.getFullYear();
+
+      return `${year}-${month}-${day}`;
+    };
+
+    const review = reactive({
+      grade1: null,
+      grade2: null,
+      grade3: null,
+      grade4: null,
+      grade5: null,
+      grade6: null,
+      grade7: null,
+      grade8: null,
+      grade9: null,
+      grade10: null,
+
+      user_iduser: 2,     //TODO: lokalny user v db, bude treba aktualizovat na pouzivatela ktoreho praca je hodnotena
+
+      yesno1: "",
+      yesno2: "",
+      yesno3: "",
+      yesno4: "",
+      yesno5: "",
+      yesno6: "",
+      yesno7: "",
+      yesno8: "",
+      yesno9: "",
+      yesno10: "",
+      yesno11: "",
+      yesno12: "",
+      yesno13: "",
+      yesno14: "",
+
+      txt_plus: "",
+      txt_minus: "",
+      txt_general: "",
+
+      status: "",
+      status_desc: "",
+
+
+      valid_from: today(),
+      valid_to: twoYearsFromNow(),
+      
+    });
+
+    const submitReview = async () => {
+        try {
+          console.log(review);
+          const response = await axiosInstance.post('/submit-review', review, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          console.log('Review submitted successfully:', response.data);
+        } catch (error) {
+          console.error('Error submitting review:', error.response?.data || error.message);
+        }
+      };
+
+</script>
+
 <template>
   <BaseLayout
  title="Hodnotenie Práce"
@@ -223,7 +317,7 @@ textarea {
   label="ZVOLTE ZNÁMKU"
   ></HeaderLine>
   <div class="wrapper">
-   
+
 <table class="table caption-top">
   <!--<caption>List of users</caption>-->
   <thead>
@@ -240,49 +334,84 @@ textarea {
   <tbody>
 
     <TableRow
+      id="grade1" 
       question="Aktuálnosť a náročnosť práce"
-        radio-number="1">
+
+      radio-number="1"
+      @update="review.grade1 = $event"
+      >
     </TableRow>
 
     <TableRow
-      question="Zorientovanie sa študenta v danej problematike, 
-        predovšetkým analýzou domácej a zahraničnej literatúry"
-        radio-number="2">
+      id="grade2" 
+      question="Zorientovanie sa študenta v danej problematike, predovšetkým analýzou domácej a zahraničnej literatúry"
+      radio-number="2"
+      @update="review.grade2 = $event"
+      >
     </TableRow>
 
     <TableRow
+      id="grade3" 
       question="Vhodnosť zvolených metód spracovania riešenej problematiky"
-      radio-number="3">
+      radio-number="3"
+      @update="review.grade3 = $event"
+      >
     </TableRow>
 
     <TableRow
+      id="grade4" 
       question="Rozsah a úroveň dosiahnutých výsledkov"
-      radio-number="4">
+      radio-number="4"
+      @update="review.grade4 = $event"
+      >
     </TableRow>
 
     <TableRow
+      id="grade5" 
       question="Analýza a interpretácia výsledkov a formulácia záverov práce"
-      radio-number="5">
+      radio-number="5"
+      @update="review.grade5 = $event"
+      >
     </TableRow>
 
     <TableRow
+      id="grade6" 
       question="Prehľadnosť a logická štruktúra práce"
-      radio-number="6">
+      radio-number="6"
+      @update="review.grade6 = $event"
+      >
     </TableRow>
 
     <TableRow
+      id="grade7" 
       question="Formálna, jazyková a štylistická úroveň práce"
-      radio-number="7">
+      radio-number="7"
+      @update="review.grade7 = $event"
+      >
     </TableRow>
 
     <TableRow
+      id="grade8" 
       question="Analýza a interpretácia výsledkov a formulácia záverov práce"
-      radio-number="8">
+      radio-number="8"
+      @update="review.grade8 = $event"
+      >
     </TableRow>
 
     <TableRow
+      id="grade9" 
       question="Prehľadnosť a logická štruktúra práce"
-      radio-number="9">
+      radio-number="9"
+      @update="review.grade9 = $event"
+      >
+    </TableRow>
+
+    <TableRow
+      id="grade10" 
+      question="Prehľadnosť a logická štruktúra práce"
+      radio-number="10"
+      @update="review.grade10 = $event"
+      >
     </TableRow>
     
   </tbody>
@@ -296,59 +425,104 @@ textarea {
   ></HeaderLine>
 
   <TableSelect
-  opinion="Zorientovanie sa študenta v danej problematike, 
-      predovšetkým analýzou domácej a zahraničnej literatúry">
+     id="yesno1" 
+      opinion="Zorientovanie sa študenta v danej problematike, predovšetkým analýzou domácej a zahraničnej literatúry"
+      v-model="review.yesno1"
+      >
   </TableSelect>
                                                               
                                                             <!-- pre Git ovanim vymeniť : -->
 
   
  <TableSelect
-  opinion="Práca zodpovedá šablóne určenej pre ŠVK">
+    id="yesno2" 
+    opinion="Práca zodpovedá šablóne určenej pre ŠVK"
+    v-model="review.yesno2"
+    >
   </TableSelect>
 
   <TableSelect
-  opinion="Chýba názov práce v slovenskom alebo anglickom jazyku">
+    id="yesno3" 
+    opinion="Chýba názov práce v slovenskom alebo anglickom jazyku" 
+    v-model="review.yesno3"
+    >
   </TableSelect>
 
   <TableSelect
-  opinion="Chýba meno autora alebo školiteľa">
+    id="yesno4" 
+    opinion="Chýba meno autora alebo školiteľa" 
+    v-model="review.yesno4"
+    >
   </TableSelect>
 
   <TableSelect
-  opinion="Chýba pracovná emailová adresa autora alebo školiteľa">
+    id="yesno5" 
+    opinion="Chýba pracovná emailová adresa autora alebo školiteľa" 
+    v-model="review.yesno5"
+    >
   </TableSelect>
 
   <TableSelect
-  opinion="Chýba abstrakt v slovenskom alebo anglickom jazyku">
+    id="yesno6" 
+    opinion="Chýba abstrakt v slovenskom alebo anglickom jazyku" 
+    v-model="review.yesno6"
+    >
   </TableSelect>
 
   <TableSelect
-  opinion="Abstrakt nespĺňa rozsah 100 - 150 slov">
+    id="yesno7" 
+    opinion="Abstrakt nespĺňa rozsah 100 - 150 slov" 
+    v-model="review.yesno7"
+    >
   </TableSelect>
 
   <TableSelect
-  opinion="Chýbajú kľúčové slová v slovenskom alebo v anglickom jazyku">
+    id="yesno8" 
+    opinion="Chýbajú kľúčové slová v slovenskom alebo v anglickom jazyku" 
+    v-model="review.yesno8"
+    >
   </TableSelect>
 
   <TableSelect
-  opinion="Chýba 'Úvod', 'Výsledky a diskusia' alebo 'Záver'">
+    id="yesno9" 
+    opinion="Chýba 'Úvod', 'Výsledky a diskusia' alebo 'Záver'" 
+    v-model="review.yesno9"
+    >
   </TableSelect>
 
   <TableSelect
-  opinion="Nie sú uvedené zdroje a použitá literatúra">
+    id="yesno10" 
+    opinion="Nie sú uvedené zdroje a použitá literatúra" 
+    v-model="review.yesno10"
+    >
   </TableSelect>
 
   <TableSelect
-  opinion="V texte chýbajú referencie na zoznam bibliografie">
+    id="yesno11" 
+    opinion="V texte chýbajú referencie na zoznam bibliografie" 
+    v-model="review.yesno11"
+    >
   </TableSelect>
 
   <TableSelect
-  opinion="V texte chýbajú referencie na použité obrázky alebo tabuľky">
+    id="yesno12" 
+    opinion="V texte chýbajú referencie na použité obrázky alebo tabuľky" 
+    v-model="review.yesno12"
+    >
   </TableSelect>
   
   <TableSelect
-  opinion="Obrázkom alebo tabuľkám chýba popis">
+    id="yesno13" 
+    opinion="Obrázkom alebo tabuľkám chýba popis" 
+    v-model="review.yesno13"
+    >
+  </TableSelect>
+
+  <TableSelect
+    id="yesno14" 
+    opinion="Chýba meno autora alebo školiteľa" 
+    v-model="review.yesno14"
+    >
   </TableSelect>
 
 <!--TABULKA 3-->
@@ -358,11 +532,13 @@ textarea {
   ></HeaderLine>
 
   <TableTextArea
-  opinion="Prínos (silné stránky) práce">
+    opinion="Prínos (silné stránky) práce"
+    v-model="review.txt_plus" >
   </TableTextArea>
 
   <TableTextArea
-  opinion="Nedostatky (slabé stránky) práce">
+    opinion="Nedostatky (slabé stránky) práce"
+    v-model="review.txt_minus">
   </TableTextArea>
 
 
@@ -375,10 +551,10 @@ textarea {
       <div class="row justify-space-between text-center py-2">
         <div class="col-6 mx-auto">
           <div class="btn-group" role="group" aria-label="Basic example">
-            <MaterialButton size="lg" variant="outline" color="success">
+            <MaterialButton size="lg" variant="outline" color="success" @click="approveWork">
               SCHVAĽUJEM PRÁCU
             </MaterialButton>
-            <MaterialButton size="lg" variant="outline" color="success">
+            <MaterialButton size="lg" variant="outline" color="success" @click="disapproveWork">
               NESCHVAĽUJEM PRÁCU
             </MaterialButton>
           </div>
@@ -395,6 +571,7 @@ textarea {
             color="success"
             class="w-auto me-2"
             size="lg"
+            @click="submitReview"
             style="font-family: 'Open Sans' !important">
             ODOSLAŤ
           </MaterialButton>
