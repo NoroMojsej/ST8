@@ -13,7 +13,7 @@ defineProps({
 const emit = defineEmits(["update"]);
 </script>
 
-
+<template>
 
 <tr>
   <td scope="row" class="question-table text-wrap">

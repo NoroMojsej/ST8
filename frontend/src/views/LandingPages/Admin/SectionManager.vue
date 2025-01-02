@@ -1,13 +1,34 @@
 <script setup>
 import { ref, computed } from "vue";
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
+import axiosInstance from '@/axios';
 
-const sections = ref([
-  { id: 1, section: "Sekcia 1", isEditing: false },
-  { id: 2, section: "Sekcia 2", isEditing: false },
-  { id: 3, section: "Sekcia 3", isEditing: false },
-  { id: 4, section: "Sekcia 4", isEditing: false },
-]);
+
+const sections = ref([]);
+
+const getAllSections = async () => {
+  try {
+    const response = await axiosInstance.post('/sections/get-all-sections', {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    console.log('Sections retrieved successfully:', response.data);
+
+
+    sections.value = response.data.map(section => ({
+      id: section.idsection,
+      section: section.text,
+      isEditing: false,
+    }));
+  } catch (error) {
+    console.error('Sections retrieving failed:', error.response?.data || error.message);
+  }
+};
+
+
+getAllSections();
 
 const isAdding = ref(false);
 const input = ref("");
@@ -24,11 +45,59 @@ const toggleEdit = (id) => {
   }
 };
 
+const saveSection = async (section) => {
+  try {
+        const sectionToSave = {
+          section_id: section.id,
+          section_text: section.section,
+        };
+
+        console.log(sectionToSave);
+
+        const response = await axiosInstance.post('/sections/save-section', sectionToSave, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        console.log('Section saved successfully:', response.data);
+      } catch (error) {
+        console.error('Error saving section:', error.response?.data || error.message);
+      }
+    };
+
+const deleteSection = async (sectionIdToDelete) => {
+  try {
+        const sectionToDelete = {
+          section_id: sectionIdToDelete,
+        };
+
+        console.log('Section to delete:', sectionToDelete);
+
+        const response = await axiosInstance.post('/sections/delete-section', sectionToDelete, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        console.log('Section deleted successfully:', response.data);
+      } catch (error) {
+        console.error('Error deleting section:', error.response?.data || error.message);
+        window.alert(error.response?.data?.message);
+      }
+    };
+
+
+
 const saveEdit = (id, newSectionValue) => {
   const section = sections.value.find((section) => section.id === id);
   if (section) {
     section.section = newSectionValue;
     section.isEditing = false;
+    
+    //posli na backend
+    saveSection(section)
+    
   }
 };
 
@@ -38,6 +107,7 @@ const deleteUser = (id) => {
     const index = sections.value.findIndex((section) => section.id === id);
     if (index !== -1) {
       sections.value.splice(index, 1);
+      deleteSection(id)
     }
   }
 };
@@ -58,6 +128,9 @@ const saveNewSection = (id, newSectionValue) => {
     section.section = newSectionValue;
     section.isEditing = false;
     isAdding.value = false;
+
+    //posli na backend
+    saveSection(section)
   }
 };
 
