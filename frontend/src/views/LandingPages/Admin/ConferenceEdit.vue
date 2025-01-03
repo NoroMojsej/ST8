@@ -117,7 +117,7 @@ const getAvailableSections = (index) => {
 };
 
 
-async function updateConference() {
+async function Conference() {
   try {
     const formatDate = (dateString) => {
       const date = new Date(dateString);
@@ -245,7 +245,7 @@ async function updateConference() {
               </div>
 
               <div class="d-flex justify-content-center">
-                <button class="btn btn-success" @click="updateConference">
+                <button class="btn btn-success" @click="Conference">
                   Upraviť Konferenciu
                 </button>
               </div>
