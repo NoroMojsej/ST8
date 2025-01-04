@@ -44,12 +44,16 @@ Route::get('/faculties/{universityId}', [FacultyController::class, 'getFaculties
 Route::get('/departments/{facultyId}', [DepartmentController::class, 'getDepartments']);
 Route::post('/submit-review', [ReviewController::class, 'submitReview']);
 Route::get('/sections', [SectionController::class, 'index']);
+Route::get('/sections/{idConference}', [SectionController::class, 'getSectionsByConference']);
 Route::get('/conferences', [ConferenceController::class, 'index']);
 Route::post('/createConf', [ConferenceController::class, 'store']);
 Route::get('/conferences/{conferenceId}', [ConferenceController::class, 'show']);
 Route::put('/conference/{conferenceId}', [ConferenceController::class, 'update']);
 Route::get('/papers/conference/{conferenceId}', [PaperController::class, 'getPapersByConference']);
+Route::get('/papers/{idEssay}', [PaperController::class, 'getEssayById']);
 Route::get('/papers/student/{studentId}/conference/{conferenceId}', [PaperController::class, 'getEssaysByStudentAndConference']);
+Route::put('/papers/update/{essayId}', [PaperController::class, 'updateEssayByID']);
+Route::post('/papers/update/{essayId}/upload-files', [PaperController::class, 'uploadFiles']);
 Route::post('/sections/get-all-sections', [SectionController::class, 'getAllSections']);
 Route::post('/sections/save-section', [SectionController::class, 'saveSection']);
 Route::post('/sections/delete-section', [SectionController::class, 'deleteSection']);

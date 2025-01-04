@@ -78,26 +78,35 @@ class PaperController extends Controller
     }
 
     public function uploadFiles(Request $request, $id)
-    {
-        $request->validate([
-            'file1' => 'required|file|mimes:pdf,docx|max:20048',
-            'file2' => 'required|file|mimes:pdf,docx|max:20048',
-        ]);
+{
+    $request->validate([
+        'file1' => 'required|file|mimes:pdf,doc,docx|max:20048',
+        'file2' => 'required|file|mimes:pdf,doc,docx|max:20048',
+    ]);
 
-        $essay = Paper::findOrFail($id);
+    $essay = Paper::findOrFail($id);
 
-        $filePaths = [];
-        foreach (['file1', 'file2'] as $fileKey) {
-            if ($request->hasFile($fileKey)) {
-                $filePaths[$fileKey] = $request->file($fileKey)->store('essays', 'public');
+    $filePaths = [];
+
+    foreach (['file1', 'file2'] as $fileKey) {
+        if ($request->hasFile($fileKey)) {
+            $file = $request->file($fileKey);
+            $extension = $file->getClientOriginalExtension(); // získame príponu súboru, aby sme vedeli ktorý sa má dať kam
+
+            if (in_array($extension, ['pdf'])) {
+                $filePaths['pdf'] = $file->store('essays', 'public');
+            } elseif (in_array($extension, ['doc', 'docx'])) {
+                $filePaths['doc'] = $file->store('essays', 'public');
             }
         }
-
-        $essay->update([
-            'path_filesystem_doc' => $filePaths['file1'] ?? null,
-            'path_filesystem_pdf' => $filePaths['file2'] ?? null,
-        ]);
-
-        return response()->json(['message' => 'Files uploaded successfully', 'file_paths' => $filePaths]);
     }
+
+    $essay->update([
+        'path_filesystem_doc' => $filePaths['doc'] ?? $essay->path_filesystem_doc,
+        'path_filesystem_pdf' => $filePaths['pdf'] ?? $essay->path_filesystem_pdf,
+    ]);
+
+    return response()->json(['message' => 'Files uploaded successfully', 'file_paths' => $filePaths]);
+}
+
 }
