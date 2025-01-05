@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Paper;
@@ -65,7 +65,11 @@ class PaperController extends Controller
     }
 
     public function uploadPaper(Request $request)
-    {
+{
+    try {
+        Log::info('Starting uploadPaper method.');
+        Log::info('Request data:', $request->all());
+
         $request->validate([
             'name' => 'required|string|max:255',
             'abstract_lang1' => 'nullable|string',
@@ -77,17 +81,37 @@ class PaperController extends Controller
             'files.*' => 'file|mimes:pdf,docx|max:10240', // zatial max 10mb, mozme zmenit
         ]);
 
-        $userId = auth()->id(); // user ID
+        Log::info('Validation passed.');
+
+        $userId = auth()->id(); // ? auth()->id() : 1; // Dont do this, len pre debug.
+        Log::info('Authenticated user ID:', ['user_id' => $userId]);
+
+        if (!$userId) {
+            Log::error('User is not authenticated.');
+            return response()->json(['message' => 'User not authenticated.'], 401);
+        }
+
         $files = $request->file('files');
+        Log::info('Uploaded files:', ['files' => $files]);
+
         $filePaths = [];
 
         foreach ($files as $file) {
-            // unikátny názov aby sme v storage neprepisovali UŽ nahrané práce. Aktuálne používa userID, asi by bolo lepšie nejak implementovať "DATETIME" (zistím jak aby to bolo rozumné.)
+            // Unique filename
             $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
             $extension = $file->getClientOriginalExtension();
             $newFilename = "{$originalName}_user{$userId}_" . uniqid() . ".{$extension}";
 
+            Log::info('Generated filename:', ['filename' => $newFilename]);
+
+            // File storage
             $filePath = $file->storeAs('papers', $newFilename, 'public');
+            if (!$filePath) {
+                Log::error('Failed to store file.', ['filename' => $newFilename]);
+                return response()->json(['message' => 'Failed to store file.'], 500);
+            }
+
+            Log::info('File stored successfully.', ['path' => $filePath]);
             $filePaths[] = $filePath;
         }
 
@@ -98,16 +122,24 @@ class PaperController extends Controller
             'keywords_lang1' => $request->input('keywords_lang1'),
             'keywords_lang2' => $request->input('keywords_lang2'),
             'section_idsection' => $request->input('section_id'),
-            'path_filesystem' => json_encode($filePaths), // file paths ako JSON v DB
+            'path_filesystem' => json_encode($filePaths), // File paths as JSON
             'upload_datetime' => now(),
         ]);
 
-        // successful response
+        Log::info('Paper record created successfully.', ['paper_id' => $paper->idpaper]);
+
         return response()->json([
             'message' => 'Paper uploaded successfully.',
-            'paper_id' => $paper->idpaper, // nie moc potrebné ale môže sa zísť neskôr
-            'file_paths' => $filePaths, // nie moc potrebné ale môže sa zísť neskôr
+            'paper_id' => $paper->idpaper,
+            'file_paths' => $filePaths,
         ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation error:', ['errors' => $e->errors()]);
+            return response()->json(['message' => 'Validation failed.', 'errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            Log::error('Unexpected error:', ['exception' => $e->getMessage()]);
+            return response()->json(['message' => 'Unexpected error occurred.', 'error' => $e->getMessage()], 501);
+        }
     }
 
     public function deletePaper($id) // Mazanie "Papers" (usermode, nie pre adminov)
@@ -137,5 +169,33 @@ class PaperController extends Controller
         $paper->delete();
 
         return response()->json(['message' => 'Paper deleted successfully']);
+    }
+
+    public function getPapersByUser($userId)
+    {
+    $papers = Paper::where('user_id', $userId)->pluck('name', 'idpaper');
+
+    if ($papers->isEmpty()) {
+        return response()->json(['message' => 'No papers found for this user.'], 404);
+    }
+
+    return response()->json([
+        'message' => 'Papers retrieved successfully.',
+        'papers' => $papers, // mená a IDčká paperov.
+    ]);
+    }   
+
+    public function getPaperById($id)
+    {
+    $paper = Paper::find($id);
+
+    if (!$paper) {
+        return response()->json(['message' => 'Paper not found.'], 404);
+    }
+
+    return response()->json([
+        'message' => 'Paper retrieved successfully.',
+        'paper' => $paper, // Celý paper pre editing.
+    ]);
     }
 }

@@ -23,13 +23,14 @@ class Paper extends Model // done
 {
     protected $table = 'paper';
     protected $primaryKey = 'idpaper';
+    const CREATED_AT = 'created_on';
+    const UPDATED_AT = 'updated_on';
 
     protected $fillable = [
         'name', 'path_filesystem', 'abstract_lang1', 'abstract_lang2', 'upload_datetime', 'reupload_datetime',
         'keywords_lang1', 'keywords_lang2', 'created_on', 'updated_on',
         'review_idreview', 'conference_idconference', 'section_idsection', 'paper_status_idpaper_status'
     ];
-
 
     public function conference()
     {
