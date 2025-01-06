@@ -65,7 +65,7 @@ class PaperController extends Controller
     }
 
     public function uploadPaper(Request $request)
-{
+    {
     try {
         Log::info('Starting uploadPaper method.');
         Log::info('Request data:', $request->all());
@@ -104,7 +104,7 @@ class PaperController extends Controller
 
             Log::info('Generated filename:', ['filename' => $newFilename]);
 
-            // File storage
+            // File saving s novým unique menom.
             $filePath = $file->storeAs('papers', $newFilename, 'public');
             if (!$filePath) {
                 Log::error('Failed to store file.', ['filename' => $newFilename]);

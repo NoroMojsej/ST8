@@ -183,20 +183,26 @@ onMounted(() => {
                 </div>
               </div>
 
-              <!-- File Upload -->
-              <div class="mb-3">
-                <label for="file-upload" class="form-label">Nahrajte 2 súbory (PDF a DOCX)</label>
+              <div class="file-upload-section mt-4 p-4 rounded shadow-sm bg-white text-center">
+                <label for="file-upload" class="form-label d-block mb-3">Nahrajte 2 súbory (PDF a DOCX)</label>
+
                 <input
                   type="file"
                   id="file-upload"
-                  class="form-control"
+                  class="form-control-file"
                   multiple
                   accept=".pdf,.docx"
                   @change="handleFileChange"
                 />
-                <ul class="list-unstyled mt-2">
-                  <li v-for="file in uploadedFiles" :key="file.name">{{ file.name }}</li>
-                </ul>
+
+                <div v-if="uploadedFiles.length" class="uploaded-files mt-3">
+                  <ul class="list-unstyled">
+                    <li v-for="file in uploadedFiles" :key="file.name" class="d-flex align-items-center mb-2">
+                      <i class="bi bi-file-earmark me-2 text-primary"></i>
+                      <span>{{ file.name }}</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
 
               <div class="col-md-12 text-center">
@@ -225,5 +231,13 @@ onMounted(() => {
     background-color: rgba(253, 253, 253, 0.89);
     border-radius: 15px;
     padding: 20px;
+  }
+
+  .file-upload-section {
+    border: 2px dashed #a9afb4;
+  }
+
+  .uploaded-files i {
+    font-size: 1.2rem;
   }
 </style>
