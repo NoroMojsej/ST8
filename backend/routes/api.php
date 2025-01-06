@@ -14,6 +14,7 @@ use App\Http\Controllers\SectionController;
 use App\Http\Controllers\ConferenceController;
 use App\Http\Controllers\PaperController;
 use App\Http\Controllers\UserController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -57,3 +58,9 @@ Route::post('/papers/update/{essayId}/upload-files', [PaperController::class, 'u
 Route::post('/sections/get-all-sections', [SectionController::class, 'getAllSections']);
 Route::post('/sections/save-section', [SectionController::class, 'saveSection']);
 Route::post('/sections/delete-section', [SectionController::class, 'deleteSection']);
+// Upravte si routes ako chcete.
+//Route::post('/upload-paper', [PaperController::class, 'uploadPaper'])->middleware('auth:sanctum'); // pre istotu aby vedeli len prihlásení ludia uploadovať
+Route::post('/upload-paper', [PaperController::class, 'uploadPaper']); // môže sa aj takto, ajtak ho to nepustí uploadnuť.
+Route::put('/update-paper/{id}', [PaperController::class, 'updatePaper'])->middleware('auth:sanctum'); // môže sa použiť post ale whatever, PUT je dobre podla dokumentácie.
+Route::delete('/delete-paper/{id}', [PaperController::class, 'deletePaper'])->middleware('auth:sanctum'); // mazanie papers (non-admin).
+

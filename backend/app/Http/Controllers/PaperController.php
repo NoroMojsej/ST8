@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\Paper;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Paper;
 
 class PaperController extends Controller
 {
@@ -30,29 +31,7 @@ class PaperController extends Controller
         return response()->json($essays, 200);
     }
 
-    public function getEssayById($id)
-    {
-        try {
-            $essay = Paper::with(['conference', 'section'])
-                ->findOrFail($id);
-
-            return response()->json($essay);
-
-            if (!$essay) {
-                return response()->json([
-                    'message' => 'Essay not found.',
-                ], 404);
-            }
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'An error occurred while fetching the essay.',
-                'error' => $e->getMessage(),
-            ], 500);
-        }
-    }
-
-
-    public function updateEssayByID(Request $request, $essayID)
+    public function updatePaper(Request $request, $id)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -60,53 +39,186 @@ class PaperController extends Controller
             'abstract_lang2' => 'nullable|string',
             'keywords_lang1' => 'nullable|string',
             'keywords_lang2' => 'nullable|string',
-            'selectedSection' => 'required|exists:section,idsection',
+            'section_id' => 'required|exists:section,idsection',
+            'files' => 'required|array|min:2|max:2',
+            'files.*' => 'file|mimes:pdf,docx|max:10240',
         ]);
 
-        $essay = Paper::findOrFail($essayID);
+        $paper = Paper::find($id);
 
-        $essay->name = $request->input('name');
-        $essay->abstract_lang1 = $request->input('abstract_lang1');
-        $essay->abstract_lang2 = $request->input('abstract_lang2');
-        $essay->keywords_lang1 = $request->input('keywords_lang1');
-        $essay->keywords_lang2 = $request->input('keywords_lang2');
-        $essay->section_idsection = $request->input('selectedSection');
+        if (!$paper) {
+            return response()->json(['message' => 'Paper not found.'], 404);
+        }
 
-        $essay->save();
+        $paper->name = $request->name;
+        $paper->abstract_lang1 = $request->abstract_lang1;
+        $paper->abstract_lang2 = $request->abstract_lang2;
+        $paper->keywords_lang1 = $request->keywords_lang1;
+        $paper->keywords_lang2 = $request->keywords_lang2;
+        $paper->section_idsection = $request->section_id;
 
-        return response()->json(['message' => 'Essay updated successfully'], 200);
+        $userId = auth()->id();
+        $files = $request->file('files');
+        $newFilePaths = [];
+
+        foreach ($files as $file) {
+            $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $extension = $file->getClientOriginalExtension();
+            $newFilename = "{$originalName}_user{$userId}_" . uniqid() . ".{$extension}";
+            $filePath = $file->storeAs('papers', $newFilename, 'public');
+            $newFilePaths[] = $filePath;
+        }
+
+        $oldFilePaths = json_decode($paper->path_filesystem, true) ?? [];
+        foreach ($oldFilePaths as $oldFilePath) {
+            if (Storage::disk('public')->exists($oldFilePath)) {
+                Storage::disk('public')->delete($oldFilePath);
+            }
+        }
+
+        // Update the database with new file paths (as JSON)
+        $paper->path_filesystem = json_encode($newFilePaths);
+
+        $paper->save();
+
+        return response()->json([
+            'message' => 'Paper updated successfully.',
+            'paper' => $paper,
+        ]);
     }
 
-    public function uploadFiles(Request $request, $id)
-{
-    $request->validate([
-        'file1' => 'required|file|mimes:pdf,doc,docx|max:20048',
-        'file2' => 'required|file|mimes:pdf,doc,docx|max:20048',
-    ]);
+    public function uploadPaper(Request $request)
+    {
+    try {
+        Log::info('Starting uploadPaper method.');
+        Log::info('Request data:', $request->all());
 
-    $essay = Paper::findOrFail($id);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'abstract_lang1' => 'nullable|string',
+            'abstract_lang2' => 'nullable|string',
+            'keywords_lang1' => 'nullable|string',
+            'keywords_lang2' => 'nullable|string',
+            'section_id' => 'required|exists:section,idsection',
+            'files' => 'required|array|min:2|max:2',
+            'files.*' => 'file|mimes:pdf,docx|max:10240', // zatial max 10mb, mozme zmenit
+        ]);
 
-    $filePaths = [];
+        Log::info('Validation passed.');
 
-    foreach (['file1', 'file2'] as $fileKey) {
-        if ($request->hasFile($fileKey)) {
-            $file = $request->file($fileKey);
-            $extension = $file->getClientOriginalExtension(); // získame príponu súboru, aby sme vedeli ktorý sa má dať kam
+        $userId = auth()->id(); // ? auth()->id() : 1; // Dont do this, len pre debug.
+        Log::info('Authenticated user ID:', ['user_id' => $userId]);
 
-            if (in_array($extension, ['pdf'])) {
-                $filePaths['pdf'] = $file->store('essays', 'public');
-            } elseif (in_array($extension, ['doc', 'docx'])) {
-                $filePaths['doc'] = $file->store('essays', 'public');
+        if (!$userId) {
+            Log::error('User is not authenticated.');
+            return response()->json(['message' => 'User not authenticated.'], 401);
+        }
+
+        $files = $request->file('files');
+        Log::info('Uploaded files:', ['files' => $files]);
+
+        $filePaths = [];
+
+        foreach ($files as $file) {
+            // Unique filename
+            $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $extension = $file->getClientOriginalExtension();
+            $newFilename = "{$originalName}_user{$userId}_" . uniqid() . ".{$extension}";
+
+            Log::info('Generated filename:', ['filename' => $newFilename]);
+
+            // File saving s novým unique menom.
+            $filePath = $file->storeAs('papers', $newFilename, 'public');
+            if (!$filePath) {
+                Log::error('Failed to store file.', ['filename' => $newFilename]);
+                return response()->json(['message' => 'Failed to store file.'], 500);
             }
+
+            Log::info('File stored successfully.', ['path' => $filePath]);
+            $filePaths[] = $filePath;
+        }
+
+        $paper = Paper::create([
+            'name' => $request->input('name'),
+            'abstract_lang1' => $request->input('abstract_lang1'),
+            'abstract_lang2' => $request->input('abstract_lang2'),
+            'keywords_lang1' => $request->input('keywords_lang1'),
+            'keywords_lang2' => $request->input('keywords_lang2'),
+            'section_idsection' => $request->input('section_id'),
+            'path_filesystem' => json_encode($filePaths), // File paths as JSON
+            'upload_datetime' => now(),
+        ]);
+
+        Log::info('Paper record created successfully.', ['paper_id' => $paper->idpaper]);
+
+        return response()->json([
+            'message' => 'Paper uploaded successfully.',
+            'paper_id' => $paper->idpaper,
+            'file_paths' => $filePaths,
+        ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation error:', ['errors' => $e->errors()]);
+            return response()->json(['message' => 'Validation failed.', 'errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            Log::error('Unexpected error:', ['exception' => $e->getMessage()]);
+            return response()->json(['message' => 'Unexpected error occurred.', 'error' => $e->getMessage()], 501);
         }
     }
 
-    $essay->update([
-        'path_filesystem_doc' => $filePaths['doc'] ?? $essay->path_filesystem_doc,
-        'path_filesystem_pdf' => $filePaths['pdf'] ?? $essay->path_filesystem_pdf,
+    public function deletePaper($id) // Mazanie "Papers" (usermode, nie pre adminov)
+    {
+        $paper = Paper::find($id);
+
+        if (!$paper) {
+            return response()->json(['message' => 'Paper not found'], 404);
+        }
+
+        $userId = auth()->id();
+        $isAuthorized = $paper->users()->where('iduser', $userId)->exists();
+
+        if (!$isAuthorized) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+        if (!empty($paper->path_filesystem)) {
+            $filePaths = json_decode($paper->path_filesystem, true);
+
+            foreach ($filePaths as $filePath) {
+                if (Storage::disk('public')->exists($filePath)) {
+                    Storage::disk('public')->delete($filePath);
+                }
+            }
+        }
+
+        $paper->delete();
+
+        return response()->json(['message' => 'Paper deleted successfully']);
+    }
+
+    public function getPapersByUser($userId)
+    {
+    $papers = Paper::where('user_id', $userId)->pluck('name', 'idpaper');
+
+    if ($papers->isEmpty()) {
+        return response()->json(['message' => 'No papers found for this user.'], 404);
+    }
+
+    return response()->json([
+        'message' => 'Papers retrieved successfully.',
+        'papers' => $papers, // mená a IDčká paperov.
     ]);
+    }   
 
-    return response()->json(['message' => 'Files uploaded successfully', 'file_paths' => $filePaths]);
-}
+    public function getPaperById($id)
+    {
+    $paper = Paper::find($id);
 
+    if (!$paper) {
+        return response()->json(['message' => 'Paper not found.'], 404);
+    }
+
+    return response()->json([
+        'message' => 'Paper retrieved successfully.',
+        'paper' => $paper, // Celý paper pre editing.
+    ]);
+    }
 }

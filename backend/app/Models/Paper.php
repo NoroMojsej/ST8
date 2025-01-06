@@ -10,12 +10,11 @@ class Paper extends Model
 
     protected $table = 'paper';
     protected $primaryKey = 'idpaper';
-
     const CREATED_AT = 'created_on';
     const UPDATED_AT = 'updated_on';
 
     protected $fillable = [
-        'name', 'path_filesystem_doc', 'path_filesystem_pdf', 'abstract_lang1', 'abstract_lang2', 'upload_datetime', 'reupload_datetime', 'keywords_lang1', 'keywords_lang2', 'status', 'review_idreview', 'conference_idconference', 'created_on', 'updated_on'
+        'name', 'path_filesystem', 'abstract_lang1', 'abstract_lang2', 'upload_datetime', 'reupload_datetime', 'keywords_lang1', 'keywords_lang2', 'status', 'review_idreview', 'conference_idconference', 'created_on', 'updated_on'
     ];
 
     public function conference()
