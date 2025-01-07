@@ -41,7 +41,6 @@ Route::get('/countries', [CountryController::class, 'countries']);
 Route::get('/degrees', [DegreeController::class, 'index']);
 Route::get('/universities', [UniversityController::class, 'index']);
 Route::get('/universities/{countryId}', [UniversityController::class, 'getByCountry']);
-Route::get('/faculties/{universityId}', [FacultyController::class, 'getFaculties']);
 Route::get('/departments/{facultyId}', [DepartmentController::class, 'getDepartments']);
 Route::post('/submit-review', [ReviewController::class, 'submitReview']);
 Route::get('/sections', [SectionController::class, 'index']);
@@ -63,4 +62,10 @@ Route::post('/sections/delete-section', [SectionController::class, 'deleteSectio
 Route::post('/upload-paper', [PaperController::class, 'uploadPaper']); // môže sa aj takto, ajtak ho to nepustí uploadnuť.
 Route::put('/update-paper/{id}', [PaperController::class, 'updatePaper'])->middleware('auth:sanctum'); // môže sa použiť post ale whatever, PUT je dobre podla dokumentácie.
 Route::delete('/delete-paper/{id}', [PaperController::class, 'deletePaper'])->middleware('auth:sanctum'); // mazanie papers (non-admin).
+
+Route::post('/faculties', [FacultyController::class, 'create']);
+Route::get('/faculties/{id}', [FacultyController::class, 'getFaculties']); // getByUniversity
+Route::get('/faculties/getfaculty{id}', [FacultyController::class, 'getById']); // getById
+Route::put('/faculties/update/{id}', [FacultyController::class, 'update']);
+Route::delete('/faculties/delete/{id}', [FacultyController::class, 'deleteById']);
 

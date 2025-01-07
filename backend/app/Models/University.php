@@ -12,6 +12,9 @@ class University extends Model
     protected $table = 'university';
     protected $primaryKey = 'iduniversity';
 
+    const CREATED_AT = 'created_on';
+    const UPDATED_AT = 'updated_on';
+
     protected $fillable = [
         'code', 'name', 'created_on', 'updated_on', 'country_idcountry'
     ];

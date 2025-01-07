@@ -171,6 +171,7 @@ async function updateEssay() {
               </div>
 
               <FileUpload v-model:uploadedFiles="uploadedFiles" :close-date="closeDate" />
+              <!-- nefuknčné, použite štandartný komponent ktorý bol použitý v upravenom essayview -->
 
               <div class="col-md-12 text-center">
                 <MaterialButton id=save-essay variant="outline" color="success" class="w-35 me-2 mt-3 mb-0 btn"
