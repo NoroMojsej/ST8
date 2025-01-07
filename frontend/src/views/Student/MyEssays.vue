@@ -7,34 +7,32 @@ import { ref, onMounted } from "vue";
 
 onMounted(() => {
   const selectedStudentId = ref(null);
-  const selectedConference = 12;
   const session = JSON.parse(localStorage.getItem('session'));
-  console.log("SESSION: " + JSON.stringify(session));
   selectedStudentId.value = session?.user_id || null;
 
   if (selectedStudentId.value) {
-    fetchEssays(selectedStudentId.value, selectedConference);
+    fetchEssays(selectedStudentId.value);
   }
 });
 
 const router = useRouter();
 const essays = ref([]);
 
-const fetchEssays = async (studentId, conferenceId) => {
+const fetchEssays = async (studentId) => {
   try {
-    const response = await axiosInstance.get(`/papers/student/${studentId}/conference/${conferenceId}`);
+    const response = await axiosInstance.get(`/papers/student/${studentId}`);
     essays.value = response.data;
   } catch (error) {
     console.error("Chyba pri načítaní prác:", error);
   }
 };
 
-function handleEdit(id) {
-  router.push({ name: "essayUpdate", params: { id } });
+function handleEdit(idEssay, idConference) {
+  router.push({ name: "essayUpdate", params: { idEssay, idConference } });
 }
 
-function handleEval(id) {
-  router.push({ name: "gradesummary", params: { id } });
+function handleEval(idEssay) {
+  router.push({ name: "gradesummary", params: { idEssay } });
 }
 </script>
 
@@ -53,13 +51,13 @@ function handleEval(id) {
                 <EssaySummary 
                 :name="essay.name"
                 :keywords=[essay.keywords_lang1,essay.keywords_lang2]
-                :conferenceName="essay.conference.abbreviation"
-                :section="essay.section.text"
-                :status="essay.paper_status.status_desc"
+                :conferenceName="essay.abbreviation"
+                :section="essay.text"
+                :status="essay.review_status_desc"
                 :showEditButton="true"
                 :showEvaluationButton="true"
-                :handleEdit="() => handleEdit(essay.idpaper)"
-                :handleEvaluation="() => handleEval(essay.idpaper)"
+                :handleEdit="() => handleEdit(essay.id_paper, essay.id_conference)"
+                :handleEvaluation="() => handleEval(essay.id_paper)"
                 />
               </div>
             </div>

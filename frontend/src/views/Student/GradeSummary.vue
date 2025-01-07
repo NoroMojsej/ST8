@@ -1,33 +1,96 @@
 <script setup>
-import { onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import setMaterialInput from "@/assets/js/material-input";
+import { useRoute } from "vue-router";
+import axiosInstance from '@/axios';
+
+const route = useRoute();
+const essayID = ref(null);
+const reviewData = ref({});
+const reviewStatus = ref("");
+
+const grades = ref([]);
+const labelsGradesItems = [
+  "Aktuálnosť a náročnosť práce",
+  "Zorientovanie sa v problematike",
+  "Vhodnosť metód",
+  "Rozsah výsledkov",
+  "Analýza výsledkov",
+  "Štruktúra práce",
+  "Formálna úroveň",
+  "Analýza a interpretácia výsledkov",
+  "Prehľadnosť práce",
+  "Zorientovanie sa v literatúre"
+];
+
+
+const yesnoItems = ref([]);
+const labelsYesNoItems = [
+  "Práca zodpovedá šablóne",
+  "Chýba názov práce",
+  "Chýba meno autora",
+  "Chýba emailová adresa",
+  "Chýba abstrakt",
+  "Abstrakt nespĺňa rozsah",
+  "Chýbajú kľúčové slová",
+  "Chýba 'Úvod', 'Výsledky', 'Záver'",
+  "Chýbajú zdroje",
+  "Chýbajú referencie",
+  "Chýbajú referencie obrázkov",
+  "Obrázkom chýba popis",
+];
+
+const descriptions = ref({
+  textPos: '',
+  textNeg: ''
+});
+
 
 onMounted(() => {
   setMaterialInput();
+  if (route.params) {
+    essayID.value = route.params.idEssay;
+    fetchEssayReview(essayID.value);
+  }
 });
+
+async function fetchEssayReview(essayID) {
+  try {
+    const response = await axiosInstance.get(`/papers/${essayID}/review`);
+    reviewData.value = response.data.review;
+
+    grades.value = labelsGradesItems.map((label, index) => ({
+      label,
+      value: reviewData.value[`grade${index + 1}`], // Z databázy získa hodnotu pre daný index
+    }));
+
+    yesnoItems.value = labelsYesNoItems.map((label, index) => ({
+      label,
+      value: reviewData.value[`yesno${index + 1}`] == 1 ? "ÁNO" : "NIE",
+    }));
+
+    descriptions.value = {
+      textPos: reviewData.value.txt_plus,
+      textNeg: reviewData.value.txt_minus,
+    };
+
+    reviewStatus.value = response.data.status;
+  } catch (err) {
+    console.error('Chyba pri načítaní údajov:', err);
+  }
+}
+
 </script>
 
 <template>
-  <BaseLayout
-    title="Hodnotenie"
-    :breadcrumb="[
-      { label: 'Moje Práce', route: '/student/home/my-essays' },
-      { label: 'Hodnotenie' }
-    ]"
-  >
-    <div class="info-horizontal border-radius-xl d-block d-md-flex justify-content-between align-items-center bg-light p-3">
+  <BaseLayout title="Hodnotenie" :breadcrumb="[
+    { label: 'Moje Práce', route: '/student/home/my-essays' },
+    { label: 'Hodnotenie' }
+  ]">
+    <div
+      class="info-horizontal border-radius-xl d-block d-md-flex justify-content-between align-items-center bg-light p-3">
       <div>
-        <h5 class="text-dark mb-3">{{ name }}</h5>
-
-        <div class="mb-3">
-          <span v-if="status === 'Schvaľujem'" class="text-success fw-bold">
-            {{ status }}
-          </span>
-          <span v-else class="text-danger fw-bold">
-            {{ status }}
-          </span>
-        </div>
 
         <details class="mb-4">
           <summary class="text-dark fw-bold">HODNOTENIE</summary>
@@ -54,53 +117,27 @@ onMounted(() => {
         <details class="mb-4">
           <summary class="text-dark fw-bold">DOPLŇUJÚCE INFORMÁCIE</summary>
           <p class="text-muted mt-2">
-            <strong>Prínos (silné stránky) práce:</strong> {{ text1 }}
+            <strong>Prínos (silné stránky) práce:</strong> {{ descriptions.textPos }}
           </p>
           <p class="text-muted">
-            <strong>Nedostatky (slabé stránky) práce:</strong> {{ text2 }}
+            <strong>Nedostatky (slabé stránky) práce:</strong> {{ descriptions.textNeg }}
           </p>
         </details>
+
+        <details class="mb-4">
+          <summary class="text-dark fw-bold">STATUS</summary>
+          <p class="text-muted mt-2">
+            <strong> {{ reviewStatus.status_desc }} </strong>
+          </p>
+        </details>
+
+
+
       </div>
     </div>
   </BaseLayout>
 </template>
 
-<script>
-export default {
-  computed: {
-    grades() {
-      return [
-        { label: "Aktuálnosť a náročnosť práce", value: this.grade1 },
-        { label: "Zorientovanie sa v problematike", value: this.grade2 },
-        { label: "Vhodnosť metód", value: this.grade3 },
-        { label: "Rozsah výsledkov", value: this.grade4 },
-        { label: "Analýza výsledkov", value: this.grade5 },
-        { label: "Štruktúra práce", value: this.grade6 },
-        { label: "Formálna úroveň", value: this.grade7 },
-        { label: "Analýza a interpretácia výsledkov", value: this.grade8 },
-        { label: "Prehľadnosť práce", value: this.grade9 },
-        { label: "Zorientovanie sa v literatúre", value: this.grade10 }
-      ];
-    },
-    yesnoItems() {
-      return [
-        { label: "Práca zodpovedá šablóne", value: this.yesno1 },
-        { label: "Chýba názov práce", value: this.yesno2 },
-        { label: "Chýba meno autora", value: this.yesno3 },
-        { label: "Chýba emailová adresa", value: this.yesno4 },
-        { label: "Chýba abstrakt", value: this.yesno5 },
-        { label: "Abstrakt nespĺňa rozsah", value: this.yesno6 },
-        { label: "Chýbajú kľúčové slová", value: this.yesno7 },
-        { label: "Chýba 'Úvod', 'Výsledky', 'Záver'", value: this.yesno8 },
-        { label: "Chýbajú zdroje", value: this.yesno9 },
-        { label: "Chýbajú referencie", value: this.yesno10 },
-        { label: "Chýbajú referencie obrázkov", value: this.yesno11 },
-        { label: "Obrázkom chýba popis", value: this.yesno12 }
-      ];
-    }
-  }
-};
-</script>
 
 <style scoped>
 .bg-container {

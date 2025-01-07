@@ -51,6 +51,8 @@ Route::get('/conferences/{conferenceId}', [ConferenceController::class, 'show'])
 Route::put('/conference/{conferenceId}', [ConferenceController::class, 'update']);
 Route::get('/papers/conference/{conferenceId}', [PaperController::class, 'getPapersByConference']);
 Route::get('/papers/{idEssay}', [PaperController::class, 'getEssayById']);
+Route::get('/papers/{idEssay}/review', [PaperController::class, 'getReviewByEssay']);
+Route::get('/papers/student/{studentId}', [PaperController::class, 'getEssaysByStudent']);
 Route::get('/papers/student/{studentId}/conference/{conferenceId}', [PaperController::class, 'getEssaysByStudentAndConference']);
 Route::put('/papers/update/{essayId}', [PaperController::class, 'updateEssayByID']);
 Route::post('/papers/update/{essayId}/upload-files', [PaperController::class, 'uploadFiles']);

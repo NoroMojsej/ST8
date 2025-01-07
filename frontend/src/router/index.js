@@ -54,10 +54,10 @@ const router = createRouter({
       component: EssayView,
      },
      {
-      path: "/student/home/my-essays/essay-update/:id",
+      path: "/student/home/my-essays/essay-update/:idEssay/:idConference",
       name: "essayUpdate",
       component: EssayUpdate,
-     },
+    },
      {
       path: "/pages/landing-pages/admin-control-panel",
       name: "adminhome",
@@ -74,7 +74,7 @@ const router = createRouter({
       component: MyEssays,
     },
     {
-      path: "/student/home/my-essays/gradesummary/:id",
+      path: "/student/home/my-essays/gradesummary/:idEssay",
       name: "gradesummary",
       component: GradeSummary,
     },

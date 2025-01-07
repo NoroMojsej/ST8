@@ -221,4 +221,47 @@ class PaperController extends Controller
         'paper' => $paper, // Celý paper pre editing.
     ]);
     }
+
+    function getEssaysByStudent($studentId) {
+        return Paper::with([
+                'conference:abbreviation,idconference',
+                'section:text,idsection',
+                'review.status:status_desc,idreview_status'
+            ])
+            ->whereHas('users', function ($query) use ($studentId) {
+                $query->where('user_iduser', $studentId);
+            })
+            ->get()
+            ->map(function ($paper) {
+                return [
+                    'id_paper' => $paper->idpaper,
+                    'name' => $paper->name,
+                    'keywords_lang1' => $paper->keywords_lang1,
+                    'keywords_lang2' => $paper->keywords_lang2,
+                    'id_conference' =>  $paper->conference->idconference ?? null,
+                    'abbreviation' => $paper->conference->abbreviation ?? null,
+                    'text' => $paper->section->text ?? null,
+                    'review_status_desc' => $paper->review->status->status_desc ?? null,
+                ];
+            });
+    }
+
+    public function getReviewByEssay($essayID)
+{
+    $essay = Paper::with(['review.status'])->find($essayID);
+
+    if (!$essay) {
+        return response()->json(['error' => 'Essay not found'], 404);
+    }
+
+    if (!$essay->review) {
+        return response()->json(['error' => 'Review not found'], 404);
+    }
+
+    return response()->json([
+        'review' => $essay->review,
+        'status' => $essay->review->status,
+    ], 200);
+}
+
 }
