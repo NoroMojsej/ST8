@@ -1,29 +1,41 @@
 <script setup>
 defineProps({
+  id: {
+    type: String,
+    default: "",
+  },
+
   opinion: {
     type: String,
     default: "",
+  },
+
+  value: {
+    type: Number,
+    default: null,
   }
+
 });
 
-defineEmits(["update:modelValue"]);
+defineEmits(["update"]);
 </script>
 
-  <template setup scoped>
+  <template>
     <div class="wrapper">
       <div class="container">
         <div class="row">
-          <p class="question"> {{ opinion }} </p>
+          <p class="question">{{ opinion }}</p>
         </div>
         <div class="row answear">
           <select 
             class="form-select form-select-lg mb-3" 
             aria-label="Large select example"
-            @change="$emit('update:modelValue', $event.target.value)"
+            v-model="value"
+            @change="$emit('update', +$event.target.value)"
           >
-            <option selected>Otvoriť možnosti</option>
-            <option value="1">Áno</option>
-            <option value="2">Nie</option>
+            <option :value="null" disabled selected>Otvoriť možnosti</option>
+            <option :value="1">Áno</option>
+            <option :value="0">Nie</option>
           </select>
         </div>
       </div>

@@ -7,6 +7,21 @@ use Illuminate\Http\Request;
 
 class PaperController extends Controller
 {
+
+    public function getAllpapers() 
+    {
+        $papers = Paper::all();
+
+        return response()->json($papers, 200);
+    }
+
+    public function getAllPapersAndTheirReview() 
+    {
+        $papers = Paper::with(['review:idreview'])->get();
+
+        return response()->json($papers, 200);
+    }
+
     public function getPapersByConference($conferenceId)
     {
         $papers = Paper::where('conference_idconference', $conferenceId)->get();

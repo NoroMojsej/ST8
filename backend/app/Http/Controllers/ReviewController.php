@@ -8,10 +8,37 @@ use App\Models\ReviewStatus;
 
 class ReviewController extends Controller
 {
-    public function submitReview(Request $request)
+
+    public function getAllReviews() 
+    {
+        $reviews = Review::all();
+
+        return response()->json($reviews, 200);
+    }
+    
+
+    public function getReviewById($id) 
+    {             
+        $review = Review::with(['status'])->findOrFail($id);
+
+        return response()->json($review, 200);
+
+    }
+
+
+    public function saveReview(Request $request)
     {
         $request->validate([
             //review validations
+            'id' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    // new or existing
+                    if ($value !== 'new' && !\App\Models\Review::where('idreview', $value)->exists()) {
+                        $fail('The selected review id is invalid.');
+                    }
+                },
+            ],
             'grade1' => 'nullable|in:A,B,C,D,E,F',
             'grade2' => 'nullable|in:A,B,C,D,E,F',
             'grade3' => 'nullable|in:A,B,C,D,E,F',
@@ -39,57 +66,115 @@ class ReviewController extends Controller
             'txt_general' => 'nullable|string|max:500',
             'user_iduser' => 'required|exists:user,iduser',
 
+            'created_on' => 'nullable|date',
+            'updated_on' => 'nullable|date',
+
             //review status validations
+            'review_status_idreview_status' => 'nullable|exists:review_status,idreview_status',
             'status' => 'nullable|string|size:2',
             'status_desc' => 'nullable|string|max:100',
             'valid_from' => 'nullable|date',
             'valid_to' => 'nullable|date|after_or_equal:valid_from',
         ]);
 
-        $reviewStatus = ReviewStatus::create([
-            'status' => $request->status,
-            'status_desc' => $request->status_desc,
-            'valid_from' => $request->valid_from,
-            'valid_to' => $request->valid_to,
+        //update
+        if ($request->has('id') && $request->id != 'new') {
+            $review = Review::findOrFail($request->id);
+            $review->update($request->all());
 
-        ]);
+        } else{
+            //create
+            $reviewStatus = ReviewStatus::create([
+                'status' => $request->status,
+                'status_desc' => $request->status_desc,
+                'valid_from' => $request->valid_from,
+                'valid_to' => $request->valid_to,
+    
+                'created_on' => $request->created_on,
+                'updated_on' => $request->updated_on,
+    
+            ]);
+    
+            $review = Review::create([
+                'grade1' => $request->grade1,
+                'grade2' => $request->grade2,
+                'grade3' => $request->grade3,
+                'grade4' => $request->grade4,
+                'grade5' => $request->grade5,
+                'grade6' => $request->grade6,
+                'grade7' => $request->grade7,
+                'grade8' => $request->grade8,
+                'grade9' => $request->grade9,
+                'grade10' => $request->grade10,
+    
+                'yesno1' => $request->yesno1,
+                'yesno2' => $request->yesno2,
+                'yesno3' => $request->yesno3,
+                'yesno4' => $request->yesno4,
+                'yesno5' => $request->yesno5,
+                'yesno6' => $request->yesno6,
+                'yesno7' => $request->yesno7,
+                'yesno8' => $request->yesno8,
+                'yesno9' => $request->yesno9,
+                'yesno10' => $request->yesno10,
+                'yesno11' => $request->yesno11,
+                'yesno12' => $request->yesno12,
+    
+                'txt_plus' => $request->txt_plus,
+                'txt_minus' => $request->txt_minus,
+                'txt_general' => $request->txt_general,
+    
+                'review_status_idreview_status' => $reviewStatus->idreview_status,
+                'user_iduser' => $request->user_iduser,
+    
+                'created_on' => $request->created_on,
+                'updated_on' => $request->updated_on,
+            ]);
 
-        $review = Review::create([
-            'grade1' => $request->grade1,
-            'grade2' => $request->grade2,
-            'grade3' => $request->grade3,
-            'grade4' => $request->grade4,
-            'grade5' => $request->grade5,
-            'grade6' => $request->grade6,
-            'grade7' => $request->grade7,
-            'grade8' => $request->grade8,
-            'grade9' => $request->grade9,
-            'grade10' => $request->grade10,
+        }
 
-            'yesno1' => $request->yesno1,
-            'yesno2' => $request->yesno2,
-            'yesno3' => $request->yesno3,
-            'yesno4' => $request->yesno4,
-            'yesno5' => $request->yesno5,
-            'yesno6' => $request->yesno6,
-            'yesno7' => $request->yesno7,
-            'yesno8' => $request->yesno8,
-            'yesno9' => $request->yesno9,
-            'yesno10' => $request->yesno10,
-            'yesno11' => $request->yesno11,
-            'yesno12' => $request->yesno12,
-
-            'txt_plus' => $request->txt_plus,
-            'txt_minus' => $request->txt_minus,
-            'txt_general' => $request->txt_general,
-
-            'review_status_idreview_status' => $reviewStatus->idreview_status,
-            'user_iduser' => $request->user_iduser,         //treba zmenit na id usera ktoreho praca sa reviewuje
-        ]);        
+               
 
     
         return response()->json([
             'message' => 'Hodnotenie zaznamenané',
+            'review_id' => $review->idreview,
         ]);
+    }
+
+    public function deleteReview(Request $request)
+    {
+        try {
+            $request->validate([
+                'review_id' => 'required',
+            ]);
+
+            $review = Review::findOrFail($request['review_id']);
+
+            $review->delete();
+
+            return response()->json([
+                'message' => 'Review deleted successfully.',
+                'review_id' => $request['review_id'],
+            ], 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            //Validation Exceptions
+            return response()->json([
+                'message' => 'Validation failed.',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            //Not found Exceptions
+            return response()->json([
+                'message' => 'The review does not exist or has already been deleted.',
+                'review_id' => $request['review_id'] ?? null,
+            ], 404);
+        } catch (\Exception $e) {
+            // Handle other Exceptions
+            return response()->json([
+                'message' => 'An unexpected error occurred while trying to delete the review.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

@@ -6,7 +6,9 @@ import TableRow from "/TableRow.vue";
 import TableSelect from "/TableSelect.vue";
 import TableTextArea from "/TableTextArea.vue";
 import { reactive } from "vue";
-import axiosInstance from '@/axios'; // Import axios instance
+import axiosInstance from '@/axios';
+import { ref } from 'vue';
+import { useRouter } from "vue-router";
 
 // Sections components
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
@@ -14,10 +16,245 @@ import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 // nav-pills
 import setNavPills from "@/assets/js/nav-pills.js";
 
+const router = useRouter();
+
+defineExpose({
+  router,
+});
+
 // hook
 onMounted(() => {
   setNavPills();
+  getReviewById();
+  
+
 });
+
+    const approveWork = () => {
+      review.status = 'YY';
+      review.status_desc = 'Work has been approved.';
+    };
+
+    const disapproveWork = () => {
+      review.status = 'NN';
+      review.status_desc = 'Work has not been approved.';
+    };
+
+
+    const today = () => {
+      const newDate = new Date();
+      const day = String(newDate.getDate()).padStart(2, '0');
+      const month = String(newDate.getMonth() + 1).padStart(2, '0');
+      const year = newDate.getFullYear();
+
+      return `${year}-${month}-${day}`;
+    };
+
+    const twoYearsFromNow = () => {
+      const newDate = new Date();
+      newDate.setFullYear(newDate.getFullYear() + 2);
+
+      const day = String(newDate.getDate()).padStart(2, '0');
+      const month = String(newDate.getMonth() + 1).padStart(2, '0');
+      const year = newDate.getFullYear();
+
+      return `${year}-${month}-${day}`;
+    };
+
+    const getReviewIdFromURL = () => {
+        const url = window.location.href;
+        const regex = /evaluation\/(\d+)/;
+        const match = url.match(regex);
+
+        if (match) {
+          const id = match[1];
+          console.log("ID extracted from URL:", id);
+          return id;
+        } else {
+          console.log("No ID found in URL. Creating new review.");
+        }
+
+        
+    };
+
+
+    const review = reactive({
+      id: 'new',
+      grade1: null,
+      grade2: null,
+      grade3: null,
+      grade4: null,
+      grade5: null,
+      grade6: null,
+      grade7: null,
+      grade8: null,
+      grade9: null,
+      grade10: null,
+
+      user_iduser: 2,      //logged in user
+
+      yesno1: null,
+      yesno2: null,
+      yesno3: null,
+      yesno4: null,
+      yesno5: null,
+      yesno6: null,
+      yesno7: null,
+      yesno8: null,
+      yesno9: null,
+      yesno10: null,
+      yesno11: null,
+      yesno12: null,
+      // yesno13: null,     v databaze neexistuje 13 a 14 otazka ale texty existuju tak zakomentovane
+      // yesno14: null,
+
+      txt_plus: null,
+      txt_minus: null,
+      txt_general: null,
+
+      status: null,
+      status_desc: null,
+
+
+      valid_from: null,
+      valid_to: null,
+
+      created_on: null,
+      updated_on: null,
+
+      
+    });
+
+    const openSavedReview = (newReviewId) => {
+          console.log(newReviewId);
+          router.push({ name: "evaluation", params: { id: newReviewId } });
+    };
+    
+    const gradeQuestions = ref([
+      { question: "Aktuálnosť a náročnosť práce", number: 1, key: "grade1" },
+      { question: "Zorientovanie sa študenta v danej problematike, predovšetkým analýzou domácej a zahraničnej literatúry", number: 2, key: "grade2" },
+      { question: "Vhodnosť zvolených metód spracovania riešenej problematiky", number: 3, key: "grade3" },
+      { question: "Rozsah a úroveň dosiahnutých výsledkov", number: 4, key: "grade4" },
+      { question: "Analýza a interpretácia výsledkov a formulácia záverov práce", number: 5, key: "grade5" },
+      { question: "Prehľadnosť a logická štruktúra práce", number: 6, key: "grade6" },
+      { question: "Formálna, jazyková a štylistická úroveň práce", number: 7, key: "grade7" },
+      { question: "Analýza a interpretácia výsledkov a formulácia záverov práce", number: 8, key: "grade8" },
+      { question: "Prehľadnosť a logická štruktúra práce", number: 9, key: "grade9" },
+      { question: "Prehľadnosť a logická štruktúra práce", number: 10, key: "grade10" },
+      
+
+    ]);
+
+    const yesNoQuestions = ref ([
+      { question: "Zorientovanie sa študenta v danej problematike, predovšetkým analýzou domácej a zahraničnej literatúry", key: "yesno1" },
+      { question: "Práca zodpovedá šablóne určenej pre ŠVK", key: "yesno2" },
+      { question: "Chýba názov práce v slovenskom alebo anglickom jazyku", key: "yesno3" },
+      { question: "Chýba meno autora alebo školiteľa", key: "yesno4" },
+      { question: "Chýba pracovná emailová adresa autora alebo školiteľa", key: "yesno5" },
+      { question: "Chýba abstrakt v slovenskom alebo anglickom jazyku", key: "yesno6" },
+      { question: "Abstrakt nespĺňa rozsah 100 - 150 slov", key: "yesno7" },
+      { question: "Chýbajú kľúčové slová v slovenskom alebo v anglickom jazyku", key: "yesno8" },
+      { question: "Chýba 'Úvod', 'Výsledky a diskusia' alebo 'Záver'", key: "yesno9" },
+      { question: "Nie sú uvedené zdroje a použitá literatúra", key: "yesno2" },
+      { question: "V texte chýbajú referencie na zoznam bibliografie", key: "yesno11" },
+      { question: "V texte chýbajú referencie na použité obrázky alebo tabuľky", key: "yesno12" },
+      // v databaze neexistuje 13 a 14 otazka ale texty existuju tak zakomentovane
+      // { question: "Obrázkom alebo tabuľkám chýba popis", key: "yesno13" }, 
+      // { question: "Chýba meno autora alebo školiteľa", key: "yesno14" },
+    ]);
+
+    const updateReview = (key, value) => {      
+      review[key] = value;
+      // console.log(review);
+    };
+
+    const getReviewById = async () => {
+      const reviewId = getReviewIdFromURL();
+      if (!reviewId) return;  
+
+
+      try {
+        const response = await axiosInstance.get('/reviews/get-review/' + reviewId, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        console.log('Review retrieved successfully:', response.data);
+
+        review.id = response.data.idreview ? response.data.idreview : 'new';
+        review.grade1 = response.data.grade1;
+        review.grade2 = response.data.grade2;
+        review.grade3 = response.data.grade3;
+        review.grade4 = response.data.grade4;
+        review.grade5 = response.data.grade5;
+        review.grade6 = response.data.grade6;
+        review.grade7 = response.data.grade7;
+        review.grade8 = response.data.grade8;
+        review.grade9 = response.data.grade9;
+        review.grade10 = response.data.grade10;
+
+        review.yesno1 = response.data.yesno1;
+        review.yesno2 = response.data.yesno2;
+        review.yesno3 = response.data.yesno3;
+        review.yesno4 = response.data.yesno4;
+        review.yesno5 = response.data.yesno5;
+        review.yesno6 = response.data.yesno6;
+        review.yesno7 = response.data.yesno7;
+        review.yesno8 = response.data.yesno8;
+        review.yesno9 = response.data.yesno9;
+        review.yesno10 = response.data.yesno10;
+        review.yesno11 = response.data.yesno11;
+        review.yesno12 = response.data.yesno12;
+
+        review.txt_plus = response.data.txt_plus;
+        review.txt_minus = response.data.txt_minus;
+        review.txt_general = response.data.txt_general;
+
+        review.status = response.data.status ? response.data.status.name : "";
+        review.status_desc = response.data.status_desc;
+
+        review.user_iduser = response.data.user_iduser;
+
+        review.valid_from = response.data.valid_from;
+        review.valid_to = response.data.valid_to;
+
+        review.created_on = response.data.created_on;
+        review.updated_on = response.data.updated_on;
+
+        
+      } catch (error) {
+        console.log('review.id: ', review.id);
+        console.error('Review retrieving failed:', error.response?.data || error.message);
+      }
+    };
+
+    const submitReview = async () => {
+        try {
+          review.valid_from = today();
+          review.valid_to = twoYearsFromNow();
+
+          
+          console.log(review);
+
+          const response = await axiosInstance.post('/reviews/save-review', review, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          
+          
+          console.log('Review submitted successfully:', response.data);
+          openSavedReview(response.data.review_id);
+         
+
+
+        } catch (error) {
+          console.error('Error submitting review:', error.response?.data || error.message);
+        }
+      };
+      
+
 </script>
 
 <style setup scoped>
@@ -198,99 +435,6 @@ textarea {
 }
 </style>
 
-<script>
-
-
-    const approveWork = () => {
-      review.status = 'YY';
-      review.status_desc = 'Work has been approved.';
-    };
-
-    const disapproveWork = () => {
-      review.status = 'NN';
-      review.status_desc = 'Work has not been approved.';
-    };
-
-
-    const today = () => {
-      const newDate = new Date();
-      const day = String(newDate.getDate()).padStart(2, '0');
-      const month = String(newDate.getMonth() + 1).padStart(2, '0');
-      const year = newDate.getFullYear();
-
-      return `${year}-${month}-${day}`;
-    };
-
-    const twoYearsFromNow = () => {
-      const newDate = new Date();
-      newDate.setFullYear(newDate.getFullYear() + 2);
-
-      const day = String(newDate.getDate()).padStart(2, '0');
-      const month = String(newDate.getMonth() + 1).padStart(2, '0');
-      const year = newDate.getFullYear();
-
-      return `${year}-${month}-${day}`;
-    };
-
-    const review = reactive({
-      grade1: null,
-      grade2: null,
-      grade3: null,
-      grade4: null,
-      grade5: null,
-      grade6: null,
-      grade7: null,
-      grade8: null,
-      grade9: null,
-      grade10: null,
-
-      user_iduser: 2,     //TODO: lokalny user v db, bude treba aktualizovat na pouzivatela ktoreho praca je hodnotena
-
-      yesno1: "",
-      yesno2: "",
-      yesno3: "",
-      yesno4: "",
-      yesno5: "",
-      yesno6: "",
-      yesno7: "",
-      yesno8: "",
-      yesno9: "",
-      yesno10: "",
-      yesno11: "",
-      yesno12: "",
-      yesno13: "",
-      yesno14: "",
-
-      txt_plus: "",
-      txt_minus: "",
-      txt_general: "",
-
-      status: "",
-      status_desc: "",
-
-
-      valid_from: today(),
-      valid_to: twoYearsFromNow(),
-      
-    });
-
-    const submitReview = async () => {
-        try {
-          console.log(review);
-          const response = await axiosInstance.post('/submit-review', review, {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
-
-          console.log('Review submitted successfully:', response.data);
-        } catch (error) {
-          console.error('Error submitting review:', error.response?.data || error.message);
-        }
-      };
-
-</script>
-
 <template>
   <BaseLayout
  title="Hodnotenie Práce"
@@ -315,6 +459,7 @@ textarea {
 
   <HeaderLine
   label="ZVOLTE ZNÁMKU"
+  color=""
   ></HeaderLine>
   <div class="wrapper">
 
@@ -328,92 +473,20 @@ textarea {
       <th scope="col" class="th-header">C</th>
       <th scope="col" class="th-header">D</th>
       <th scope="col" class="th-header">E</th>
-      <th scope="col" class="th-header FX">FX</th>
+      <th scope="col" class="th-header">FX</th>
     </tr>
   </thead>
   <tbody>
-
-    <TableRow
-      id="grade1" 
-      question="Aktuálnosť a náročnosť práce"
-
-      radio-number="1"
-      @update="review.grade1 = $event"
-      >
-    </TableRow>
-
-    <TableRow
-      id="grade2" 
-      question="Zorientovanie sa študenta v danej problematike, predovšetkým analýzou domácej a zahraničnej literatúry"
-      radio-number="2"
-      @update="review.grade2 = $event"
-      >
-    </TableRow>
-
-    <TableRow
-      id="grade3" 
-      question="Vhodnosť zvolených metód spracovania riešenej problematiky"
-      radio-number="3"
-      @update="review.grade3 = $event"
-      >
-    </TableRow>
-
-    <TableRow
-      id="grade4" 
-      question="Rozsah a úroveň dosiahnutých výsledkov"
-      radio-number="4"
-      @update="review.grade4 = $event"
-      >
-    </TableRow>
-
-    <TableRow
-      id="grade5" 
-      question="Analýza a interpretácia výsledkov a formulácia záverov práce"
-      radio-number="5"
-      @update="review.grade5 = $event"
-      >
-    </TableRow>
-
-    <TableRow
-      id="grade6" 
-      question="Prehľadnosť a logická štruktúra práce"
-      radio-number="6"
-      @update="review.grade6 = $event"
-      >
-    </TableRow>
-
-    <TableRow
-      id="grade7" 
-      question="Formálna, jazyková a štylistická úroveň práce"
-      radio-number="7"
-      @update="review.grade7 = $event"
-      >
-    </TableRow>
-
-    <TableRow
-      id="grade8" 
-      question="Analýza a interpretácia výsledkov a formulácia záverov práce"
-      radio-number="8"
-      @update="review.grade8 = $event"
-      >
-    </TableRow>
-
-    <TableRow
-      id="grade9" 
-      question="Prehľadnosť a logická štruktúra práce"
-      radio-number="9"
-      @update="review.grade9 = $event"
-      >
-    </TableRow>
-
-    <TableRow
-      id="grade10" 
-      question="Prehľadnosť a logická štruktúra práce"
-      radio-number="10"
-      @update="review.grade10 = $event"
-      >
-    </TableRow>
     
+    <TableRow 
+      v-for="(question) in gradeQuestions" 
+          :key="question.key"
+          :question="question.question"
+          :radio-number="question.number"
+          :value="review[question.key]"
+          @update="updateReview(question.key, $event)" 
+    ></TableRow> 
+
   </tbody>
 </table>
 </div>
@@ -422,113 +495,24 @@ textarea {
 
 <HeaderLine
   label="VYBERTE ÁNO/NIE"
+  color=""
   ></HeaderLine>
 
   <TableSelect
-     id="yesno1" 
-      opinion="Zorientovanie sa študenta v danej problematike, predovšetkým analýzou domácej a zahraničnej literatúry"
-      v-model="review.yesno1"
-      >
-  </TableSelect>
-                                                              
-                                                            <!-- pre Git ovanim vymeniť : -->
+    v-for="(question) in yesNoQuestions"
+    :id="question.key"
+    :opinion="question.question"
+    :value="review[question.key]" 
+    @update="updateReview(question.key, $event)"
+  ></TableSelect>
 
   
- <TableSelect
-    id="yesno2" 
-    opinion="Práca zodpovedá šablóne určenej pre ŠVK"
-    v-model="review.yesno2"
-    >
-  </TableSelect>
-
-  <TableSelect
-    id="yesno3" 
-    opinion="Chýba názov práce v slovenskom alebo anglickom jazyku" 
-    v-model="review.yesno3"
-    >
-  </TableSelect>
-
-  <TableSelect
-    id="yesno4" 
-    opinion="Chýba meno autora alebo školiteľa" 
-    v-model="review.yesno4"
-    >
-  </TableSelect>
-
-  <TableSelect
-    id="yesno5" 
-    opinion="Chýba pracovná emailová adresa autora alebo školiteľa" 
-    v-model="review.yesno5"
-    >
-  </TableSelect>
-
-  <TableSelect
-    id="yesno6" 
-    opinion="Chýba abstrakt v slovenskom alebo anglickom jazyku" 
-    v-model="review.yesno6"
-    >
-  </TableSelect>
-
-  <TableSelect
-    id="yesno7" 
-    opinion="Abstrakt nespĺňa rozsah 100 - 150 slov" 
-    v-model="review.yesno7"
-    >
-  </TableSelect>
-
-  <TableSelect
-    id="yesno8" 
-    opinion="Chýbajú kľúčové slová v slovenskom alebo v anglickom jazyku" 
-    v-model="review.yesno8"
-    >
-  </TableSelect>
-
-  <TableSelect
-    id="yesno9" 
-    opinion="Chýba 'Úvod', 'Výsledky a diskusia' alebo 'Záver'" 
-    v-model="review.yesno9"
-    >
-  </TableSelect>
-
-  <TableSelect
-    id="yesno10" 
-    opinion="Nie sú uvedené zdroje a použitá literatúra" 
-    v-model="review.yesno10"
-    >
-  </TableSelect>
-
-  <TableSelect
-    id="yesno11" 
-    opinion="V texte chýbajú referencie na zoznam bibliografie" 
-    v-model="review.yesno11"
-    >
-  </TableSelect>
-
-  <TableSelect
-    id="yesno12" 
-    opinion="V texte chýbajú referencie na použité obrázky alebo tabuľky" 
-    v-model="review.yesno12"
-    >
-  </TableSelect>
-  
-  <TableSelect
-    id="yesno13" 
-    opinion="Obrázkom alebo tabuľkám chýba popis" 
-    v-model="review.yesno13"
-    >
-  </TableSelect>
-
-  <TableSelect
-    id="yesno14" 
-    opinion="Chýba meno autora alebo školiteľa" 
-    v-model="review.yesno14"
-    >
-  </TableSelect>
 
 <!--TABULKA 3-->
 
-<HeaderLine
-  label="VPÍŠTE STANOVISKO"
+  <HeaderLine
+    label="VPÍŠTE STANOVISKO"
+    color=""
   ></HeaderLine>
 
   <TableTextArea
@@ -543,7 +527,8 @@ textarea {
 
 
   <HeaderLine
-  label="CELKOVÉ STANOVISKO"
+    label="CELKOVÉ STANOVISKO"
+    color=""
   ></HeaderLine>
 
   <section class="py-7 m-3 bg-gray-100">
@@ -571,7 +556,7 @@ textarea {
             color="success"
             class="w-auto me-2"
             size="lg"
-            @click="submitReview"
+            @click="submitReview()"
             style="font-family: 'Open Sans' !important">
             ODOSLAŤ
           </MaterialButton>

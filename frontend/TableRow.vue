@@ -5,6 +5,10 @@ defineProps({
     default: "",
   },
   radioNumber: {
+    type: Number,
+    default: "",
+  },
+  value: {
     type: String,
     default: "",
   },
@@ -29,7 +33,8 @@ const emit = defineEmits(["update"]);
         :name="`flexRadioDefault${radioNumber}`"
         :id="`flexRadioDefault${radioNumber}A`"
         value="A"
-        @change="$emit('update', 'A')"
+        v-model="value"
+        @change="$emit('update', value)"
       />
       <label class="form-check-label" :for="`flexRadioDefault${radioNumber}A`"></label>
     </div>
@@ -44,7 +49,8 @@ const emit = defineEmits(["update"]);
         :name="`flexRadioDefault${radioNumber}`"
         :id="`flexRadioDefault${radioNumber}B`"
         value="B"
-        @change="$emit('update', 'B')"
+        v-model="value"
+        @change="$emit('update', value)"
       />
       <label class="form-check-label" :for="`flexRadioDefault${radioNumber}B`"></label>
     </div>
@@ -59,7 +65,8 @@ const emit = defineEmits(["update"]);
         :name="`flexRadioDefault${radioNumber}`"
         :id="`flexRadioDefault${radioNumber}C`"
         value="C"
-        @change="$emit('update', 'C')"
+        v-model="value"
+        @change="$emit('update', value)"
       />
       <label class="form-check-label" :for="`flexRadioDefault${radioNumber}C`"></label>
     </div>
@@ -74,7 +81,8 @@ const emit = defineEmits(["update"]);
         :name="`flexRadioDefault${radioNumber}`"
         :id="`flexRadioDefault${radioNumber}D`"
         value="D"
-        @change="$emit('update', 'D')"
+        v-model="value"
+        @change="$emit('update', value)"
       />
       <label class="form-check-label" :for="`flexRadioDefault${radioNumber}D`"></label>
     </div>
@@ -89,7 +97,8 @@ const emit = defineEmits(["update"]);
         :name="`flexRadioDefault${radioNumber}`"
         :id="`flexRadioDefault${radioNumber}E`"
         value="E"
-        @change="$emit('update', 'E')"
+        v-model="value"
+        @change="$emit('update', value)"
       />
       <label class="form-check-label" :for="`flexRadioDefault${radioNumber}E`"></label>
     </div>
@@ -104,7 +113,8 @@ const emit = defineEmits(["update"]);
         :name="`flexRadioDefault${radioNumber}`"
         :id="`flexRadioDefault${radioNumber}FX`"
         value="FX"
-        @change="$emit('update', 'FX')"
+        v-model="value"
+        @change="$emit('update', value)"
       />
       <label class="form-check-label" :for="`flexRadioDefault${radioNumber}FX`"></label>
     </div>
