@@ -3,7 +3,11 @@ defineProps({
   opinion: {
     type: String,
     default: "",
-  }
+  },
+  modelValue: {
+    type: String,
+    default: "",
+  },
 });
 
 defineEmits(["update:modelValue"]);
@@ -21,6 +25,7 @@ defineEmits(["update:modelValue"]);
               class="form-control" 
               id="exampleFormControlTextarea1" 
               rows="3" 
+              :value="modelValue"
               @input="$emit('update:modelValue', $event.target.value)"
             ></textarea>
           </div>
