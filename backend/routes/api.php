@@ -41,7 +41,6 @@ Route::get('/countries', [CountryController::class, 'countries']);
 Route::get('/degrees', [DegreeController::class, 'index']);
 Route::get('/universities', [UniversityController::class, 'index']);
 Route::get('/universities/{countryId}', [UniversityController::class, 'getByCountry']);
-Route::get('/departments/{facultyId}', [DepartmentController::class, 'getDepartments']);
 Route::post('/submit-review', [ReviewController::class, 'submitReview']);
 Route::get('/sections', [SectionController::class, 'index']);
 Route::get('/sections/{idConference}', [SectionController::class, 'getSectionsByConference']);
@@ -66,8 +65,13 @@ Route::put('/update-paper/{id}', [PaperController::class, 'updatePaper'])->middl
 Route::delete('/delete-paper/{id}', [PaperController::class, 'deletePaper'])->middleware('auth:sanctum'); // mazanie papers (non-admin).
 
 Route::post('/faculties', [FacultyController::class, 'create']);
-Route::get('/faculties/{id}', [FacultyController::class, 'getFaculties']); // getByUniversity
-Route::get('/faculties/getfaculty{id}', [FacultyController::class, 'getById']); // getById
+Route::get('/faculties/{universityId}', [FacultyController::class, 'getFaculties']); // getByUniversity
+Route::get('/faculties/getfaculty/{id}', [FacultyController::class, 'getById']); // getById
 Route::put('/faculties/update/{id}', [FacultyController::class, 'update']);
 Route::delete('/faculties/delete/{id}', [FacultyController::class, 'deleteById']);
 
+Route::post('/departments', [DepartmentController::class, 'create']); // Create department
+Route::get('/departments/{facultyId}', [DepartmentController::class, 'getDepartments']); //
+Route::get('/departments/getdepartment/{id}', [DepartmentController::class, 'getById']); // Get department by ID
+Route::put('/departments/updatedepartment/{id}', [DepartmentController::class, 'update']); // Edit department by ID
+Route::delete('/departments/deletedepartment/{id}', [DepartmentController::class, 'deleteById']); // Remove department by ID
