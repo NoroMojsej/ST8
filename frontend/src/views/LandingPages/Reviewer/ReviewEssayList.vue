@@ -3,19 +3,48 @@ import { ref, computed } from "vue";
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import ListCard from "../Admin/components/ListCard.vue";
 import { useRouter } from "vue-router";
+import axiosInstance from '@/axios';
+
+const papers = ref([]);
+
+const getAllPapersAndTheirReview = async () => {
+  try {
+    const response = await axiosInstance.get('/papers/get-all-papers-and-their-review', {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    console.log('Papers retrieved successfully:', response.data);
+
+
+    papers.value = response.data.map(paper => ({
+      id: paper.idpaper,
+      paper: paper.name,
+      review_id: paper.review ? paper.review.idreview : 'new',
+      info: paper.keywords_lang1,
+      isEditing: false,
+    }));
+    // console.log(response.data[index].review.idreview);
+  } catch (error) {
+    console.error('Papers retrieving failed:', error.response?.data || error.message);
+  }
+};
+
+getAllPapersAndTheirReview();
 
 const router = useRouter();
 const input = ref("");
-const essays = [
-  { id: 1, essay: "Práca 1", info: "desc" },
-  { id: 2, essay: "Práca 2", info: "desc" },
-  { id: 3, essay: "Práca 3", info: "desc" },
-  { id: 4, essay: "Práca 4", info: "desc" },
-];
+// const papers = [
+//   { id: 1, paper: "Práca 1", info: "desc" },
+//   { id: 2, paper: "Práca 2", info: "desc" },
+//   { id: 3, paper: "Práca 3", info: "desc" },
+//   { id: 4, paper: "Práca 4", info: "desc" },
+// ];
 
-const filteredEssays = computed(() => {
-  return essays.filter(essay =>
-    essay.essay.toLowerCase().includes(input.value.toLowerCase())
+const filteredPapers = computed(() => {
+  return papers.value.filter(paper =>
+    paper.paper.toLowerCase().includes(input.value.toLowerCase())
   );
 });
 
@@ -58,7 +87,7 @@ function handleDownload(id) {
     <div class="container mb-4">
       <div
         class="row mb-3"
-        v-for="essay in filteredEssays" :key="essay.id"
+        v-for="paper in filteredPapers" :key="paper.id"
       >
         <div class="col-12">
           <div class="d-flex align-items-center">
@@ -67,13 +96,13 @@ function handleDownload(id) {
                 class="px-lg-1 mt-lg-0 mt-4 p-4"
                 height="h-100"
                 :icon="{ component: 'receipt_long', color: 'success' }"
-                :title="essay.essay"
-                :description="essay.info"
-                :handleEdit="() => handleGrade(essay.id)"
+                :title="paper.paper"
+                :description="paper.info"
+                :handleEdit="() => handleGrade(paper.review_id)"
                 :buttonText="'Hodnotiť'"
                 :optionalButton="{
                   text: 'Stiahnuť',
-                  onClick: () => handleDownload(essay.id),
+                  onClick: () => handleDownload(paper.id),
                   color: 'info'
                 }"
               />
