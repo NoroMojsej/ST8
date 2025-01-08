@@ -86,4 +86,22 @@ class UserController extends Controller
 
         return response()->json(['message' => 'Password updated successfully.']);
     }
+
+    public function getUsersList()
+{
+    $users = User::join('department', 'user.department_iddepartment', '=', 'department.iddepartment')
+                 ->join('faculty', 'department.faculty_idfaculty', '=', 'faculty.idfaculty')
+                 ->join('university', 'faculty.university_iduniversity', '=', 'university.iduniversity')
+                 ->join('role', 'user.role_idrole', '=', 'role.idrole')
+                 ->whereIn('user.role_idrole', [1, 3])
+                 ->select(
+                     'user.name',
+                     'user.surname',
+                     'university.code as university_code',
+                     'role.code as role_code'
+                 )
+                 ->get();
+
+    return response()->json($users);
+}
 }

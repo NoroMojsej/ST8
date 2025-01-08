@@ -1,27 +1,43 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
+import setMaterialInput from "@/assets/js/material-input";
 import BaseLayout from "../../components/BaseLayout.vue";
 import { useRouter } from "vue-router";
 import UserCard from "../../components/UserCard.vue";
+import axiosInstance from '@/axios';
+
+onMounted(() => {
+  setMaterialInput();
+  fetchUsers();
+});
 
 const router = useRouter();
 const input = ref("");
-const users = [
-  { id: 1, firstName: "Mark Otto", uni: "UKF", role: "Student" },
-  { id: 2, firstName: "Jacob Thornton", uni: "UBM", role: "Student" },
-  { id: 3, firstName: "Larry Bird", uni: "UKF", role: "Recenzent" },
-  { id: 4, firstName: "Larry Bird", uni: "UKF", role: "Student" },
-];
+const users = ref([]);
 
 const filteredUsers = computed(() => {
-  return users.filter(user =>
-    user.firstName.toLowerCase().includes(input.value.toLowerCase())
-  );
+  if (!Array.isArray(users.value)) return []; // ak nie sú hodnoty, vráti prázdne pole
+
+  return users.value.filter(user => {
+    const fullName = `${user.name} ${user.surname}`.toLowerCase(); // spojíme name a surname
+    return fullName.startsWith(input.value.toLowerCase()); // filtrovanie len podľa začiatku
+  });
 });
 
 function handleEssayManager(id) {
   router.push({ name: "essayassign", params: { id } });
 }
+
+async function fetchUsers() {
+  try {
+    const response = await axiosInstance.get(`/user/list`);
+    users.value = response.data;
+    console.log(JSON.stringify(users.value));
+  } catch (err) {
+    console.error('Chyba pri načítaní údajov:', err);
+  }
+}
+
 </script>
 
 <template>
@@ -54,26 +70,26 @@ function handleEssayManager(id) {
 
     <div class="container mb-4">
       <div
-        class="row mb-3"
-        v-for="user in filteredUsers" :key="user.id"
-      >
-        <div class="col-12">
-          <div class="d-flex align-items-center">
-            <div class="flex-grow-1">
-              <UserCard
-                class="px-lg-1 mt-lg-0 mt-4 p-4"
-                height="h-100"
-                :color="{ text: 'dark', background: 'primary' }"
-                :icon="{ component: 'edit', color: 'success' }"
-                :title="user.firstName"
-                :description="user.uni"
-                :handleEdit="() => handleEssayManager(user.id)"
-                :initialRole="user.role"
-              />
-            </div>
-          </div>
+    class="row mb-3"
+    v-for="user in filteredUsers" :key="user.id"
+  >
+    <div class="col-12">
+      <div class="d-flex align-items-center">
+        <div class="flex-grow-1">
+          <UserCard
+            class="px-lg-1 mt-lg-0 mt-4 p-4"
+            height="h-100"
+            :color="{ text: 'dark', background: 'primary' }"
+            :icon="{ component: 'edit', color: 'success' }"
+            :title="user.name + ' ' + user.surname"
+            :description="user.university_code"
+            :handleEdit="() => handleEssayManager(user.id)"
+            :initialRole="user.role_code" 
+          />
         </div>
       </div>
+    </div>
+  </div>
     </div>
   </BaseLayout>
 </template>

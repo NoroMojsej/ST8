@@ -34,6 +34,7 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth:sanctum');
 Route::middleware('auth:sanctum')->get('user', [LoginController::class, 'user']);
 Route::post('/register', [RegisterController::class, 'register']);
+Route::get('/user/list', [UserController::class, 'getUsersList']);
 Route::get('/user/{userId}', [UserController::class, 'getUserInfo']);
 Route::put('/user/changePassword/{userId}', [UserController::class, 'changePassword']);
 Route::put('/updateUser/{userId}', [UserController::class, 'update']);

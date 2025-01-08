@@ -78,11 +78,11 @@ watch(
     </div>
     <div class="d-flex flex-column align-items-start mt-3 mt-md-0">
       <select v-model="selectedRole" class="form-select mb-2">
-        <option value="Student">Študent</option>
-        <option value="Recenzent">Recenzent</option>
+        <option value="STDNT">Študent</option>
+        <option value="REVIW">Recenzent</option>
       </select>
       <button
-        v-if="selectedRole === 'Recenzent'"
+        v-if="selectedRole === 'REVIW'"
         class="btn btn-success"
         @click="handleEdit"
       >
