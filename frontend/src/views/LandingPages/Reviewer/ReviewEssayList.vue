@@ -7,6 +7,27 @@ import axiosInstance from '@/axios';
 
 const papers = ref([]);
 
+const downloadPaperById = async (paper) => {
+  try {
+    const response = await axiosInstance.get(`/papers/download-paper/${paper.id}`, {
+      responseType: 'blob',
+    });
+
+    const blob = new Blob([response.data], { type: response.headers['content-type'] });
+    const url = URL.createObjectURL(blob);
+
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = paper.pdf_filename;
+    anchor.click();
+
+    URL.revokeObjectURL(url);
+    console.log('Paper downloaded successfully');
+  } catch (error) {
+    console.error('Paper downloading failed:', error.response?.data || error.message);
+  }
+};
+
 
 
 
@@ -53,6 +74,8 @@ const getAllPapersAndTheirReview = async () => {
       paper: paper.name,
       review_id: paper.review ? paper.review.idreview : 'new',
       info: paper.keywords_lang1,
+      pdf_path: paper.path_filesystem_pdf,
+      pdf_filename: paper.pdf_filename,
       isEditing: false,
     }));
     // console.log(response.data[index].review.idreview);
@@ -81,9 +104,7 @@ const filteredPapers = computed(() => {
 function handleGrade(id) {
     router.push({ name: "evaluation", params: { id } });
 }
-function handleDownload(id) {
- //logika pre stiahnutie práce
-}
+
 </script>
 
 <template>
@@ -132,7 +153,7 @@ function handleDownload(id) {
                 :buttonText="'Hodnotiť'"
                 :optionalButton="{
                   text: 'Stiahnuť',
-                  onClick: () => handleDownload(paper.id),
+                  onClick: () => downloadPaperById(paper),
                   color: 'info'
                 }"
               />

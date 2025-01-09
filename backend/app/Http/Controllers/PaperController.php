@@ -205,7 +205,7 @@ class PaperController extends Controller
         }
     }
 
-    public function deletePaper($id, $userId) // Mazanie "Papers" (usermode, nie pre adminov)
+    public function deletePaper($id) // Mazanie "Papers" (usermode, nie pre adminov)
     {
         $paper = Paper::find($id);
 

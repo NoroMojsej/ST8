@@ -63,6 +63,8 @@ class ReviewController extends Controller
             'yesno10' => 'nullable|integer|in:0,1',
             'yesno11' => 'nullable|integer|in:0,1',
             'yesno12' => 'nullable|integer|in:0,1',
+            'yesno13' => 'nullable|integer|in:0,1',
+            'yesno14' => 'nullable|integer|in:0,1',
             'txt_plus' => 'nullable|string|max:500',
             'txt_minus' => 'nullable|string|max:500',
             'txt_general' => 'nullable|string|max:500',
@@ -121,6 +123,8 @@ class ReviewController extends Controller
                 'yesno10' => $request->yesno10,
                 'yesno11' => $request->yesno11,
                 'yesno12' => $request->yesno12,
+                'yesno13' => $request->yesno13,
+                'yesno14' => $request->yesno14,
     
                 'txt_plus' => $request->txt_plus,
                 'txt_minus' => $request->txt_minus,
