@@ -23,9 +23,21 @@ class PaperController extends Controller
         return response()->json($papers, 200);
     }
 
+    public function getAllPapersAndTheirReviewByAssignedUserIdToReview($reviewerId)
+    {
+        $papers = Paper::whereHas('review', function ($query) use ($reviewerId) {
+            $query->where('user_iduser', $reviewerId);
+        })
+        ->with('review')
+        ->get();
+
+        return response()->json($papers, 200);
+    }
+
+
     public function getPapersByConference($conferenceId)
     {
-        $papers = Paper::where('conference_idconference', $conferenceId)->get();
+        $papers = Paper::where('conference_idconference',    $conferenceId)->get();
         return response()->json($papers);
     }
 

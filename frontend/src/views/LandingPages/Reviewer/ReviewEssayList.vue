@@ -7,13 +7,43 @@ import axiosInstance from '@/axios';
 
 const papers = ref([]);
 
+
+
+
 const getAllPapersAndTheirReview = async () => {
   try {
-    const response = await axiosInstance.get('/papers/get-all-papers-and-their-review', {
+    const session = JSON.parse(localStorage.getItem('session'));
+    console.log("Logged in user:", session.user_id);
+
+    let apiRouteBasedOnLoggedUserRole = null;
+
+    if(session.user_role == 3){
+      //admin logged in
+      console.log('Getting papers for admin with user id: '+ session.user_id);
+      apiRouteBasedOnLoggedUserRole = '/papers/get-all-papers-and-their-review';
+
+    }else if(session.user_role == 2){
+      //reviewer logged in
+      console.log('Getting papers for reviewer with user id: '+ session.user_id);
+      apiRouteBasedOnLoggedUserRole = '/papers/get-all-papers-and-their-review-by-assigned-userid-to-review/' + session.user_id;
+    }else {
+      //default: do nothing
+      console.log('Doing Nothing');
+      return null;
+    }
+    
+    
+    
+    
+
+    
+    const response = await axiosInstance.get(apiRouteBasedOnLoggedUserRole, {
       headers: {
         'Content-Type': 'application/json',
       },
     });
+
+    
 
     console.log('Papers retrieved successfully:', response.data);
 
