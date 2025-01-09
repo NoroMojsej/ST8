@@ -26,6 +26,8 @@ defineExpose({
 onMounted(() => {
   setNavPills();
   getReviewById();
+  const session = JSON.parse(localStorage.getItem('session'));
+        console.log("Logged in user:", session.user_id);
   
 
 });
@@ -62,20 +64,19 @@ onMounted(() => {
     };
 
     const getReviewIdFromURL = () => {
-        const url = window.location.href;
-        const regex = /evaluation\/(\d+)/;
-        const match = url.match(regex);
+    const reviewId = router.currentRoute.value.params.id;
 
-        if (match) {
-          const id = match[1];
-          console.log("ID extracted from URL:", id);
-          return id;
+        if (reviewId) {
+          console.log("ID extracted from URL:", reviewId);
+          return reviewId;
         } else {
           console.log("No ID found in URL. Creating new review.");
+
         }
 
         
     };
+
 
 
     const review = reactive({
@@ -170,7 +171,7 @@ onMounted(() => {
 
     const getReviewById = async () => {
       const reviewId = getReviewIdFromURL();
-      if (!reviewId) return;  
+      if (!reviewId || reviewId === 'new' ) return;  
 
 
       try {
@@ -181,6 +182,8 @@ onMounted(() => {
         });
 
         console.log('Review retrieved successfully:', response.data);
+
+        
 
         review.id = response.data.idreview ? response.data.idreview : 'new';
         review.grade1 = response.data.grade1;
@@ -214,7 +217,7 @@ onMounted(() => {
         review.status = response.data.status ? response.data.status.name : "";
         review.status_desc = response.data.status_desc;
 
-        review.user_iduser = response.data.user_iduser;
+        review.user_iduser = response.data.user_iduser ? response.data.user_iduser : session.user_id;
 
         review.valid_from = response.data.valid_from;
         review.valid_to = response.data.valid_to;
