@@ -106,8 +106,8 @@ onMounted(() => {
       yesno10: null,
       yesno11: null,
       yesno12: null,
-      // yesno13: null,     v databaze neexistuje 13 a 14 otazka ale texty existuju tak zakomentovane
-      // yesno14: null,
+      yesno13: null,
+      yesno14: null,
 
       txt_plus: null,
       txt_minus: null,
@@ -159,9 +159,8 @@ onMounted(() => {
       { question: "Nie sú uvedené zdroje a použitá literatúra", key: "yesno2" },
       { question: "V texte chýbajú referencie na zoznam bibliografie", key: "yesno11" },
       { question: "V texte chýbajú referencie na použité obrázky alebo tabuľky", key: "yesno12" },
-      // v databaze neexistuje 13 a 14 otazka ale texty existuju tak zakomentovane
-      // { question: "Obrázkom alebo tabuľkám chýba popis", key: "yesno13" }, 
-      // { question: "Chýba meno autora alebo školiteľa", key: "yesno14" },
+      { question: "Obrázkom alebo tabuľkám chýba popis", key: "yesno13" }, 
+      { question: "Chýba meno autora alebo školiteľa", key: "yesno14" },
     ]);
 
     const updateReview = (key, value) => {      
@@ -209,6 +208,8 @@ onMounted(() => {
         review.yesno10 = response.data.yesno10;
         review.yesno11 = response.data.yesno11;
         review.yesno12 = response.data.yesno12;
+        review.yesno13 = response.data.yesno13;
+        review.yesno14 = response.data.yesno14;
 
         review.txt_plus = response.data.txt_plus;
         review.txt_minus = response.data.txt_minus;

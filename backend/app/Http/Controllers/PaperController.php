@@ -27,13 +27,19 @@ class PaperController extends Controller
     public function getAllPapersAndTheirReviewByAssignedUserIdToReview($reviewerId)
     {
         $papers = Paper::whereHas('review', function ($query) use ($reviewerId) {
-            $query->where('user_iduser', $reviewerId);
-        })
-        ->with('review')
-        ->get();
+                $query->where('user_iduser', $reviewerId);
+            })
+            ->whereHas('conference', function ($query) {
+                $query->where('take_place_from', '>', now()); 
+            })
+            ->join('paper_status', 'paper.paper_status_idpaper_status', '=', 'paper_status.idpaper_status')
+            ->with('review', 'conference')
+            ->get();
 
         return response()->json($papers, 200);
     }
+
+
 
 
     public function getPapersByConference($conferenceId)
@@ -205,6 +211,27 @@ class PaperController extends Controller
         }
     }
 
+    public function downloadPaper(Request $request, $id)
+    {
+        $paper = Paper::find($id);
+
+        $storage_path = 'storage/app/public/';
+        $file = $paper->pdf_filename;
+        $full_path = $storage_path.$paper->path_filesystem_pdf;
+
+        $headers = array(
+            'Content-Type: application/pdf',
+          );
+
+        if (!$paper || !Storage::exists($full_path)) {
+            return response()->json(['message' => 'Paper not found.'], 404);
+        }
+
+
+        return response()->download($full_path, $file, $headers);
+    }
+
+
     public function deletePaper($id, $userId) // Mazanie "Papers" (usermode, nie pre adminov)
     {
         $paper = Paper::find($id);
@@ -233,6 +260,19 @@ class PaperController extends Controller
         return response()->json(['message' => 'Paper deleted successfully']);
     }
 
+    public function getPapersByUser($userId)
+    {
+    $papers = Paper::where('user_id', $userId)->pluck('name', 'idpaper');
+
+    if ($papers->isEmpty()) {
+        return response()->json(['message' => 'No papers found for this user.'], 404);
+    }
+
+    return response()->json([
+        'message' => 'Papers retrieved successfully.',
+        'papers' => $papers, // mená a IDčká paperov.
+    ]);
+    }   
 
     public function getPaperById($id)
     {
