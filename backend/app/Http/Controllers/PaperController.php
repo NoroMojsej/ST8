@@ -192,6 +192,27 @@ class PaperController extends Controller
         }
     }
 
+    public function downloadPaper(Request $request, $id)
+    {
+        $paper = Paper::find($id);
+
+        $storage_path = 'storage/app/public/';
+        $file = $paper->pdf_filename;
+        $full_path = $storage_path.$paper->path_filesystem_pdf;
+
+        $headers = array(
+            'Content-Type: application/pdf',
+          );
+
+        if (!$paper || !Storage::exists($full_path)) {
+            return response()->json(['message' => 'Paper not found.'], 404);
+        }
+
+
+        return response()->download($full_path, $file, $headers);
+    }
+
+
     public function deletePaper($id) // Mazanie "Papers" (usermode, nie pre adminov)
     {
         $paper = Paper::find($id);

@@ -63,6 +63,7 @@ Route::get('/papers/student/{studentId}', [PaperController::class, 'getEssaysByS
 Route::get('/papers/student/{studentId}/conference/{conferenceId}', [PaperController::class, 'getEssaysByStudentAndConference']);
 Route::put('/papers/update/{essayId}', [PaperController::class, 'updateEssayByID']);
 Route::post('/papers/update/{essayId}/upload-files', [PaperController::class, 'uploadFiles']);
+Route::get('/papers/download-paper/{paperId}', [PaperController::class, 'downloadPaper']);
 Route::post('/sections/get-all-sections', [SectionController::class, 'getAllSections']);
 Route::post('/sections/save-section', [SectionController::class, 'saveSection']);
 Route::post('/sections/delete-section', [SectionController::class, 'deleteSection']);
