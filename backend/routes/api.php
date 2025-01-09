@@ -60,6 +60,7 @@ Route::get('/conferences/download-refused/{conferenceId}', [ConferenceController
 Route::put('/conference/{conferenceId}', [ConferenceController::class, 'update']);
 Route::get('/papers/get-all-papers', [PaperController::class, 'getAllPapers']);
 Route::get('/papers/get-all-papers-and-their-review', [PaperController::class, 'getAllPapersAndTheirReview']);
+Route::get('/papers/get-all-papers-and-their-review-by-assigned-userid-to-review/{assignedUserIdToReview}', [PaperController::class, 'getAllPapersAndTheirReviewByAssignedUserIdToReview']);
 Route::get('/papers/available/{idConference}/{idSection}', [PaperController::class, 'getPapersAvailable']);
 Route::post('/papers/assign/{userId}', [ReviewController::class, 'createReviewAndUpdatePaper']);  
 Route::get('/papers/{idEssay}', [PaperController::class, 'getPaperById']);
