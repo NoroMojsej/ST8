@@ -35,6 +35,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth:san
 Route::middleware('auth:sanctum')->get('user', [LoginController::class, 'user']);
 Route::post('/register', [RegisterController::class, 'register']);
 Route::get('/user/list', [UserController::class, 'getUsersList']);
+Route::put('/user/changeRole/{userId}', [UserController::class, 'changeRole']);
 Route::get('/user/{userId}', [UserController::class, 'getUserInfo']);
 Route::put('/user/changePassword/{userId}', [UserController::class, 'changePassword']);
 Route::put('/updateUser/{userId}', [UserController::class, 'update']);
@@ -51,11 +52,14 @@ Route::post('/reviews/delete-review', [ReviewController::class, 'deleteReview'])
 Route::get('/sections/{idConference}', [SectionController::class, 'getSectionByConferenceId']);
 Route::get('/conferences', [ConferenceController::class, 'index']);
 Route::post('/createConf', [ConferenceController::class, 'store']);
+Route::get('/conferences/active', [ConferenceController::class, 'getActiveConferences']);
 Route::get('/conferences/{conferenceId}', [ConferenceController::class, 'show']);
 Route::put('/conference/{conferenceId}', [ConferenceController::class, 'update']);
 Route::get('/papers/get-all-papers', [PaperController::class, 'getAllPapers']);
 Route::get('/papers/get-all-papers-and-their-review', [PaperController::class, 'getAllPapersAndTheirReview']);
 Route::get('/papers/conference/{conferenceId}', [PaperController::class, 'getPapersByConference']);
+Route::get('/papers/available/{idSection}', [PaperController::class, 'getPapersAvailable']);
+Route::post('/papers/assign/{userId}', [ReviewController::class, 'createReviewAndUpdatePaper']);  
 Route::get('/papers/{idEssay}', [PaperController::class, 'getEssayById']);
 Route::get('/papers/{idEssay}/review', [PaperController::class, 'getReviewByEssay']);
 Route::get('/papers/student/{studentId}', [PaperController::class, 'getEssaysByStudent']);

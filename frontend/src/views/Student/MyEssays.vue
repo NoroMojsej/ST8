@@ -20,7 +20,7 @@ const essays = ref([]);
 
 const fetchEssays = async (studentId) => {
   try {
-    const response = await axiosInstance.get(`/papers/student/${studentId}`);
+    const response = await axiosInstance.get(`/papers/student`);
     essays.value = response.data;
   } catch (error) {
     console.error("Chyba pri načítaní prác:", error);

@@ -110,4 +110,13 @@ class ConferenceController extends Controller
         'conference' => $conference->fresh(),
     ]);*/
     }
+
+    public function getActiveConferences()
+    {
+            $conferences = Conference::select('idconference', 'abbreviation')
+                ->where('take_place_to', '>=', now())
+                ->get();
+        
+            return response()->json($conferences);
+    }
 }

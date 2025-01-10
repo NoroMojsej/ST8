@@ -238,14 +238,18 @@ class PaperController extends Controller
     ]);
     }
 
-    function getEssaysByStudent($studentId) {
+    function getPapersByStudent() {
+        $userId = auth()->id();
+        if (!$userId) {
+            return response()->json(['error' => 'User not authenticated'], 401);
+        }
         return Paper::with([
                 'conference:abbreviation,idconference',
                 'section:text,idsection',
                 'review.status:status_desc,idreview_status'
             ])
-            ->whereHas('users', function ($query) use ($studentId) {
-                $query->where('user_iduser', $studentId);
+            ->whereHas('users', function ($query) use ($userId) {
+                $query->where('user_iduser', $userId);
             })
             ->get()
             ->map(function ($paper) {
@@ -262,7 +266,7 @@ class PaperController extends Controller
             });
     }
 
-    public function getReviewByEssay($essayID)
+    public function getReviewByPaper($essayID)
 {
     $essay = Paper::with(['review.status'])->find($essayID);
 
@@ -278,6 +282,16 @@ class PaperController extends Controller
         'review' => $essay->review,
         'status' => $essay->review->status,
     ], 200);
+}
+
+public function getPapersAvailable($sectionID)
+{
+    $papers = Paper::select('idpaper', 'name')
+        ->whereNull('review_idreview')
+        ->where('section_idsection', $sectionID)
+        ->get();
+
+    return response()->json($papers);
 }
 
 }

@@ -12,19 +12,20 @@ onMounted(() => {
 });
 
 const router = useRouter();
-const input = ref("");
+const searchInput = ref("");
 const users = ref([]);
 
 const filteredUsers = computed(() => {
-  if (!Array.isArray(users.value)) return []; // ak nie sú hodnoty, vráti prázdne pole
+  if (!Array.isArray(users.value)) return [];
 
   return users.value.filter(user => {
-    const fullName = `${user.name} ${user.surname}`.toLowerCase(); // spojíme name a surname
-    return fullName.startsWith(input.value.toLowerCase()); // filtrovanie len podľa začiatku
+    const fullName = `${user.name} ${user.surname}`.toLowerCase();
+    return fullName.startsWith(searchInput.value.toLowerCase());
   });
 });
 
 function handleEssayManager(id) {
+  console.log("ID je "+id);
   router.push({ name: "essayassign", params: { id } });
 }
 
@@ -37,6 +38,20 @@ async function fetchUsers() {
     console.error('Chyba pri načítaní údajov:', err);
   }
 }
+
+const handleRoleChanged = async ({ id, newRole }) => {
+  console.log('ID používateľa:', id);
+  console.log('Nová rola:', newRole);
+
+  try {
+    const response = await axiosInstance.put(`/user/changeRole/${id}`, {
+      role_code: newRole,
+    });
+    console.log('Úspešná zmena roly:', response.data);
+  } catch (error) {
+    console.error('Chyba pri zmene roly:', error);
+  }
+};
 
 </script>
 
@@ -55,7 +70,7 @@ async function fetchUsers() {
             <input
               class="searchbox"
               type="text"
-              v-model="input"
+              v-model="searchInput"
               placeholder="Hľadať používateľa"
             />
           </div>
@@ -71,7 +86,7 @@ async function fetchUsers() {
     <div class="container mb-4">
       <div
     class="row mb-3"
-    v-for="user in filteredUsers" :key="user.id"
+    v-for="user in filteredUsers" :key="user.iduser"
   >
     <div class="col-12">
       <div class="d-flex align-items-center">
@@ -79,12 +94,14 @@ async function fetchUsers() {
           <UserCard
             class="px-lg-1 mt-lg-0 mt-4 p-4"
             height="h-100"
+            :id="user.iduser"
             :color="{ text: 'dark', background: 'primary' }"
             :icon="{ component: 'edit', color: 'success' }"
             :title="user.name + ' ' + user.surname"
-            :description="user.university_code"
-            :handleEdit="() => handleEssayManager(user.id)"
+            :description="user.department_code + ', ' + user.university_code"
+            :handleEdit="() => handleEssayManager(user.iduser)"
             :initialRole="user.role_code" 
+            @role-changed="handleRoleChanged"
           />
         </div>
       </div>

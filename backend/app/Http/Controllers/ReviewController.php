@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Review;
+use App\Models\Paper;
 use App\Models\ReviewStatus;
+use Illuminate\Support\Facades\DB;
 
 class ReviewController extends Controller
 {
@@ -177,4 +179,31 @@ class ReviewController extends Controller
             ], 500);
         }
     }
+
+    public function createReviewAndUpdatePaper(Request $request, $userId)
+{
+    $validated = $request->validate([
+        'essayIds' => 'required|array',
+        'essayIds.*' => 'required|integer|exists:paper,idpaper',
+    ]);
+
+    try {
+        DB::transaction(function () use ($validated, $userId) {
+            foreach ($validated['essayIds'] as $paperId) {
+                $review = Review::create([
+                    'user_iduser' => $userId,
+                ]);
+
+                Paper::where('idpaper', $paperId)->update([
+                    'review_idreview' => $review->idreview,
+                ]);
+            }
+        });
+
+        return response()->json(['status' => 'success', 'message' => 'Reviews created and Papers updated.'], 200);
+
+    } catch (\Exception $e) {
+        return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+    }
+}
 }
