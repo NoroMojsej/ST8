@@ -14,7 +14,7 @@ onMounted(() => {
 
 async function fetchConferences() {
   try {
-    const response = await axiosInstance.get('/conferences');
+    const response = await axiosInstance.get('/conferences/active');
     conferences.value = response.data;
   } catch (error) {
     console.error('Chyba pri načítaní konferencií:', error);
