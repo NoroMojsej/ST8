@@ -82,7 +82,7 @@ const fetchUniversities = async () => {
 
 const fetchSections = async () => {
   try {
-    const response = await axiosInstance.get('/sections');
+    const response = await axiosInstance.get('/sections/get-all-sections');
 
     if (Array.isArray(response.data)) {
       allSections.value = response.data;

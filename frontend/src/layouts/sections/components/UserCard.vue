@@ -68,6 +68,7 @@ const selectedRole = ref(props.initialRole);
 const emit = defineEmits();
 
 const handleRoleChange = () => {
+console.log("PROPS ID "+props.id);
   emit('role-changed', { id: props.id, newRole: selectedRole.value });
 };
 

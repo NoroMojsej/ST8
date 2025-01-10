@@ -143,7 +143,7 @@ const fetchUniversities = async () => {
 
 const fetchSections = async () => {
   try {
-    const response = await axiosInstance.get('/sections');
+    const response = await axiosInstance.get('/sections/get-all-sections');
     sections.value = response.data;
     console.log("SEKCIE " + response)
   } catch (error) {

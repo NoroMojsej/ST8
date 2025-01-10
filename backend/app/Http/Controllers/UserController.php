@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -88,22 +89,25 @@ class UserController extends Controller
     }
 
     public function getUsersList()
-{
-    $users = User::join('department', 'user.department_iddepartment', '=', 'department.iddepartment')
-                 ->join('faculty', 'department.faculty_idfaculty', '=', 'faculty.idfaculty')
-                 ->join('university', 'faculty.university_iduniversity', '=', 'university.iduniversity')
-                 ->join('role', 'user.role_idrole', '=', 'role.idrole')
-                 ->whereIn('user.role_idrole', [1, 3])
-                 ->select(
-                     'user.name',
-                     'user.surname',
-                     'university.code as university_code',
-                     'role.code as role_code'
-                 )
-                 ->get();
-
-    return response()->json($users);
-}
+    {
+        $users = User::join('department', 'user.department_iddepartment', '=', 'department.iddepartment')
+                     ->join('faculty', 'department.faculty_idfaculty', '=', 'faculty.idfaculty')
+                     ->join('university', 'faculty.university_iduniversity', '=', 'university.iduniversity')
+                     ->join('role', 'user.role_idrole', '=', 'role.idrole')
+                     ->whereIn('role.code', ['REVIW', 'STDNT']) 
+                     ->select(
+                         'user.iduser',
+                         'user.name',
+                         'user.surname',
+                         'department.code as department_code',
+                         'university.code as university_code',
+                         'role.code as role_code'
+                     )
+                     ->get();
+    
+        return response()->json($users);
+    }
+    
 
 public function changeRole(Request $request, $userId)
 {
