@@ -104,4 +104,29 @@ class UserController extends Controller
 
     return response()->json($users);
 }
+
+public function changeRole(Request $request, $userId)
+{
+    $validated = $request->validate([
+        'role_code' => 'required|string|exists:role,code',
+    ]);
+
+    try {
+        $roleId = Role::where('code', $validated['role_code'])->value('idrole');
+
+        if (!$roleId) {
+            return response()->json(['status' => 'error', 'message' => 'Invalid role code.'], 400);
+        }
+
+        $user = User::findOrFail($userId);
+        $user->role_idrole = $roleId;
+        $user->save();
+
+        return response()->json(['status' => 'success', 'message' => 'Role updated successfully.'], 200);
+
+    } catch (\Exception $e) {
+        return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+    }
+}
+
 }
