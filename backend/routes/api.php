@@ -48,7 +48,7 @@ Route::get('/reviews/get-all-reviews', [ReviewController::class, 'getAllReviews'
 Route::get('/reviews/get-review/{id}', [ReviewController::class, 'getReviewById']);
 Route::post('/reviews/save-review', [ReviewController::class, 'saveReview']);
 Route::post('/reviews/delete-review', [ReviewController::class, 'deleteReview']);
-Route::get('/sections/{idConference}', [SectionController::class, 'getSectionsByConference']);
+Route::get('/sections/{idConference}', [SectionController::class, 'getSectionByConferenceId']);
 Route::get('/conferences', [ConferenceController::class, 'index']);
 Route::post('/createConf', [ConferenceController::class, 'store']);
 Route::get('/conferences/{conferenceId}', [ConferenceController::class, 'show']);
@@ -66,10 +66,10 @@ Route::post('/sections/get-all-sections', [SectionController::class, 'getAllSect
 Route::post('/sections/save-section', [SectionController::class, 'saveSection']);
 Route::post('/sections/delete-section', [SectionController::class, 'deleteSection']);
 // Upravte si routes ako chcete.
-//Route::post('/upload-paper', [PaperController::class, 'uploadPaper'])->middleware('auth:sanctum'); // pre istotu aby vedeli len prihlásení ludia uploadovať
-Route::post('/upload-paper', [PaperController::class, 'uploadPaper']); // môže sa aj takto, ajtak ho to nepustí uploadnuť.
-Route::put('/update-paper/{id}', [PaperController::class, 'updatePaper'])->middleware('auth:sanctum'); // môže sa použiť post ale whatever, PUT je dobre podla dokumentácie.
-Route::delete('/delete-paper/{id}', [PaperController::class, 'deletePaper'])->middleware('auth:sanctum'); // mazanie papers (non-admin).
+//Route::post('/upload-paper{userId}', [PaperController::class, 'uploadPaper'])->middleware('auth:sanctum'); // pre istotu aby vedeli len prihlásení ludia uploadovať
+Route::post('/upload-paper/{userId}', [PaperController::class, 'uploadPaper']); // môže sa aj takto, ajtak ho to nepustí uploadnuť.
+Route::put('/update-paper/{id}/{userId}', [PaperController::class, 'updatePaper']); // môže sa použiť post ale whatever, PUT je dobre podla dokumentácie.
+Route::delete('/delete-paper/{id}/{userId}', [PaperController::class, 'deletePaper']); // mazanie papers (non-admin).
 
 Route::post('/faculties', [FacultyController::class, 'create']);
 Route::get('/faculties/{universityId}', [FacultyController::class, 'getFaculties']); // getByUniversity

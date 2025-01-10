@@ -50,7 +50,7 @@ function essayUpload(id) {
               :icon="{ component: 'flag', color: 'success' }"
               :title="conference.abbreviation"
               :description="conference.description"
-              :handleEdit="() => essayUpload(idconference)"
+              :handleEdit="() => essayUpload(idconference + 1)"
               :buttonText="'Nahrať Prácu'"
             />
             </div>

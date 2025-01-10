@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import MaterialInput from "@/components/MaterialInput.vue";
 import MaterialButton from "@/components/MaterialButton.vue";
+import { useRoute } from "vue-router";
 import axiosInstance from '@/axios'; 
 
 const formData = ref({
@@ -14,9 +15,12 @@ const formData = ref({
   section_id: "",
 });
 
+const route = useRoute();
 const uploadedFiles = ref([]);
 const errorMessage = ref("");
 const successMessage = ref("");
+const conferenceId = ref(null);
+const sections = ref([]);
 
 function handleFileChange(event) {
   const files = Array.from(event.target.files);
@@ -57,6 +61,7 @@ async function handleSubmit() {
   data.append("keywords_lang1", formData.value.keywords_lang1);
   data.append("keywords_lang2", formData.value.keywords_lang2);
   data.append("section_id", formData.value.section_id);
+  data.append("conference_id", conferenceId.value);
 
   const fileInput = document.querySelector("#file-upload");
   const files = fileInput?.files;
@@ -78,8 +83,15 @@ async function handleSubmit() {
 
   try {
     console.log("Sending request to server...");
-    const response = await axiosInstance.post("/upload-paper", data, {
-      headers: { "Content-Type": "multipart/form-data" },
+    const token = JSON.parse(localStorage.getItem('auth_token')); // Get the token from localStorage
+    const session = JSON.parse(localStorage.getItem('session'));
+    if(!token)
+      console.error("No token found.");
+
+    const response = await axiosInstance.post(`/upload-paper/${session?.user_id}`, data, {
+      headers: {
+      "Content-Type": "multipart/form-data",
+      },      
     });
 
     successMessage.value = response.data.message;
@@ -91,8 +103,22 @@ async function handleSubmit() {
 }
 
 import setMaterialInput from "@/assets/js/material-input";
+
+async function fetchSections() {
+  try {
+    console.log("ConfId: ", conferenceId.value);
+    const response = await axiosInstance.get(`/sections/${conferenceId.value}`);
+    sections.value = response.data;
+    console.log("Found sections: ", sections.value);    
+  } catch (error) {
+    console.error('Chyba pri načítaní sekcií:', error);
+  }
+}
+
 onMounted(() => {
   setMaterialInput();
+  conferenceId.value = route.params.id;
+  fetchSections();
 });
 </script>
 
@@ -175,10 +201,9 @@ onMounted(() => {
                     v-model="formData.section_id"
                   >
                     <option selected disabled>Vyberte sekciu</option>
-                    <option value="1">Kat1</option>
-                    <option value="2">Kat2</option>
-                    <option value="3">Kat3</option>
-                    <option value="4">Kat4</option>
+                    <option v-for="section in sections" :key="section.idsection" :value="section.idsection">
+                      {{ section.text }}
+                    </option>
                   </select>
                 </div>
               </div>

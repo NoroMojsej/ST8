@@ -46,7 +46,7 @@ class PaperController extends Controller
         return response()->json($essays, 200);
     }
 
-    public function updatePaper(Request $request, $id)
+    public function updatePaper(Request $request, $id, $userId)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -54,7 +54,7 @@ class PaperController extends Controller
             'abstract_lang2' => 'nullable|string',
             'keywords_lang1' => 'nullable|string',
             'keywords_lang2' => 'nullable|string',
-            'section_id' => 'required|exists:section,idsection',
+            'section_id' => 'required',
             'files' => 'required|array|min:2|max:2',
             'files.*' => 'file|mimes:pdf,docx|max:10240',
         ]);
@@ -72,7 +72,6 @@ class PaperController extends Controller
         $paper->keywords_lang2 = $request->keywords_lang2;
         $paper->section_idsection = $request->section_id;
 
-        $userId = auth()->id();
         $files = $request->file('files');
         $newFilePaths = [];
 
@@ -102,7 +101,7 @@ class PaperController extends Controller
         ]);
     }
 
-    public function uploadPaper(Request $request)
+    public function uploadPaper(Request $request, $userId)
     {
     try {
         Log::info('Starting uploadPaper method.');
@@ -114,14 +113,14 @@ class PaperController extends Controller
             'abstract_lang2' => 'nullable|string',
             'keywords_lang1' => 'nullable|string',
             'keywords_lang2' => 'nullable|string',
-            'section_id' => 'required|exists:section,idsection',
+            'section_id' => 'required',
+            'conference_id' => 'required',
             'files' => 'required|array|min:2|max:2',
             'files.*' => 'file|mimes:pdf,docx|max:10240', // zatial max 10mb, mozme zmenit
         ]);
 
         Log::info('Validation passed.');
 
-        $userId = auth()->id(); // ? auth()->id() : 1; // Dont do this, len pre debug.
         Log::info('Authenticated user ID:', ['user_id' => $userId]);
 
         if (!$userId) {
@@ -160,7 +159,9 @@ class PaperController extends Controller
             'keywords_lang1' => $request->input('keywords_lang1'),
             'keywords_lang2' => $request->input('keywords_lang2'),
             'section_idsection' => $request->input('section_id'),
-            'path_filesystem' => json_encode($filePaths), // File paths as JSON
+            'conference_idconference' => $request->input('conference_id'),
+            'paper_status_idpaper_status' => 1, // uploaded
+            'path_filesystem' => json_encode($filePaths),
             'upload_datetime' => now(),
         ]);
 
@@ -171,6 +172,7 @@ class PaperController extends Controller
             'paper_id' => $paper->idpaper,
             'file_paths' => $filePaths,
         ]);
+
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Validation error:', ['errors' => $e->errors()]);
             return response()->json(['message' => 'Validation failed.', 'errors' => $e->errors()], 422);
@@ -180,7 +182,7 @@ class PaperController extends Controller
         }
     }
 
-    public function deletePaper($id) // Mazanie "Papers" (usermode, nie pre adminov)
+    public function deletePaper($id, $userId) // Mazanie "Papers" (usermode, nie pre adminov)
     {
         $paper = Paper::find($id);
 
@@ -188,7 +190,6 @@ class PaperController extends Controller
             return response()->json(['message' => 'Paper not found'], 404);
         }
 
-        $userId = auth()->id();
         $isAuthorized = $paper->users()->where('iduser', $userId)->exists();
 
         if (!$isAuthorized) {

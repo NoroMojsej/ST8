@@ -16,6 +16,22 @@ class SectionController extends Controller
         return response()->json($sections, 200);
     }
 
+    public function getSectionByConferenceId($conferenceId) // hlavne že sú routes pre to v api, ale funkcia neexistuje.
+    {
+        try {
+            $sections = Section::whereHas('conferences', function ($query) use ($conferenceId) {
+                $query->where('conference_idconference', $conferenceId);
+            })->get();
+
+            return response()->json($sections, 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to retrieve sections.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function saveSection(Request $request)
     {
         $request->validate([
