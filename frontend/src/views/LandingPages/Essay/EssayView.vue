@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import MaterialInput from "@/components/MaterialInput.vue";
 import MaterialButton from "@/components/MaterialButton.vue";
@@ -21,6 +21,13 @@ const errorMessage = ref("");
 const successMessage = ref("");
 const conferenceId = ref(null);
 const sections = ref([]);
+const closeDate = ref(new Date("2035-12-20T23:59:00"));
+
+async function fetchConfData(conferenceId) {
+  const response_conference = await axiosInstance.get(`/conferences/${conferenceId.value}`);
+  console.log(response_conference.data);
+  closeDate.value = new Date(response_conference.data.submissions_to);
+}
 
 function handleFileChange(event) {
   const files = Array.from(event.target.files);
@@ -44,9 +51,17 @@ function handleFileChange(event) {
   errorMessage.value = "";
 }
 
+const isAfterCloseDate = computed(() => new Date() > closeDate.value);
+const isUploadAllowed = computed(() => !isAfterCloseDate.value);
+
 async function handleSubmit() {
   errorMessage.value = "";
   successMessage.value = "";
+
+  if (!isUploadAllowed.value) {
+    errorMessage.value = "Nahrávanie nie je povolené. Skontrolujte čas uzávierky.";
+    return;
+  }
 
   if (!formData.value.name || !formData.value.section_id) {
     errorMessage.value = "Prosím vyplňte všetky povinné polia.";
@@ -115,9 +130,25 @@ async function fetchSections() {
   }
 }
 
+const formattedCloseDate = computed(() => {
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  };
+  return closeDate.value
+    ? closeDate.value.toLocaleString("sk-SK", options)
+    : new Date("2024-12-20T23:59:00").toLocaleString("sk-SK", options);
+});
+
 onMounted(() => {
   setMaterialInput();
   conferenceId.value = route.params.id;
+  fetchConfData(conferenceId);
   fetchSections();
 });
 </script>
@@ -210,6 +241,9 @@ onMounted(() => {
 
               <div class="file-upload-section mt-4 p-4 rounded shadow-sm bg-white text-center">
                 <label for="file-upload" class="form-label d-block mb-3">Nahrajte 2 súbory (PDF a DOCX)</label>
+                <p class="text-danger">
+                  Termín odovzdania: {{ formattedCloseDate }}
+                </p>
 
                 <input
                   type="file"
