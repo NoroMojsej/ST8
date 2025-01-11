@@ -37,13 +37,7 @@ const getAllPapersAndTheirReview = async () => {
     console.log("Logged in user:", session.user_id);
 
     let apiRouteBasedOnLoggedUserRole = null;
-
     if(session.user_role == 3){
-      //admin logged in
-      console.log('Getting papers for admin with user id: '+ session.user_id);
-      apiRouteBasedOnLoggedUserRole = '/papers/get-all-papers-and-their-review';
-
-    }else if(session.user_role == 2){
       //reviewer logged in
       console.log('Getting papers for reviewer with user id: '+ session.user_id);
       apiRouteBasedOnLoggedUserRole = '/papers/get-all-papers-and-their-review-by-assigned-userid-to-review/' + session.user_id;
@@ -88,12 +82,6 @@ getAllPapersAndTheirReview();
 
 const router = useRouter();
 const input = ref("");
-// const papers = [
-//   { id: 1, paper: "Práca 1", info: "desc" },
-//   { id: 2, paper: "Práca 2", info: "desc" },
-//   { id: 3, paper: "Práca 3", info: "desc" },
-//   { id: 4, paper: "Práca 4", info: "desc" },
-// ];
 
 const filteredPapers = computed(() => {
   return papers.value.filter(paper =>
