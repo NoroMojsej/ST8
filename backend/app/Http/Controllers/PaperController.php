@@ -308,11 +308,12 @@ public function getPapersOfUser($studentId)
     }
 }
 
-public function getPapersAvailable($sectionID)
+public function getPapersAvailable($conferenceID, $sectionID)
 {
     $papers = Paper::select('idpaper', 'name')
         ->whereNull('review_idreview')
         ->where('section_idsection', $sectionID)
+        ->where('conference_idconference', $conferenceID)
         ->get();
 
     return response()->json($papers);

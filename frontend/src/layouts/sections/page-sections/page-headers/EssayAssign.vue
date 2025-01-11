@@ -40,7 +40,9 @@ async function fetchConference() {
 
 async function fetchEssays() {
   try {
-    const response = await axiosInstance.get(`/papers/available/${selectedSection.value.idsection}`);
+    /*console.log("KOFN"+JSON.stringify(selectedConference.value));
+    console.log("SEKC"+JSON.stringify(selectedSection.value));*/
+    const response = await axiosInstance.get(`/papers/available/${selectedConference.value}/${selectedSection.value.idsection}`);
     essays.value = response.data;
     entries.value = [{ essay: null }];
   } catch (err) {

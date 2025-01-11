@@ -58,7 +58,7 @@ Route::put('/conference/{conferenceId}', [ConferenceController::class, 'update']
 Route::get('/papers/get-all-papers', [PaperController::class, 'getAllPapers']);
 Route::get('/papers/get-all-papers-and-their-review', [PaperController::class, 'getAllPapersAndTheirReview']);
 Route::get('/papers/conference/{conferenceId}', [PaperController::class, 'getPapersByConference']);
-Route::get('/papers/available/{idSection}', [PaperController::class, 'getPapersAvailable']);
+Route::get('/papers/available/{idConference}/{idSection}', [PaperController::class, 'getPapersAvailable']);
 Route::post('/papers/assign/{userId}', [ReviewController::class, 'createReviewAndUpdatePaper']);  
 Route::get('/papers/{idEssay}', [PaperController::class, 'getEssayById']);
 Route::get('/papers/{idEssay}/review', [PaperController::class, 'getReviewByEssay']);
