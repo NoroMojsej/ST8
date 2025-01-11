@@ -39,20 +39,20 @@ Route::put('/user/changeRole/{userId}', [UserController::class, 'changeRole']);
 Route::get('/user/{userId}', [UserController::class, 'getUserInfo']);
 Route::put('/user/changePassword/{userId}', [UserController::class, 'changePassword']);
 Route::put('/updateUser/{userId}', [UserController::class, 'update']);
-Route::get('/countries', [CountryController::class, 'countries']);
+Route::get('/countries', [CountryController::class, 'getAllcountries']);
 Route::get('/degrees', [DegreeController::class, 'index']);
-Route::get('/universities', [UniversityController::class, 'index']);
-Route::get('/universities/{countryId}', [UniversityController::class, 'getByCountry']);
+Route::get('/universities', [UniversityController::class, 'getAllUniversities']);
+Route::get('/universities/{countryId}', [UniversityController::class, 'getUniversityByCountry']);
 Route::get('/faculties/{universityId}', [FacultyController::class, 'getFaculties']);
 Route::get('/departments/{facultyId}', [DepartmentController::class, 'getDepartments']);
 Route::get('/reviews/get-all-reviews', [ReviewController::class, 'getAllReviews']);
 Route::get('/reviews/get-review/{id}', [ReviewController::class, 'getReviewById']);
 Route::post('/reviews/save-review', [ReviewController::class, 'saveReview']);
 Route::post('/reviews/delete-review', [ReviewController::class, 'deleteReview']);
-Route::get('/sections/{idConference}', [SectionController::class, 'getSectionByConferenceId']);
 Route::get('/conferences', [ConferenceController::class, 'index']);
 Route::post('/createConf', [ConferenceController::class, 'store']);
 Route::get('/conferences/active', [ConferenceController::class, 'getActiveConferences']);
+Route::put('/conference/update/{conferenceId}', [ConferenceController::class, 'updateConference']);
 Route::get('/conferences/{conferenceId}', [ConferenceController::class, 'show']);
 Route::put('/conference/{conferenceId}', [ConferenceController::class, 'update']);
 Route::get('/papers/get-all-papers', [PaperController::class, 'getAllPapers']);
@@ -66,9 +66,10 @@ Route::get('/papers/student/{studentId}', [PaperController::class, 'getEssaysByS
 Route::get('/papers/student/{studentId}/conference/{conferenceId}', [PaperController::class, 'getEssaysByStudentAndConference']);
 Route::put('/papers/update/{essayId}', [PaperController::class, 'updateEssayByID']);
 Route::post('/papers/update/{essayId}/upload-files', [PaperController::class, 'uploadFiles']);
-Route::post('/sections/get-all-sections', [SectionController::class, 'getAllSections']);
+Route::get('/sections/get-all-sections', [SectionController::class, 'getAllSections']);
 Route::post('/sections/save-section', [SectionController::class, 'saveSection']);
 Route::post('/sections/delete-section', [SectionController::class, 'deleteSection']);
+Route::get('/sections/{idConference}', [SectionController::class, 'getSectionByConferenceId']);
 // Upravte si routes ako chcete.
 //Route::post('/upload-paper{userId}', [PaperController::class, 'uploadPaper'])->middleware('auth:sanctum'); // pre istotu aby vedeli len prihlásení ludia uploadovať
 Route::post('/upload-paper/{userId}', [PaperController::class, 'uploadPaper']); // môže sa aj takto, ajtak ho to nepustí uploadnuť.

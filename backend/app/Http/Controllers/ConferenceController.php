@@ -61,7 +61,7 @@ class ConferenceController extends Controller
         }
     }
 
-    public function update(Request $request, int $idconference)
+    public function updateConference(Request $request, int $idconference)
     {
         $data = $request->validate([
             'title' => 'required|string|max:255',
@@ -94,21 +94,6 @@ class ConferenceController extends Controller
         if (isset($data['sections'])) {
             $conference->sections()->sync($data['sections']);
         }
-
-        //NEPOUZIVAT TENTO KOD DOLE, NEFUNGUJE
-        /*$conference = Conference::where('idconference', $idconference);
-    $conference->update($validatedData);*/
-
-        // Update the sections relationship (many-to-many)
-        /*if (isset($data['sections'])) {
-        Conference::where('idconference', $idconference)->sections()->sync($data['sections']); // This will update the sections relationship
-    }*/
-
-        // Return a response
-        /* return response()->json([
-        'message' => 'Conference updated successfully.',
-        'conference' => $conference->fresh(),
-    ]);*/
     }
 
     public function getActiveConferences()

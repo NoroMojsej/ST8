@@ -8,13 +8,13 @@ use Illuminate\Http\Request;
 class UniversityController extends Controller
 {
 
-    public function index()
+    public function getAllUniversities()
     {
         $universities = University::all();
         return response()->json($universities);
     }
 
-    public function getByCountry($countryId)
+    public function getUniversityByCountry($countryId)
     {
         $universities = University::where('country_idcountry', $countryId)->get();
 
