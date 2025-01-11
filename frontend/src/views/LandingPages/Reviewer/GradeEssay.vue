@@ -80,7 +80,7 @@ onMounted(() => {
 
 
     const review = reactive({
-      id: 'new',
+      id: 'new',  //default
       grade1: null,
       grade2: null,
       grade3: null,
@@ -92,7 +92,7 @@ onMounted(() => {
       grade9: null,
       grade10: null,
 
-      user_iduser: 2,      //logged in user
+      user_iduser: null,      //logged in user
 
       yesno1: null,
       yesno2: null,
