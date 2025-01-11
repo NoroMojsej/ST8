@@ -43,7 +43,6 @@ async function fetchEssays() {
     const response = await axiosInstance.get(`/papers/available/${selectedSection.value.idsection}`);
     essays.value = response.data;
     entries.value = [{ essay: null }];
-    sections = [];
   } catch (err) {
     console.error('Chyba pri načítaní údajov:', err);
   }
