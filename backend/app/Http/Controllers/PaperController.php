@@ -49,6 +49,8 @@ class PaperController extends Controller
 
     public function updatePaper(Request $request, $id, $userId)
     {
+        Log::info('Request Data:', $request->all());
+
         $request->validate([
             'name' => 'required|string|max:255',
             'abstract_lang1' => 'nullable|string',
@@ -232,16 +234,16 @@ class PaperController extends Controller
 
     public function getPaperById($id)
     {
-    $paper = Paper::find($id);
+        $paper = Paper::find($id); // Directly retrieve the paper by its primary key.
 
-    if (!$paper) {
-        return response()->json(['message' => 'Paper not found.'], 404);
-    }
+        if (!$paper) {
+            return response()->json(['message' => 'Paper not found.'], 404);
+        }
 
-    return response()->json([
-        'message' => 'Paper retrieved successfully.',
-        'paper' => $paper, // Celý paper pre editing.
-    ]);
+        return response()->json([
+            'message' => 'Paper retrieved successfully.',
+            'paper' => $paper, // Return the retrieved paper.
+        ]);
     }
 
     function getPapersByStudent($userId) {

@@ -60,7 +60,7 @@ Route::get('/papers/get-all-papers-and-their-review', [PaperController::class, '
 Route::get('/papers/conference/{conferenceId}', [PaperController::class, 'getPapersByConference']);
 Route::get('/papers/available/{idConference}/{idSection}', [PaperController::class, 'getPapersAvailable']);
 Route::post('/papers/assign/{userId}', [ReviewController::class, 'createReviewAndUpdatePaper']);  
-Route::get('/papers/{idEssay}', [PaperController::class, 'getEssayById']);
+Route::get('/papers/{idEssay}', [PaperController::class, 'getPaperById']);
 Route::get('/papers/{idEssay}/review', [PaperController::class, 'getReviewByEssay']);
 Route::get('/papers/student/{studentId}', [PaperController::class, 'getPapersOfUser']);
 Route::get('/papers/student/{studentId}/conference/{conferenceId}', [PaperController::class, 'getEssaysByStudentAndConference']);
@@ -73,7 +73,7 @@ Route::get('/sections/{idConference}', [SectionController::class, 'getSectionByC
 // Upravte si routes ako chcete.
 //Route::post('/upload-paper{userId}', [PaperController::class, 'uploadPaper'])->middleware('auth:sanctum'); // pre istotu aby vedeli len prihlásení ludia uploadovať
 Route::post('/upload-paper/{userId}', [PaperController::class, 'uploadPaper']); // môže sa aj takto, ajtak ho to nepustí uploadnuť.
-Route::put('/update-paper/{id}/{userId}', [PaperController::class, 'updatePaper']); // môže sa použiť post ale whatever, PUT je dobre podla dokumentácie.
+Route::post('/update-paper/{id}/{userId}', [PaperController::class, 'updatePaper']); // PUT z nejakého dôvodu nefunguje s file-uploadom, zmena na post.
 Route::delete('/delete-paper/{id}/{userId}', [PaperController::class, 'deletePaper']); // mazanie papers (non-admin).
 
 Route::post('/faculties', [FacultyController::class, 'create']);

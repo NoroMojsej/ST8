@@ -1,10 +1,9 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRoute } from 'vue-router';
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import MaterialInput from "@/components/MaterialInput.vue";
 import MaterialButton from "@/components/MaterialButton.vue";
-import FileUpload from "@/views/LandingPages/Essay/components/FileUpload.vue";
 import axiosInstance from '@/axios';
 
 const route = useRoute();
@@ -26,9 +25,9 @@ const selectedSection = ref("");
 const uploadedFiles = ref([]);
 
 onMounted(() => {
-  if (route.params.id) {
-    essayID.value = route.params.id;
-    selectedConference.value = 12;
+  if (route.params.idEssay) {
+    essayID.value = route.params.idEssay;
+    selectedConference.value = route.params.idConference;
     fetchEssayData(essayID.value);
     fetchSections(selectedConference.value);
   } else {
@@ -43,13 +42,16 @@ async function fetchEssayData(idEssay) {
     console.log("idsay" + idEssay);
     const response = await axiosInstance.get(`/papers/${idEssay}`);
     essayData.value = response.data;
-    name.value = essayData.value.name;
-    abstract_lang1.value = essayData.value.abstract_lang1;
-    abstract_lang2.value = essayData.value.abstract_lang2;
-    keywords_lang1.value = essayData.value.keywords_lang1;
-    keywords_lang2.value = essayData.value.keywords_lang2;
-    selectedSection.value = essayData.value.section.idsection;
-    closeDate.value = essayData.value.conference.submissions_to;
+    console.log(essayData.value);
+    name.value = essayData.value.paper.name;
+    abstract_lang1.value = essayData.value.paper.abstract_lang1;
+    abstract_lang2.value = essayData.value.paper.abstract_lang2;
+    keywords_lang1.value = essayData.value.paper.keywords_lang1;
+    keywords_lang2.value = essayData.value.paper.keywords_lang2;
+    selectedSection.value = essayData.value.paper.section_idsection;
+    const response_conference = await axiosInstance.get(`/conferences/${essayData.value.paper.conference_idconference}`);
+    console.log(response_conference.data);
+    closeDate.value = new Date(response_conference.data.submissions_to);
     console.log("CLOSE DATA:", closeDate.value);
   } catch (err) {
     console.error('Chyba pri načítaní údajov:', err);
@@ -69,53 +71,112 @@ async function fetchSections(idConference) {
   }
 }
 
+const isAfterCloseDate = computed(() => new Date() > closeDate.value);
+const isUploadAllowed = computed(() => !isAfterCloseDate.value);
 
-async function updateEssay() {
-  if (uploadedFiles.value.length !== 2) {
-    errorMessage.value = "Prosím nahrajte 2 súbory.";
-    successMessage.value = '';
+const formattedCloseDate = computed(() => {
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  };
+  return closeDate.value
+    ? closeDate.value.toLocaleString("sk-SK", options)
+    : new Date("2024-12-20T23:59:00").toLocaleString("sk-SK", options);
+});
+
+function handleFileChange(event) {
+  const files = Array.from(event.target.files);
+
+  if (files.length !== 2) {
+    errorMessage.value = "Prosím nahrajte presne 2 súbory.";
+    uploadedFiles.value = [];
+    return;
+  }
+
+  const validExtensions = ["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+  const isValid = files.every((file) => validExtensions.includes(file.type));
+
+  if (!isValid) {
+    errorMessage.value = "Iba súbory PDF a DOCX sú povolené.";
+    uploadedFiles.value = [];
+    return;
+  }
+
+  uploadedFiles.value = files;
+  errorMessage.value = "";
+}
+
+async function handleSubmit() {
+  errorMessage.value = "";
+  successMessage.value = "";
+
+  if (!isUploadAllowed.value) {
+    errorMessage.value = "Nahrávanie nie je povolené. Skontrolujte čas uzávierky.";
+    return;
+  }
+
+  if (!name.value || !selectedSection.value) {
+    errorMessage.value = "Prosím vyplňte všetky povinné polia.";
+    console.log("Error: Missing required fields");
+    return;
+  }
+
+  const data = new FormData();
+  data.append("name", name.value);
+  data.append("abstract_lang1", abstract_lang1.value);
+  data.append("abstract_lang2", abstract_lang2.value);
+  data.append("keywords_lang1", keywords_lang1.value);
+  data.append("keywords_lang2", keywords_lang2.value);
+  data.append("section_id", selectedSection.value);
+  data.append("conference_id", selectedConference.value);
+
+  const fileInput = document.querySelector("#file-upload");
+  const files = fileInput?.files;
+
+  console.log("Files selected:", files); // Debugging
+
+  for (const [key, value] of data.entries()) {
+    console.log(`${key}:`, value);
+  }
+
+  if (files && files.length === 2) {
+    console.log("Files to upload:", files);
+
+    Array.from(files).forEach((file) => {
+      console.log("Appending file:", file.name); // Debugging
+      data.append("files[]", file);
+    });
+  } else {
+    errorMessage.value = "Prosím nahrajte presne 2 súbory.";
+    console.log("Error: Uploaded files are not exactly 2. Files found:", files ? files.length : 0);
     return;
   }
 
   try {
-    const essayData = {
-      name: name.value,
-      abstract_lang1: abstract_lang1.value,
-      abstract_lang2: abstract_lang2.value,
-      keywords_lang1: keywords_lang1.value,
-      keywords_lang2: keywords_lang2.value,
-      selectedSection: selectedSection.value,
-    };
+    console.log("Sending request to server...");
+    const token = JSON.parse(localStorage.getItem('auth_token'));
+    const session = JSON.parse(localStorage.getItem('session'));
+    if(!token)
+      console.error("No token found.");
 
-    const fileData = new FormData();
-    uploadedFiles.value.forEach((file, index) => {
-      if (file.type === 'application/pdf' || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-        fileData.append(`file${index + 1}`, file);
-      } else {
-        errorMessage.value = "Iba súbory PDF a DOCX sú povolené.";
-        successMessage.value = '';
-        return;
-      }
-    });
-
-    await axiosInstance.put(`/papers/update/${essayID.value}`, essayData);
-
-    await axiosInstance.post(`/papers/update/${essayID.value}/upload-files`, fileData, {
+    const response = await axiosInstance.post(`/update-paper/${essayID.value}/${session?.user_id}`, data, {
       headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+      "Content-Type": "multipart/form-data",
+      },      
     });
 
-    successMessage.value = 'Úspešne zmenené';
-    errorMessage.value = '';
-
+    successMessage.value = response.data.message;
+    console.log("Response:", response.data);
   } catch (error) {
-    console.error('Error during form submission:', error);
-    successMessage.value = '';
-    errorMessage.value = error.message;
+    errorMessage.value = error.response?.data?.message || "Chyba pri odosielaní formuláru.";
+    console.error("Error while submitting form:", error);
   }
 }
-
 </script>
 
 <template>
@@ -170,15 +231,43 @@ async function updateEssay() {
                 </div>
               </div>
 
-              <FileUpload v-model:uploadedFiles="uploadedFiles" :close-date="closeDate" />
-              <!-- nefuknčné, použite štandartný komponent ktorý bol použitý v upravenom essayview -->
+              <div class="file-upload-section mt-4 p-4 rounded shadow-sm bg-white text-center">
+                <label for="file-upload" class="form-label d-block mb-3">Nahrajte 2 súbory (PDF a DOCX)</label>
+                <p class="text-danger">
+                  Termín odovzdania: {{ formattedCloseDate }}
+                </p>
+
+                <input
+                  type="file"
+                  id="file-upload"
+                  class="form-control-file"
+                  multiple
+                  accept=".pdf,.docx"
+                  @change="handleFileChange"
+                />
+
+                <div v-if="uploadedFiles.length" class="uploaded-files mt-3">
+                  <ul class="list-unstyled">
+                    <li v-for="file in uploadedFiles" :key="file.name" class="d-flex align-items-center mb-2">
+                      <i class="bi bi-file-earmark me-2 text-primary"></i>
+                      <span>{{ file.name }}</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
 
               <div class="col-md-12 text-center">
-                <MaterialButton id=save-essay variant="outline" color="success" class="w-35 me-2 mt-3 mb-0 btn"
-                  @click="updateEssay">UPRAVIŤ PRÁCU
+                <MaterialButton
+                  id="save-essay"
+                  variant="outline"
+                  color="success"
+                  class="w-35 me-2 mt-3 mb-0 btn"
+                  @click="handleSubmit"
+                >
+                  UPRAVIŤ PRÁCU
                 </MaterialButton>
-                <div v-if="errorMessage" class="text-danger mt-2">{{ errorMessage }}</div>
-                <div v-if="successMessage" class="text-success mt-2">{{ successMessage }}</div>
+              <p class="text-danger mt-3" v-if="errorMessage">{{ errorMessage }}</p>
+              <p class="text-success mt-3" v-if="successMessage">{{ successMessage }}</p>
               </div>
             </div>
           </div>
