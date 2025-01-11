@@ -46,6 +46,7 @@ Route::get('/faculties/{universityId}', [FacultyController::class, 'getFaculties
 Route::get('/departments/{facultyId}', [DepartmentController::class, 'getDepartments']);
 Route::get('/reviews/get-all-reviews', [ReviewController::class, 'getAllReviews']);
 Route::get('/reviews/get-review/{id}', [ReviewController::class, 'getReviewById']);
+Route::post('/reviews/create-review', [ReviewController::class, 'createReview']);
 Route::post('/reviews/save-review', [ReviewController::class, 'saveReview']);
 Route::post('/reviews/delete-review', [ReviewController::class, 'deleteReview']);
 Route::get('/sections/{idConference}', [SectionController::class, 'getSectionsByConference']);
