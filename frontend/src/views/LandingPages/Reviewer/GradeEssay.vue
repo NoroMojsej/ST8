@@ -33,13 +33,12 @@ onMounted(() => {
 });
 
     const approveWork = () => {
-      review.status = 'YY';
-      review.status_desc = 'Work has been approved.';
+      review.review_status_idreview_status = 1;
+
     };
 
     const disapproveWork = () => {
-      review.status = 'NN';
-      review.status_desc = 'Work has not been approved.';
+      review.review_status_idreview_status = 2;
     };
 
 
@@ -80,7 +79,7 @@ onMounted(() => {
 
 
     const review = reactive({
-      id: 'new',  //default
+      id: null,
       grade1: null,
       grade2: null,
       grade3: null,
@@ -92,7 +91,7 @@ onMounted(() => {
       grade9: null,
       grade10: null,
 
-      user_iduser: null,      //logged in user
+      user_iduser: null,      //logged in reviewer
 
       yesno1: null,
       yesno2: null,
@@ -113,9 +112,7 @@ onMounted(() => {
       txt_minus: null,
       txt_general: null,
 
-      status: null,
-      status_desc: null,
-
+      review_status_idreview_status: null,
 
       valid_from: null,
       valid_to: null,
@@ -123,6 +120,7 @@ onMounted(() => {
       created_on: null,
       updated_on: null,
 
+      validationErrorsPresent: false, 
       
     });
 
@@ -132,35 +130,35 @@ onMounted(() => {
     };
     
     const gradeQuestions = ref([
-      { question: "Aktuálnosť a náročnosť práce", number: 1, key: "grade1" },
-      { question: "Zorientovanie sa študenta v danej problematike, predovšetkým analýzou domácej a zahraničnej literatúry", number: 2, key: "grade2" },
-      { question: "Vhodnosť zvolených metód spracovania riešenej problematiky", number: 3, key: "grade3" },
-      { question: "Rozsah a úroveň dosiahnutých výsledkov", number: 4, key: "grade4" },
-      { question: "Analýza a interpretácia výsledkov a formulácia záverov práce", number: 5, key: "grade5" },
-      { question: "Prehľadnosť a logická štruktúra práce", number: 6, key: "grade6" },
-      { question: "Formálna, jazyková a štylistická úroveň práce", number: 7, key: "grade7" },
-      { question: "Analýza a interpretácia výsledkov a formulácia záverov práce", number: 8, key: "grade8" },
-      { question: "Prehľadnosť a logická štruktúra práce", number: 9, key: "grade9" },
-      { question: "Prehľadnosť a logická štruktúra práce", number: 10, key: "grade10" },
+      { question: "Aktuálnosť a náročnosť práce", number: 1, key: "grade1", error: "Prosím doplňte hodnotenie."},
+      { question: "Zorientovanie sa študenta v danej problematike, predovšetkým analýzou domácej a zahraničnej literatúry", number: 2, key: "grade2", error: "Prosím doplňte hodnotenie." },
+      { question: "Vhodnosť zvolených metód spracovania riešenej problematiky", number: 3, key: "grade3", error: "Prosím doplňte hodnotenie." },
+      { question: "Rozsah a úroveň dosiahnutých výsledkov", number: 4, key: "grade4", error: "Prosím doplňte hodnotenie." },
+      { question: "Analýza a interpretácia výsledkov a formulácia záverov práce", number: 5, key: "grade5", error: "Prosím doplňte hodnotenie." },
+      { question: "Prehľadnosť a logická štruktúra práce", number: 6, key: "grade6", error: "Prosím doplňte hodnotenie." },
+      { question: "Formálna, jazyková a štylistická úroveň práce", number: 7, key: "grade7", error: "Prosím doplňte hodnotenie." },
+      { question: "Analýza a interpretácia výsledkov a formulácia záverov práce", number: 8, key: "grade8", error: "Prosím doplňte hodnotenie." },
+      { question: "Prehľadnosť a logická štruktúra práce", number: 9, key: "grade9", error: "Prosím doplňte hodnotenie." },
+      { question: "Prehľadnosť a logická štruktúra práce", number: 10, key: "grade10", error: "Prosím doplňte hodnotenie." },
       
 
     ]);
 
     const yesNoQuestions = ref ([
-      { question: "Zorientovanie sa študenta v danej problematike, predovšetkým analýzou domácej a zahraničnej literatúry", key: "yesno1" },
-      { question: "Práca zodpovedá šablóne určenej pre ŠVK", key: "yesno2" },
-      { question: "Chýba názov práce v slovenskom alebo anglickom jazyku", key: "yesno3" },
-      { question: "Chýba meno autora alebo školiteľa", key: "yesno4" },
-      { question: "Chýba pracovná emailová adresa autora alebo školiteľa", key: "yesno5" },
-      { question: "Chýba abstrakt v slovenskom alebo anglickom jazyku", key: "yesno6" },
-      { question: "Abstrakt nespĺňa rozsah 100 - 150 slov", key: "yesno7" },
-      { question: "Chýbajú kľúčové slová v slovenskom alebo v anglickom jazyku", key: "yesno8" },
-      { question: "Chýba 'Úvod', 'Výsledky a diskusia' alebo 'Záver'", key: "yesno9" },
-      { question: "Nie sú uvedené zdroje a použitá literatúra", key: "yesno2" },
-      { question: "V texte chýbajú referencie na zoznam bibliografie", key: "yesno11" },
-      { question: "V texte chýbajú referencie na použité obrázky alebo tabuľky", key: "yesno12" },
-      { question: "Obrázkom alebo tabuľkám chýba popis", key: "yesno13" }, 
-      { question: "Chýba meno autora alebo školiteľa", key: "yesno14" },
+      { question: "Zorientovanie sa študenta v danej problematike, predovšetkým analýzou domácej a zahraničnej literatúry", key: "yesno1", error: "Proím odpovedzte na túto otázku." },
+      { question: "Práca zodpovedá šablóne určenej pre ŠVK", key: "yesno2", error: "Proím odpovedzte na túto otázku." },
+      { question: "Chýba názov práce v slovenskom alebo anglickom jazyku", key: "yesno3", error: "Proím odpovedzte na túto otázku." },
+      { question: "Chýba meno autora alebo školiteľa", key: "yesno4", error: "Proím odpovedzte na túto otázku." },
+      { question: "Chýba pracovná emailová adresa autora alebo školiteľa", key: "yesno5", error: "Proím odpovedzte na túto otázku." },
+      { question: "Chýba abstrakt v slovenskom alebo anglickom jazyku", key: "yesno6", error: "Proím odpovedzte na túto otázku." },
+      { question: "Abstrakt nespĺňa rozsah 100 - 150 slov", key: "yesno7", error: "Proím odpovedzte na túto otázku." },
+      { question: "Chýbajú kľúčové slová v slovenskom alebo v anglickom jazyku", key: "yesno8", error: "Proím odpovedzte na túto otázku." },
+      { question: "Chýba 'Úvod', 'Výsledky a diskusia' alebo 'Záver'", key: "yesno9", error: "Proím odpovedzte na túto otázku." },
+      { question: "Nie sú uvedené zdroje a použitá literatúra", key: "yesno2", error: "Proím odpovedzte na túto otázku." },
+      { question: "V texte chýbajú referencie na zoznam bibliografie", key: "yesno11", error: "Proím odpovedzte na túto otázku." },
+      { question: "V texte chýbajú referencie na použité obrázky alebo tabuľky", key: "yesno12", error: "Proím odpovedzte na túto otázku." },
+      { question: "Obrázkom alebo tabuľkám chýba popis", key: "yesno13", error: "Proím odpovedzte na túto otázku." }, 
+      { question: "Chýba meno autora alebo školiteľa", key: "yesno14", error: "Proím odpovedzte na túto otázku." },
     ]);
 
     const updateReview = (key, value) => {      
@@ -170,7 +168,7 @@ onMounted(() => {
 
     const getReviewById = async () => {
       const reviewId = getReviewIdFromURL();
-      if (!reviewId || reviewId === 'new' ) return;  
+      if (!reviewId) return;  
 
 
       try {
@@ -184,7 +182,7 @@ onMounted(() => {
 
         
 
-        review.id = response.data.idreview ? response.data.idreview : 'new';
+        review.id = response.data.idreview;
         review.grade1 = response.data.grade1;
         review.grade2 = response.data.grade2;
         review.grade3 = response.data.grade3;
@@ -215,10 +213,9 @@ onMounted(() => {
         review.txt_minus = response.data.txt_minus;
         review.txt_general = response.data.txt_general;
 
-        review.status = response.data.status ? response.data.status.name : "";
-        review.status_desc = response.data.status_desc;
+        review.review_status_idreview_status = response.data.review_status_idreview_status;
 
-        review.user_iduser = response.data.user_iduser ? response.data.user_iduser : session.user_id;
+        review.user_iduser = response.data.user_iduser;
 
         review.valid_from = response.data.valid_from;
         review.valid_to = response.data.valid_to;
@@ -237,6 +234,7 @@ onMounted(() => {
         try {
           review.valid_from = today();
           review.valid_to = twoYearsFromNow();
+          review.validationErrorsPresent = false;
 
           
           console.log(review);
@@ -249,12 +247,21 @@ onMounted(() => {
           
           
           console.log('Review submitted successfully:', response.data);
-          openSavedReview(response.data.review_id);
+          // openSavedReview(response.data.review_id);
          
 
 
         } catch (error) {
-          console.error('Error submitting review:', error.response?.data || error.message);
+          if (error.response && error.response.status === 422) {
+            const validationErrors = error.response.data.errors;
+
+            review.validationErrorsPresent = true;
+
+            console.error('Validation Errors:', validationErrors);
+          } else {
+            console.error('Error submitting review:', error.response?.data || error.message);
+            alert('An unexpected error occurred. Please try again later.');
+          }
         }
       };
       
@@ -566,6 +573,9 @@ textarea {
           </MaterialButton>
 </div>
 
+<div style="text-align: center;">
+  <p style="color: red;" v-if="review.validationErrorsPresent">Prosím vyplňte všetky údaje</p>
+</div>
 
   </BaseLayout>
 </template>
