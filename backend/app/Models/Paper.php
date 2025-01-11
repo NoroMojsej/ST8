@@ -34,7 +34,7 @@ class Paper extends Model
     
     public function paper_status()
     {
-        return $this->belongsTo(ReviewStatus::class, 'paper_status_idpaper_status');
+        return $this->belongsTo(PaperStatus::class, 'paper_status_idpaper_status', 'idpaper_status');
     }
 
     public function users()

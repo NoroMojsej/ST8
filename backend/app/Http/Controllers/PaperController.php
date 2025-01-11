@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Paper;
+use App\Models\User;
 
 class PaperController extends Controller
 {
@@ -166,6 +167,11 @@ class PaperController extends Controller
         ]);
 
         Log::info('Paper record created successfully.', ['paper_id' => $paper->idpaper]);
+        $paper->users()->attach($userId);
+        $conference = $paper->conference;
+
+        if ($conference)
+            $conference->users()->attach($userId);
 
         return response()->json([
             'message' => 'Paper uploaded successfully.',
@@ -238,8 +244,7 @@ class PaperController extends Controller
     ]);
     }
 
-    function getPapersByStudent() {
-        $userId = auth()->id();
+    function getPapersByStudent($userId) {
         if (!$userId) {
             return response()->json(['error' => 'User not authenticated'], 401);
         }
@@ -282,6 +287,25 @@ class PaperController extends Controller
         'review' => $essay->review,
         'status' => $essay->review->status,
     ], 200);
+}
+
+public function getPapersOfUser($studentId)
+{
+    try {
+        $papers = Paper::whereHas('users', function ($query) use ($studentId) {
+            $query->where('user_iduser', $studentId);
+        })
+        ->with([
+            'conference',
+            'section',
+            'paper_status',
+        ])
+        ->get();
+
+        return response()->json($papers);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
 }
 
 public function getPapersAvailable($sectionID)

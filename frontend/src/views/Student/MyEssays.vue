@@ -20,8 +20,10 @@ const essays = ref([]);
 
 const fetchEssays = async (studentId) => {
   try {
-    const response = await axiosInstance.get(`/papers/student`);
+    console.log("studentID:", studentId);
+    const response = await axiosInstance.get(`/papers/student/${studentId}`);
     essays.value = response.data;
+    console.log("Fetched Essays Data:", essays.value);
   } catch (error) {
     console.error("Chyba pri načítaní prác:", error);
   }
@@ -42,28 +44,28 @@ function handleEval(idEssay) {
     { label: 'Moje Práce' },
   ]">
 
-    <div class="container mb-4">
-      <div v-if="essays.length > 0">
-        <div class="row mb-3" v-for="essay in essays" :key="essay.id">
-          <div class="col-12">
-            <div class="d-flex align-items-center">
-              <div class="flex-grow-1">
-                <EssaySummary 
-                :name="essay.name"
-                :keywords=[essay.keywords_lang1,essay.keywords_lang2]
-                :conferenceName="essay.abbreviation"
-                :section="essay.text"
-                :status="essay.review_status_desc"
-                :showEditButton="true"
-                :showEvaluationButton="true"
-                :handleEdit="() => handleEdit(essay.id_paper, essay.id_conference)"
-                :handleEvaluation="() => handleEval(essay.id_paper)"
-                />
+      <div class="container mb-4">
+        <div v-if="essays.length > 0">
+          <div class="row mb-3" v-for="essay in essays" :key="essay.idpaper">
+            <div class="col-12">
+              <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                  <EssaySummary 
+                    :name="essay.name"
+                    :keywords="[essay.keywords_lang1, essay.keywords_lang2]"
+                    :conferenceName="essay.conference.abbreviation "
+                    :section="essay.section.text"
+                    :status="essay.paper_status.status_desc"
+                    :showEditButton="true"
+                    :showEvaluationButton="true"
+                    :handleEdit="() => handleEdit(essay.idpaper, essay.conference.idconference)"
+                    :handleEvaluation="() => handleEval(essay.idpaper)"
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
       <div v-else>
         <p>Žiadne práce na zobrazenie.</p>
       </div>

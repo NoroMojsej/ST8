@@ -62,7 +62,7 @@ Route::get('/papers/available/{idSection}', [PaperController::class, 'getPapersA
 Route::post('/papers/assign/{userId}', [ReviewController::class, 'createReviewAndUpdatePaper']);  
 Route::get('/papers/{idEssay}', [PaperController::class, 'getEssayById']);
 Route::get('/papers/{idEssay}/review', [PaperController::class, 'getReviewByEssay']);
-Route::get('/papers/student/{studentId}', [PaperController::class, 'getEssaysByStudent']);
+Route::get('/papers/student/{studentId}', [PaperController::class, 'getPapersOfUser']);
 Route::get('/papers/student/{studentId}/conference/{conferenceId}', [PaperController::class, 'getEssaysByStudentAndConference']);
 Route::put('/papers/update/{essayId}', [PaperController::class, 'updateEssayByID']);
 Route::post('/papers/update/{essayId}/upload-files', [PaperController::class, 'uploadFiles']);
