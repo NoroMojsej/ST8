@@ -100,11 +100,11 @@ class ReviewController extends Controller
                 'yesno14' => 'required|integer|in:0,1',
                 'txt_plus' => 'required|string|max:500',
                 'txt_minus' => 'required|string|max:500',
-                'txt_general' => 'required|string|max:500',
+                'txt_general' => 'nullable|string|max:500',
                 'user_iduser' => 'required|exists:user,iduser',
     
-                'created_on' => 'required|date',
-                'updated_on' => 'required|date',
+                'created_on' => 'nullable|date',
+                'updated_on' => 'nullable|date',
     
                 'review_status_idreview_status' => 'required|exists:review_status,idreview_status',
             ]);

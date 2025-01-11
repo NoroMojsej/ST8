@@ -68,12 +68,7 @@ onMounted(() => {
         if (reviewId) {
           console.log("ID extracted from URL:", reviewId);
           return reviewId;
-        } else {
-          console.log("No ID found in URL. Creating new review.");
-
-        }
-
-        
+        }        
     };
 
 
@@ -154,7 +149,7 @@ onMounted(() => {
       { question: "Abstrakt nespĺňa rozsah 100 - 150 slov", key: "yesno7", error: "Proím odpovedzte na túto otázku." },
       { question: "Chýbajú kľúčové slová v slovenskom alebo v anglickom jazyku", key: "yesno8", error: "Proím odpovedzte na túto otázku." },
       { question: "Chýba 'Úvod', 'Výsledky a diskusia' alebo 'Záver'", key: "yesno9", error: "Proím odpovedzte na túto otázku." },
-      { question: "Nie sú uvedené zdroje a použitá literatúra", key: "yesno2", error: "Proím odpovedzte na túto otázku." },
+      { question: "Nie sú uvedené zdroje a použitá literatúra", key: "yesno10", error: "Proím odpovedzte na túto otázku." },
       { question: "V texte chýbajú referencie na zoznam bibliografie", key: "yesno11", error: "Proím odpovedzte na túto otázku." },
       { question: "V texte chýbajú referencie na použité obrázky alebo tabuľky", key: "yesno12", error: "Proím odpovedzte na túto otázku." },
       { question: "Obrázkom alebo tabuľkám chýba popis", key: "yesno13", error: "Proím odpovedzte na túto otázku." }, 
@@ -180,7 +175,7 @@ onMounted(() => {
 
         console.log('Review retrieved successfully:', response.data);
 
-        
+              
 
         review.id = response.data.idreview;
         review.grade1 = response.data.grade1;
@@ -223,10 +218,12 @@ onMounted(() => {
         review.created_on = response.data.created_on;
         review.updated_on = response.data.updated_on;
 
-        
+                
       } catch (error) {
         console.log('review.id: ', review.id);
         console.error('Review retrieving failed:', error.response?.data || error.message);
+        console.log('Redirecting to previous webpage.');
+        router.go(-1);
       }
     };
 
