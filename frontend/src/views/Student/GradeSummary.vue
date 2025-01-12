@@ -39,6 +39,8 @@ const labelsYesNoItems = [
   "Chýbajú referencie",
   "Chýbajú referencie obrázkov",
   "Obrázkom chýba popis",
+  "13",
+  "14",
 ];
 
 const descriptions = ref({
@@ -59,7 +61,6 @@ async function fetchEssayReview(essayID) {
   try {
     const response = await axiosInstance.get(`/papers/${essayID}/review`);
     reviewData.value = response.data.review;
-
     grades.value = labelsGradesItems.map((label, index) => ({
       label,
       value: reviewData.value[`grade${index + 1}`], // Z databázy získa hodnotu pre daný index
