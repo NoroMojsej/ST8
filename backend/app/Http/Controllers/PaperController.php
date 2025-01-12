@@ -172,8 +172,9 @@ class PaperController extends Controller
         $paper->users()->attach($userId);
         $conference = $paper->conference;
 
-        if ($conference)
+        if ($conference && !$conference->users->contains($userId)) {
             $conference->users()->attach($userId);
+        }
 
         return response()->json([
             'message' => 'Paper uploaded successfully.',
