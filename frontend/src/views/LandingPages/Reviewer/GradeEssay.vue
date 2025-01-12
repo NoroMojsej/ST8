@@ -34,11 +34,13 @@ onMounted(() => {
 
     const approveWork = () => {
       review.review_status_idreview_status = 1;
+      review.paper_status = 2;
 
     };
 
     const disapproveWork = () => {
       review.review_status_idreview_status = 2;
+      review.paper_status = 3;
     };
 
 
@@ -108,6 +110,7 @@ onMounted(() => {
       txt_general: null,
 
       review_status_idreview_status: null,
+      paper_id: null,
 
       valid_from: null,
       valid_to: null,
@@ -209,6 +212,8 @@ onMounted(() => {
         review.txt_general = response.data.txt_general;
 
         review.review_status_idreview_status = response.data.review_status_idreview_status;
+        review.paper_id = response.data.papers?.length === 1 ? response.data.papers[0].idpaper : null;
+        review.paper_status = response.data.papers?.length === 1 ? response.data.papers[0].paper_status_idpaper_status : null;
 
         review.user_iduser = response.data.user_iduser;
 
