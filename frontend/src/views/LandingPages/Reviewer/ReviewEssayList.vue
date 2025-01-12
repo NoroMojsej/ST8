@@ -68,8 +68,6 @@ const getAllPapersAndTheirReview = async () => {
       paper: paper.name,
       review_id: paper.review ? paper.review.idreview : 'new',
       info: paper.keywords_lang1,
-      pdf_path: paper.path_filesystem_pdf,
-      pdf_filename: paper.pdf_filename,
       isEditing: false,
     }));
     // console.log(response.data[index].review.idreview);
