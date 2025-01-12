@@ -74,6 +74,7 @@ class PaperController extends Controller
         $paper->keywords_lang1 = $request->keywords_lang1;
         $paper->keywords_lang2 = $request->keywords_lang2;
         $paper->section_idsection = $request->section_id;
+        $paper->reupload_datetime = now();
 
         $files = $request->file('files');
         $newFilePaths = [];

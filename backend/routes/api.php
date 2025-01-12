@@ -44,7 +44,7 @@ Route::get('/degrees', [DegreeController::class, 'index']);
 Route::get('/universities', [UniversityController::class, 'getAllUniversities']);
 Route::get('/universities/{countryId}', [UniversityController::class, 'getUniversityByCountry']);
 Route::get('/faculties/{universityId}', [FacultyController::class, 'getFaculties']);
-Route::get('/departments/{facultyId}', [DepartmentController::class, 'getDepartments']);
+//Route::get('/departments/{facultyId}', [DepartmentController::class, 'getDepartments']);
 Route::get('/reviews/get-all-reviews', [ReviewController::class, 'getAllReviews']);
 Route::get('/reviews/get-review/{id}', [ReviewController::class, 'getReviewById']);
 Route::post('/reviews/save-review', [ReviewController::class, 'saveReview']);
@@ -76,14 +76,18 @@ Route::post('/upload-paper/{userId}', [PaperController::class, 'uploadPaper']); 
 Route::post('/update-paper/{id}/{userId}', [PaperController::class, 'updatePaper']); // PUT z nejakého dôvodu nefunguje s file-uploadom, zmena na post.
 Route::delete('/delete-paper/{id}/{userId}', [PaperController::class, 'deletePaper']); // mazanie papers (non-admin).
 
-Route::post('/faculties', [FacultyController::class, 'create']);
+Route::post('/faculties/create', [FacultyController::class, 'create']);
 Route::get('/faculties/{universityId}', [FacultyController::class, 'getFaculties']); // getByUniversity
 Route::get('/faculties/getfaculty/{id}', [FacultyController::class, 'getById']); // getById
 Route::put('/faculties/update/{id}', [FacultyController::class, 'update']);
 Route::delete('/faculties/delete/{id}', [FacultyController::class, 'deleteById']);
 
-Route::post('/departments', [DepartmentController::class, 'create']); // Create department
+Route::post('/departments/create', [DepartmentController::class, 'create']); // Create department
 Route::get('/departments/{facultyId}', [DepartmentController::class, 'getDepartments']); //
 Route::get('/departments/getdepartment/{id}', [DepartmentController::class, 'getById']); // Get department by ID
 Route::put('/departments/updatedepartment/{id}', [DepartmentController::class, 'update']); // Edit department by ID
 Route::delete('/departments/deletedepartment/{id}', [DepartmentController::class, 'deleteById']); // Remove department by ID
+
+Route::post('/universities/create', [UniversityController::class, 'create']);
+Route::get('/universities/university/{id}', [UniversityController::class, 'getById']);
+Route::post('/universities/update/{id}', [UniversityController::class, 'update']);
