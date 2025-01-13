@@ -54,10 +54,10 @@ Route::post('/createConf', [ConferenceController::class, 'store']);
 Route::get('/conferences/active', [ConferenceController::class, 'getActiveConferences']);
 Route::put('/conference/update/{conferenceId}', [ConferenceController::class, 'updateConference']);
 Route::get('/conferences/{conferenceId}', [ConferenceController::class, 'show']);
+Route::get('/conferences/download-all/{conferenceId}', [ConferenceController::class, 'downloadAllFiles']);
 Route::put('/conference/{conferenceId}', [ConferenceController::class, 'update']);
 Route::get('/papers/get-all-papers', [PaperController::class, 'getAllPapers']);
 Route::get('/papers/get-all-papers-and-their-review', [PaperController::class, 'getAllPapersAndTheirReview']);
-Route::get('/papers/conference/{conferenceId}', [PaperController::class, 'getPapersByConference']);
 Route::get('/papers/available/{idConference}/{idSection}', [PaperController::class, 'getPapersAvailable']);
 Route::post('/papers/assign/{userId}', [ReviewController::class, 'createReviewAndUpdatePaper']);  
 Route::get('/papers/{idEssay}', [PaperController::class, 'getPaperById']);
@@ -75,6 +75,8 @@ Route::get('/sections/{idConference}', [SectionController::class, 'getSectionByC
 Route::post('/upload-paper/{userId}', [PaperController::class, 'uploadPaper']); // môže sa aj takto, ajtak ho to nepustí uploadnuť.
 Route::post('/update-paper/{id}/{userId}', [PaperController::class, 'updatePaper']); // PUT z nejakého dôvodu nefunguje s file-uploadom, zmena na post.
 Route::delete('/delete-paper/{id}/{userId}', [PaperController::class, 'deletePaper']); // mazanie papers (non-admin).
+Route::get('/papers/conference/{conferenceId}', [PaperController::class, 'getPapersByConference']); // papers pre danú konferenciu.
+Route::get('papers/download/{idEssay}', [PaperController::class, 'download']);
 
 Route::post('/faculties/create', [FacultyController::class, 'create']);
 Route::get('/faculties/{universityId}', [FacultyController::class, 'getFaculties']); // getByUniversity
