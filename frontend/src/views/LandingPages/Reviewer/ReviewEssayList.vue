@@ -66,8 +66,8 @@ const getAllPapersAndTheirReview = async () => {
     papers.value = response.data.map(paper => ({
       id: paper.idpaper,
       paper: paper.name,
-      review_id: paper.review ? paper.review.idreview : 'new',
-      info: paper.keywords_lang1,
+      review_id: paper.review.idreview,
+      info: paper.status_desc ? paper.status_desc : 'No status available',
       isEditing: false,
     }));
     // console.log(response.data[index].review.idreview);
