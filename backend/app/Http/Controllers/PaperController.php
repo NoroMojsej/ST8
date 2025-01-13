@@ -5,8 +5,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Paper;
-use App\Models\User;
-
+use App\Models\UserHasPaper;
+use Illuminate\Support\Facades\Auth;
 class PaperController extends Controller
 {
 
@@ -221,19 +221,6 @@ class PaperController extends Controller
         return response()->json(['message' => 'Paper deleted successfully']);
     }
 
-    public function getPapersByUser($userId)
-    {
-    $papers = Paper::where('user_id', $userId)->pluck('name', 'idpaper');
-
-    if ($papers->isEmpty()) {
-        return response()->json(['message' => 'No papers found for this user.'], 404);
-    }
-
-    return response()->json([
-        'message' => 'Papers retrieved successfully.',
-        'papers' => $papers, // mená a IDčká paperov.
-    ]);
-    }   
 
     public function getPaperById($id)
     {
@@ -294,24 +281,32 @@ class PaperController extends Controller
     ], 200);
 }
 
-public function getPapersOfUser($studentId)
+public function getUserPapers($userId)
 {
-    try {
-        $papers = Paper::whereHas('users', function ($query) use ($studentId) {
-            $query->where('user_iduser', $studentId);
-        })
-        ->with([
-            'conference',
-            'section',
-            'paper_status',
-        ])
-        ->get();
+    $userPapers = UserHasPaper::with([
+        'paper' => function ($query) {
+            $query->select('idpaper', 'name', 'keywords_lang1', 'keywords_lang2', 'conference_idconference', 'section_idsection', 'review_idreview');
+        },
+        'paper.conference' => function ($query) {
+            $query->select('idconference', 'abbreviation');
+        },
+        'paper.section' => function ($query) {
+            $query->select('idsection', 'text');
+        },
+        'paper.review' => function ($query) {
+            $query->select('idreview', 'review_status_idreview_status');
+        },
+        'paper.review.status' => function ($query) {
+            $query->select('idreview_status', 'status_desc');
+        }
+    ])
+    ->where('user_iduser', $userId)
+    ->get();
 
-        return response()->json($papers);
-    } catch (\Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 500);
-    }
+    return $userPapers;
 }
+
+
 
 public function getPapersAvailable($conferenceID, $sectionID)
 {
