@@ -21,7 +21,7 @@ class ReviewController extends Controller
     public function getReviewById($id) 
     {             
         try {
-            $review = Review::with(['status', 'papers'])->findOrFail($id);
+            $review = Review::with(['status', 'papers.conference',])->findOrFail($id);
     
             return response()->json($review, 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
@@ -104,7 +104,6 @@ class ReviewController extends Controller
                 'txt_general' => 'nullable|string|max:500',
                 'user_iduser' => 'required|exists:user,iduser',
 
-                'paper_status' => 'nullable|exists:paper_status,idpaper_status',
                 'paper_id' => 'nullable|exists:paper,idpaper',
     
                 'created_on' => 'nullable|date',
@@ -116,16 +115,6 @@ class ReviewController extends Controller
             if ($request->has('id')) {
                 $review = Review::findOrFail($request->id);
                 $review->update($validatedData);
-            }
-
-            if ($request->has('paper_id')) {
-                $paper = Paper::findOrFail($request->paper_id);
-    
-                if ($request->has('paper_status')) {    
-                    $paper->paper_status_idpaper_status = $request->paper_status;
-                }
-    
-                $paper->save();
             }
     
             return response()->json([

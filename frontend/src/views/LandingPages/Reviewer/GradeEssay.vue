@@ -34,13 +34,11 @@ onMounted(() => {
 
     const approveWork = () => {
       review.review_status_idreview_status = 1;
-      review.paper_status = 2;
 
     };
 
     const disapproveWork = () => {
       review.review_status_idreview_status = 2;
-      review.paper_status = 3;
     };
 
 
@@ -119,6 +117,8 @@ onMounted(() => {
       updated_on: null,
 
       validationErrorsPresent: false, 
+
+      conference_take_place_from: null,
       
     });
 
@@ -213,7 +213,6 @@ onMounted(() => {
 
         review.review_status_idreview_status = response.data.review_status_idreview_status;
         review.paper_id = response.data.papers?.length === 1 ? response.data.papers[0].idpaper : null;
-        review.paper_status = response.data.papers?.length === 1 ? response.data.papers[0].paper_status_idpaper_status : null;
 
         review.user_iduser = response.data.user_iduser;
 
@@ -222,6 +221,8 @@ onMounted(() => {
 
         review.created_on = response.data.created_on;
         review.updated_on = response.data.updated_on;
+
+        review.conference_take_place_from = response.data.papers?.length ? response.data.papers[0]?.conference?.take_place_from ?? null : null;
 
                 
       } catch (error) {
@@ -573,6 +574,14 @@ textarea {
             style="font-family: 'Open Sans' !important">
             ODOSLAŤ
           </MaterialButton>
+</div>
+
+<div style="text-align: center;">
+  <p style="color: red;">Prosím ohodnoťte túto prácu najneskôr do dňa: 
+    {{
+      new Intl.DateTimeFormat('sk-SK', { day: '2-digit', month: '2-digit', year: 'numeric' })
+        .format(new Date(review.conference_take_place_from))
+    }}</p>
 </div>
 
 <div style="text-align: center;">

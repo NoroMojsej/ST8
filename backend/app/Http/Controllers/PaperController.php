@@ -26,13 +26,19 @@ class PaperController extends Controller
     public function getAllPapersAndTheirReviewByAssignedUserIdToReview($reviewerId)
     {
         $papers = Paper::whereHas('review', function ($query) use ($reviewerId) {
-            $query->where('user_iduser', $reviewerId);
-        })
-        ->with('review')
-        ->get();
+                $query->where('user_iduser', $reviewerId);
+            })
+            ->whereHas('conference', function ($query) {
+                $query->where('take_place_from', '>', now()); 
+            })
+            ->join('paper_status', 'paper.paper_status_idpaper_status', '=', 'paper_status.idpaper_status')
+            ->with('review', 'conference')
+            ->get();
 
         return response()->json($papers, 200);
     }
+
+
 
 
     public function getPapersByConference($conferenceId)
