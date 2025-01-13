@@ -74,6 +74,7 @@ class PaperController extends Controller
         $paper->keywords_lang1 = $request->keywords_lang1;
         $paper->keywords_lang2 = $request->keywords_lang2;
         $paper->section_idsection = $request->section_id;
+        $paper->paper_status_idpaper_status = 2; // upravená
         $paper->reupload_datetime = now();
 
         $files = $request->file('files');
@@ -236,7 +237,7 @@ class PaperController extends Controller
 
     public function getPaperById($id)
     {
-        $paper = Paper::find($id); // Directly retrieve the paper by its primary key.
+        $paper = Paper::find($id);
 
         if (!$paper) {
             return response()->json(['message' => 'Paper not found.'], 404);
@@ -244,7 +245,7 @@ class PaperController extends Controller
 
         return response()->json([
             'message' => 'Paper retrieved successfully.',
-            'paper' => $paper, // Return the retrieved paper.
+            'paper' => $paper,
         ]);
     }
 
