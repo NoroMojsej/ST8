@@ -11,6 +11,9 @@ class Faculty extends Model
     protected $table = 'faculty';
     protected $primaryKey = 'idfaculty';
 
+    const CREATED_AT = 'created_on';
+    const UPDATED_AT = 'updated_on';
+
     protected $fillable = [
         'code', 'name', 'university_iduniversity', 'valid_from', 'valid_to', 'created_on', 'updated_on',
     ];

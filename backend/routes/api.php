@@ -43,7 +43,7 @@ Route::get('/countries', [CountryController::class, 'getAllcountries']);
 Route::get('/degrees', [DegreeController::class, 'index']);
 Route::get('/universities', [UniversityController::class, 'getAllUniversities']);
 Route::get('/universities/{countryId}', [UniversityController::class, 'getUniversityByCountry']);
-Route::get('/faculties/{universityId}', [FacultyController::class, 'getFaculties']);
+//Route::get('/faculties/{universityId}', [FacultyController::class, 'getFaculties']);
 //Route::get('/departments/{facultyId}', [DepartmentController::class, 'getDepartments']);
 Route::get('/reviews/get-all-reviews', [ReviewController::class, 'getAllReviews']);
 Route::get('/reviews/get-review/{id}', [ReviewController::class, 'getReviewById']);
@@ -79,7 +79,7 @@ Route::delete('/delete-paper/{id}/{userId}', [PaperController::class, 'deletePap
 Route::post('/faculties/create', [FacultyController::class, 'create']);
 Route::get('/faculties/{universityId}', [FacultyController::class, 'getFaculties']); // getByUniversity
 Route::get('/faculties/getfaculty/{id}', [FacultyController::class, 'getById']); // getById
-Route::put('/faculties/update/{id}', [FacultyController::class, 'update']);
+Route::post('/faculties/update/{id}', [FacultyController::class, 'update']);
 Route::delete('/faculties/delete/{id}', [FacultyController::class, 'deleteById']);
 
 Route::post('/departments/create', [DepartmentController::class, 'create']); // Create department

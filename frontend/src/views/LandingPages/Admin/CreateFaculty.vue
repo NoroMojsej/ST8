@@ -1,12 +1,45 @@
 <script setup>
 import { ref, onMounted } from "vue";
-
+import { useRoute } from "vue-router";
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import MaterialInput from "@/components/MaterialInput.vue";
 import setMaterialInput from "@/assets/js/material-input";
+import axiosInstance from '@/axios';
+
+const facultyName = ref("");
+const facultyCode = ref("");
+const uniId = ref("");
+const route = useRoute();
+
+async function handleSubmit() {
+  if (!facultyName.value || !facultyCode.value) {
+    console.log("Error: Missing required fields");
+    return;
+  }
+
+  const data = new FormData();
+  data.append("code", facultyCode.value);
+  data.append("name", facultyName.value);
+  data.append("university_iduniversity", uniId.value);
+  console.log(uniId.value);
+  try {
+    console.log("Sending request to server...");
+
+    const response = await axiosInstance.post(`/faculties/create`, data, {
+      headers: {
+      "Content-Type": "multipart/form-data",
+      },      
+    });
+
+    console.log("Response:", response.data);
+  } catch (error) {
+    console.error("Error while submitting form:", error);
+  }
+}
 
 onMounted(() => {
   setMaterialInput();
+  uniId.value = route.params.id;
 });
 </script>
 
@@ -30,8 +63,9 @@ onMounted(() => {
                     id="fac-title"
                     class="input-group-static mt-2"
                     label="NÁZOV FAKULTY"
-                    type="name"
+                    type="text"
                     placeholder="Názov Fakulty"
+                    v-model="facultyName"
                   />
                 </div>
 
@@ -40,13 +74,14 @@ onMounted(() => {
                     id="fac-code"
                     class="input-group-static mt-2"
                     label="SKRÁTENÝ NÁZOV FAKULTY"
-                    type="name"
+                    type="text"
                     placeholder="Skratka Fakulty"
+                    v-model="facultyCode"
                   />
                 </div>
 
                 <div class="d-flex justify-content-center mt-3">
-                  <button class="btn btn-success">
+                  <button class="btn btn-success" @click="handleSubmit">
                     Vytvoriť Fakultu
                   </button>
                 </div>
