@@ -85,7 +85,7 @@ Route::delete('/faculties/delete/{id}', [FacultyController::class, 'deleteById']
 Route::post('/departments/create', [DepartmentController::class, 'create']); // Create department
 Route::get('/departments/{facultyId}', [DepartmentController::class, 'getDepartments']); //
 Route::get('/departments/getdepartment/{id}', [DepartmentController::class, 'getById']); // Get department by ID
-Route::put('/departments/updatedepartment/{id}', [DepartmentController::class, 'update']); // Edit department by ID
+Route::post('/departments/update/{id}', [DepartmentController::class, 'update']); // Edit department by ID
 Route::delete('/departments/deletedepartment/{id}', [DepartmentController::class, 'deleteById']); // Remove department by ID
 
 Route::post('/universities/create', [UniversityController::class, 'create']);

@@ -1,12 +1,45 @@
 <script setup>
 import { ref, onMounted } from "vue";
-
+import { useRoute } from "vue-router";
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import MaterialInput from "@/components/MaterialInput.vue";
 import setMaterialInput from "@/assets/js/material-input";
+import axiosInstance from '@/axios';
+
+const departmentName = ref("");
+const departmentCode = ref("");
+const facId = ref("");
+const route = useRoute();
+
+async function handleSubmit() {
+  if (!departmentName.value || !departmentCode.value) {
+    console.log("Error: Missing required fields");
+    return;
+  }
+
+  const data = new FormData();
+  data.append("code", departmentCode.value);
+  data.append("name", departmentName.value);
+  data.append("faculty_idfaculty", facId.value);
+  console.log(facId.value);
+  try {
+    console.log("Sending request to server...");
+
+    const response = await axiosInstance.post(`/departments/create`, data, {
+      headers: {
+      "Content-Type": "multipart/form-data",
+      },      
+    });
+
+    console.log("Response:", response.data);
+  } catch (error) {
+    console.error("Error while submitting form:", error);
+  }
+}
 
 onMounted(() => {
   setMaterialInput();
+  facId.value = route.params.id;
 });
 </script>
 
@@ -32,6 +65,7 @@ onMounted(() => {
                     label="NÁZOV KATEDRY"
                     type="name"
                     placeholder="Názov Katedry"
+                    v-model="departmentName"
                   />
                 </div>
 
@@ -42,11 +76,12 @@ onMounted(() => {
                     label="SKRÁTENÝ NÁZOV KATEDRY"
                     type="name"
                     placeholder="Skratka Katedry"
+                    v-model="departmentCode"
                   />
                 </div>
 
                 <div class="d-flex justify-content-center mt-3">
-                  <button class="btn btn-success">
+                  <button class="btn btn-success" @click="handleSubmit">
                     Vytvoriť Katedru
                   </button>
                 </div>
