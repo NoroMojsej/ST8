@@ -57,14 +57,14 @@ async function allDownload(id) {
     console.log("Requesting bulk download...");
 
     const response = await axiosInstance.get(`/conferences/download-all/${id}`, {
-      responseType: 'blob', // Make sure the response is treated as a file
+      responseType: 'blob',
     });
 
     const blob = response.data;
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `conference_${id}_papers.zip`; // Set the download filename
+    a.download = `conference_${id}_papers.zip`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -74,11 +74,49 @@ async function allDownload(id) {
     console.error("Error during bulk download:", error);
   }
 }
-function acceptedDownload() {
-  //tu bude logika pre stiahnutie schválených prác
+async function acceptedDownload(id) {
+  try {
+    console.log("Requesting bulk download of approved papers...");
+
+    const response = await axiosInstance.get(`/conferences/download-approved/${id}`, {
+      responseType: 'blob',
+    });
+
+    const blob = response.data;
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `conference_${id}_approved_papers.zip`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    console.log("Download started.");
+  } catch (error) {
+    console.error("Error during bulk download:", error);
+  }
 }
-function rejectedDownload() {
-  //tu bude logika pre stiahnutie neschválených prác
+async function rejectedDownload(id) {
+  try {
+    console.log("Requesting bulk download of refused papers...");
+
+    const response = await axiosInstance.get(`/conferences/download-refused/${id}`, {
+      responseType: 'blob',
+    });
+
+    const blob = response.data;
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `conference_${id}_refused_papers.zip`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    console.log("Download started.");
+  } catch (error) {
+    console.error("Error during bulk download:", error);
+  }
 }
 
 onMounted(() => {
@@ -122,13 +160,13 @@ onMounted(() => {
       Stiahnuť Všetky
     </button>
     <button 
-      @click="acceptedDownload" 
+      @click="acceptedDownload(route.params.id)" 
       class="btn btn-success ms-2"
     >
       Stiahnuť Schválené
     </button>
     <button 
-      @click="rejectedDownload" 
+      @click="rejectedDownload(route.params.id)" 
       class="btn btn-danger ms-2"
     >
       Stiahnuť Neschválené

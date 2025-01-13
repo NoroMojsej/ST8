@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Conference;
+use App\Models\Paper;
 use Illuminate\Http\Request;
 use ZipArchive;
 
@@ -142,5 +143,87 @@ class ConferenceController extends Controller
         $zip->close();
 
         return response()->download($zipPath)->deleteFileAfterSend(true);
+    }
+
+    public function downloadApprovedPapers($conferenceId)
+    {
+        $papers = Paper::where('conference_idconference', $conferenceId)
+            ->whereNotNull('review_idreview')
+            ->get();
+
+        $approvedFiles = [];
+
+        foreach ($papers as $paper) {
+            if ($paper->review && $paper->review->review_status_idreview_status === 1) {
+                $filePaths = json_decode($paper->path_filesystem, true);
+                if (is_array($filePaths)) {
+                    $approvedFiles = array_merge($approvedFiles, $filePaths);
+                }
+            }
+        }
+
+        if (empty($approvedFiles)) {
+            return response()->json(['message' => 'No approved papers found'], 404);
+        }
+
+        $zip = new ZipArchive();
+        $zipFileName = 'approved_papers_conference_' . $conferenceId . '.zip';
+        $zipFilePath = storage_path('app/public/' . $zipFileName);
+
+        if ($zip->open($zipFilePath, ZipArchive::CREATE) === true) {
+            foreach ($approvedFiles as $file) {
+                $filePath = storage_path('app/public/' . $file);
+
+                if (file_exists($filePath)) {
+                    $zip->addFile($filePath, basename($file));
+                }
+            }
+            $zip->close();
+        } else {
+            return response()->json(['message' => 'Unable to create ZIP file'], 500);
+        }
+
+        return response()->download($zipFilePath)->deleteFileAfterSend();
+    }
+
+    public function downloadRefusedPapers($conferenceId)
+    {
+        $papers = Paper::where('conference_idconference', $conferenceId)
+            ->whereNotNull('review_idreview')
+            ->get();
+
+        $refusedFiles = [];
+
+        foreach ($papers as $paper) {
+            if ($paper->review && $paper->review->review_status_idreview_status === 0) {
+                $filePaths = json_decode($paper->path_filesystem, true);
+                if (is_array($filePaths)) {
+                    $refusedFiles = array_merge($refusedFiles, $filePaths);
+                }
+            }
+        }
+
+        if (empty($refusedFiles)) {
+            return response()->json(['message' => 'No refused papers found'], 404);
+        }
+
+        $zip = new ZipArchive();
+        $zipFileName = 'refused_papers_conference_' . $conferenceId . '.zip';
+        $zipFilePath = storage_path('app/public/' . $zipFileName);
+
+        if ($zip->open($zipFilePath, ZipArchive::CREATE) === true) {
+            foreach ($refusedFiles as $file) {
+                $filePath = storage_path('app/public/' . $file);
+
+                if (file_exists($filePath)) {
+                    $zip->addFile($filePath, basename($file));
+                }
+            }
+            $zip->close();
+        } else {
+            return response()->json(['message' => 'Unable to create ZIP file'], 500);
+        }
+
+        return response()->download($zipFilePath)->deleteFileAfterSend();
     }
 }

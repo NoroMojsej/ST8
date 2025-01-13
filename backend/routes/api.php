@@ -55,6 +55,8 @@ Route::get('/conferences/active', [ConferenceController::class, 'getActiveConfer
 Route::put('/conference/update/{conferenceId}', [ConferenceController::class, 'updateConference']);
 Route::get('/conferences/{conferenceId}', [ConferenceController::class, 'show']);
 Route::get('/conferences/download-all/{conferenceId}', [ConferenceController::class, 'downloadAllFiles']);
+Route::get('/conferences/download-approved/{conferenceId}', [ConferenceController::class, 'downloadApprovedPapers']);
+Route::get('/conferences/download-refused/{conferenceId}', [ConferenceController::class, 'downloadRefusedPapers']);
 Route::put('/conference/{conferenceId}', [ConferenceController::class, 'update']);
 Route::get('/papers/get-all-papers', [PaperController::class, 'getAllPapers']);
 Route::get('/papers/get-all-papers-and-their-review', [PaperController::class, 'getAllPapersAndTheirReview']);

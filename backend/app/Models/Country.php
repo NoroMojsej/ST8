@@ -12,6 +12,9 @@ class Country extends Model
     protected $table = 'country';
     protected $primaryKey = 'idcountry';
 
+    const CREATED_AT = 'created_on';
+    const UPDATED_AT = 'updated_on';
+
     protected $fillable = [
         'iso_code', 'name', 'valid_from', 'valid_to', 'created_on', 'updated_on',
     ];
