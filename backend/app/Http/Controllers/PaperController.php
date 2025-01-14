@@ -338,7 +338,7 @@ public function getPapersAvailable($conferenceID, $sectionID)
 }
 
 
-public function download($id)
+public function downloadPaper($id)
 {
     $paper = Paper::find($id);
 
