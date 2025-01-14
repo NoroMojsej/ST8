@@ -3,31 +3,11 @@ import { ref, computed } from "vue";
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import ListCard from "../Admin/components/ListCard.vue";
 import { useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import axiosInstance from '@/axios';
 
 const papers = ref([]);
-
-const downloadPaperById = async (paper) => {
-  try {
-    const response = await axiosInstance.get(`/papers/download-paper/${paper.id}`, {
-      responseType: 'blob',
-    });
-
-    const blob = new Blob([response.data], { type: response.headers['content-type'] });
-    const url = URL.createObjectURL(blob);
-
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = paper.pdf_filename;
-    anchor.click();
-
-    URL.revokeObjectURL(url);
-    console.log('Paper downloaded successfully');
-  } catch (error) {
-    console.error('Paper downloading failed:', error.response?.data || error.message);
-  }
-};
-
+const route = useRoute();
 
 
 
@@ -66,6 +46,7 @@ const getAllPapersAndTheirReview = async () => {
     papers.value = response.data.map(paper => ({
       id: paper.idpaper,
       paper: paper.name,
+      conference_id: paper.conference_idconference,
       review_id: paper.review.idreview,
       info: paper.status_desc ? paper.status_desc : 'No status available',
       isEditing: false,
@@ -89,6 +70,24 @@ const filteredPapers = computed(() => {
 
 function handleGrade(id) {
     router.push({ name: "evaluation", params: { id } });
+}
+
+async function handleDownload(confid, id) {
+  try {
+    const response = await axiosInstance.get(`/papers/download-paper/${id}`, {
+      responseType: 'blob',
+    });
+    const blob = response.data;
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `conference_${confid}_paper_${id}_files.zip`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);    
+  } catch (error) {
+    console.error("Error downloading files:", error);
+  }
 }
 
 </script>
@@ -139,7 +138,7 @@ function handleGrade(id) {
                 :buttonText="'Hodnotiť'"
                 :optionalButton="{
                   text: 'Stiahnuť',
-                  onClick: () => downloadPaperById(paper),
+                  onClick: () => handleDownload(paper.conference_id, paper.id),
                   color: 'info'
                 }"
               />
