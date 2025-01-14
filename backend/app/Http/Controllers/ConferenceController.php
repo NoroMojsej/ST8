@@ -226,4 +226,44 @@ class ConferenceController extends Controller
 
         return response()->download($zipFilePath)->deleteFileAfterSend();
     }
+
+    public function downloadPaperFiles($conferenceId, $paperId)
+    {
+        $conference = Conference::with('papers')->find($conferenceId);
+
+        if (!$conference) {
+            return response()->json(['message' => 'Conference not found'], 404);
+        }
+
+        $paper = $conference->papers->where('idpaper', $paperId)->first();
+
+        if (!$paper) {
+            return response()->json(['message' => 'Paper not found in the specified conference'], 404);
+        }
+
+        $files = json_decode($paper->path_filesystem, true) ?? [];
+
+        if (empty($files)) {
+            return response()->json(['message' => 'No files found for the specified paper'], 404);
+        }
+
+        $zip = new ZipArchive();
+        $zipFileName = "conference_{$conferenceId}_paper_{$paperId}_files.zip";
+        $zipPath = storage_path("app/public/{$zipFileName}");
+
+        if ($zip->open($zipPath, ZipArchive::CREATE) !== true) {
+            return response()->json(['message' => 'Could not create ZIP file'], 500);
+        }
+
+        foreach ($files as $filePath) {
+            $fullPath = storage_path("app/public/{$filePath}");
+            if (file_exists($fullPath)) {
+                $zip->addFile($fullPath, basename($filePath));
+            }
+        }
+
+        $zip->close();
+
+        return response()->download($zipPath)->deleteFileAfterSend(true);
+    }
 }

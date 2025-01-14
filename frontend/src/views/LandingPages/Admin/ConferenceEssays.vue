@@ -28,26 +28,19 @@ const filteredEssays = computed(() => {
   return essays;
 });
 
-async function handleDownload(id) {
+async function handleDownload(confid, id) {
   try {
-    const response = await axiosInstance.get(`/papers/download/${id}`);
-    const { files } = response.data;
-
-    if (!files || files.length === 0) {
-      console.error("No files available for download.");
-      return;
-    }
-
-    files.forEach((filePath) => {
-      const baseUrl = window.location.origin;
-      const link = document.createElement("a");
-      link.href = `${baseUrl}/storage/${filePath}`;
-      link.download = filePath.split("/").pop();
-      link.target = "_blank";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+    const response = await axiosInstance.get(`/conferences/${confid}/papers/${id}/download`, {
+      responseType: 'blob',
     });
+    const blob = response.data;
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `conference_${confid}_paper_${id}_files.zip`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);    
   } catch (error) {
     console.error("Error downloading files:", error);
   }
@@ -190,7 +183,7 @@ onMounted(() => {
           :icon="{ component: 'receipt_long', color: 'success' }"
           :title="essay.name"
           :description="essay.keywords_lang2"
-          :handleEdit="() => handleDownload(essay.idpaper)"
+          :handleEdit="() => handleDownload(route.params.id, essay.idpaper)"
           :buttonText="'Stiahnuť'"
         />
       </div>
