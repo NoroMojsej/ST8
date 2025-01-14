@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -86,22 +87,50 @@ class UserController extends Controller
 
         return response()->json(['message' => 'Password updated successfully.']);
     }
-
+    
     public function getUsersList()
-{
-    $users = User::join('department', 'user.department_iddepartment', '=', 'department.iddepartment')
-                 ->join('faculty', 'department.faculty_idfaculty', '=', 'faculty.idfaculty')
-                 ->join('university', 'faculty.university_iduniversity', '=', 'university.iduniversity')
-                 ->join('role', 'user.role_idrole', '=', 'role.idrole')
-                 ->whereIn('user.role_idrole', [1, 3])
-                 ->select(
-                     'user.name',
-                     'user.surname',
-                     'university.code as university_code',
-                     'role.code as role_code'
-                 )
-                 ->get();
+    {
+        $users = User::with(['department.faculty.university', 'role'])
+                     ->whereHas('role', function ($query) {
+                         $query->whereIn('code', ['REVIW', 'STDNT']);
+                     })
+                     ->get()
+                     ->map(function ($user) {
+                         return [
+                             'iduser' => $user->iduser,
+                             'name' => $user->name,
+                             'surname' => $user->surname,
+                             'department_code' => $user->department->code ?? null,
+                             'university_code' => $user->department->faculty->university->code ?? null,
+                             'role_code' => $user->role->code ?? null,
+                         ];
+                     });
+    
+        return response()->json($users);
+    }
 
-    return response()->json($users);
+public function changeRole(Request $request, $userId)
+{
+    $validated = $request->validate([
+        'role_code' => 'required|string|exists:role,code',
+    ]);
+
+    try {
+        $roleId = Role::where('code', $validated['role_code'])->value('idrole');
+
+        if (!$roleId) {
+            return response()->json(['status' => 'error', 'message' => 'Invalid role code.'], 400);
+        }
+
+        $user = User::findOrFail($userId);
+        $user->role_idrole = $roleId;
+        $user->save();
+
+        return response()->json(['status' => 'success', 'message' => 'Role updated successfully.'], 200);
+
+    } catch (\Exception $e) {
+        return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+    }
 }
+
 }

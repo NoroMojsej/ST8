@@ -20,8 +20,10 @@ const essays = ref([]);
 
 const fetchEssays = async (studentId) => {
   try {
+    console.log("studentID:", studentId);
     const response = await axiosInstance.get(`/papers/student/${studentId}`);
     essays.value = response.data;
+    console.log("Fetched Essays Data:", JSON.stringify(essays.value));
   } catch (error) {
     console.error("Chyba pri načítaní prác:", error);
   }
@@ -34,6 +36,24 @@ function handleEdit(idEssay, idConference) {
 function handleEval(idEssay) {
   router.push({ name: "gradesummary", params: { idEssay } });
 }
+
+// Funkcia na získanie statusu hodnotenia
+const getReviewStatus = (essay) => {
+  // Ak review je null, vrátime správu o nepridelení na hodnotenie
+  if (!essay.paper.review) {
+    return "Práca nebola ešte pridelená na hodnotenie";
+  }
+
+  // Ak review existuje, ale status_desc je null, vrátime správu o neohodnotení
+  if (!essay.paper.review.status || !essay.paper.review.status.status_desc) {
+    return "Práca nebola ešte ohodnotená";
+  }
+
+  // Inak vrátime skutočný status
+  return essay.paper.review.status.status_desc;
+};
+
+
 </script>
 
 <template>
@@ -42,28 +62,28 @@ function handleEval(idEssay) {
     { label: 'Moje Práce' },
   ]">
 
-    <div class="container mb-4">
-      <div v-if="essays.length > 0">
-        <div class="row mb-3" v-for="essay in essays" :key="essay.id">
-          <div class="col-12">
-            <div class="d-flex align-items-center">
-              <div class="flex-grow-1">
-                <EssaySummary 
-                :name="essay.name"
-                :keywords=[essay.keywords_lang1,essay.keywords_lang2]
-                :conferenceName="essay.abbreviation"
-                :section="essay.text"
-                :status="essay.review_status_desc"
-                :showEditButton="true"
-                :showEvaluationButton="true"
-                :handleEdit="() => handleEdit(essay.id_paper, essay.id_conference)"
-                :handleEvaluation="() => handleEval(essay.id_paper)"
+      <div class="container mb-4">
+        <div v-if="essays.length > 0">
+          <div class="row mb-3" v-for="essay in essays" :key="essay.idpaper">
+            <div class="col-12">
+              <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                  <EssaySummary 
+                  :name="essay.paper.name"
+                  :keywords="[essay.paper.keywords_lang1, essay.paper.keywords_lang2]"
+                  :conferenceName="essay.paper.conference.abbreviation"
+                  :section="essay.paper.section.text"
+                  :status="getReviewStatus(essay)"
+                  :showEditButton="true"
+                  :showEvaluationButton="true"
+                  :handleEdit="() => handleEdit(essay.paper.idpaper, essay.paper.conference.idconference)"
+                  :handleEvaluation="() => handleEval(essay.paper.idpaper)"
                 />
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
       <div v-else>
         <p>Žiadne práce na zobrazenie.</p>
       </div>

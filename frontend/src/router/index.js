@@ -172,7 +172,7 @@ const router = createRouter({
     {
       path: "/pages/landing-pages/admin-control-panel/users-list/assign/:id",
       name: "essayassign",
-      component: EssayAssign,
+      component: EssayAssign
     },
     {
       path: "/pages/landing-pages/sign-in",

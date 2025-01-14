@@ -14,7 +14,7 @@ class Paper extends Model
     const UPDATED_AT = 'updated_on';
 
     protected $fillable = [
-        'name', 'path_filesystem_pdf', 'path_filesystem_doc', 'abstract_lang1', 'abstract_lang2', 'upload_datetime', 'reupload_datetime', 'keywords_lang1', 'keywords_lang2', 'status', 'review_idreview', 'conference_idconference', 'created_on', 'updated_on'
+        'name', 'path_filesystem', 'abstract_lang1', 'abstract_lang2', 'upload_datetime', 'reupload_datetime', 'keywords_lang1', 'keywords_lang2', 'status', 'review_idreview', 'conference_idconference', 'section_idsection', 'paper_status_idpaper_status', 'created_on', 'updated_on'
     ];
 
     public function conference()
@@ -34,7 +34,7 @@ class Paper extends Model
     
     public function paper_status()
     {
-        return $this->belongsTo(ReviewStatus::class, 'paper_status_idpaper_status');
+        return $this->belongsTo(PaperStatus::class, 'paper_status_idpaper_status', 'idpaper_status');
     }
 
     public function users()

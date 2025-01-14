@@ -14,7 +14,7 @@ onMounted(() => {
 
 async function fetchConferences() {
   try {
-    const response = await axiosInstance.get('/conferences');
+    const response = await axiosInstance.get('/conferences/active');
     conferences.value = response.data;
   } catch (error) {
     console.error('Chyba pri načítaní konferencií:', error);
@@ -22,6 +22,7 @@ async function fetchConferences() {
 }
 
 function essayUpload(id) {
+  console.log("KONF"+id);
     router.push({ name: "essay", params: { id } });
 }
 
@@ -38,8 +39,8 @@ function essayUpload(id) {
     <div class="container mb-4">
       <div
         class="row mb-3"
-        v-for="(conference, idconference) in conferences"
-        :key="idconference"
+        v-for="conference in conferences"
+        :key="conference.idconference"
       >
         <div class="col-12">
           <div class="d-flex align-items-center">
@@ -50,7 +51,7 @@ function essayUpload(id) {
               :icon="{ component: 'flag', color: 'success' }"
               :title="conference.abbreviation"
               :description="conference.description"
-              :handleEdit="() => essayUpload(idconference)"
+              :handleEdit="() => essayUpload(conference.idconference)"
               :buttonText="'Nahrať Prácu'"
             />
             </div>

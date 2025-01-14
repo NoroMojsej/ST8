@@ -16,7 +16,6 @@ const sessionData = ref(null);
 
 function getSessionFromLocalStorage() {
   const storedSession = localStorage.getItem("session");
-
   if (storedSession) {
     try {
       sessionData.value = JSON.parse(storedSession);
@@ -49,22 +48,24 @@ onUnmounted(() => {
     <Carousel />
 
     <div class="container">
-      <div class="row">
-        <div class="col-lg-4 mb-3">
-          <InfoCardCustom class="p-4" :color="{ text: 'white', background: 'bg-gradient-success' }"
-            :icon="{ color: 'white' }" title="Registrácia"
-            description="Nemáte u nás účet? Zaregistrujte sa a zúčastnite sa ŠVD!" :action="{
-              to: { name: 'register-basic' },
-              label: { color: 'white' }
-            }" />
-        </div>
-        <div class="col-lg-4 mb-3">
-          <InfoCardCustom class="p-4" :color="{ text: 'white', background: 'bg-gradient-success' }"
-            :icon="{ color: 'white' }" title="Prihlásiť sa"
-            description="Už máte u nás účet? Prihláste sa a prezrite si aktuálne prebiehajúce konferencie!" :action="{
-              to: { name: 'signin-basic' },
-              label: { color: 'white' }
-            }" />
+      <div class="row" v-if="!sessionData || Object.keys(sessionData).length === 0" :sticky="true">
+        <div class="row">
+          <div class="col-lg-4 mb-3">
+            <InfoCardCustom class="p-4" :color="{ text: 'white', background: 'bg-gradient-success' }"
+              :icon="{ color: 'white' }" title="Registrácia"
+              description="Nemáte u nás účet? Zaregistrujte sa a zúčastnite sa ŠVD!" :action="{
+                to: { name: 'register-basic' },
+                label: { color: 'white' }
+              }" />
+          </div>
+          <div class="col-lg-4 mb-3">
+            <InfoCardCustom class="p-4" :color="{ text: 'white', background: 'bg-gradient-success' }"
+              :icon="{ color: 'white' }" title="Prihlásiť sa"
+              description="Už máte u nás účet? Prihláste sa a prezrite si aktuálne prebiehajúce konferencie!" :action="{
+                to: { name: 'signin-basic' },
+                label: { color: 'white' }
+              }" />
+          </div>
         </div>
       </div>
     </div>

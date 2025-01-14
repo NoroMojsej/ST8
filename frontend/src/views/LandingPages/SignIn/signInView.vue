@@ -39,9 +39,9 @@ const login = async () => {
     localStorage.setItem('auth_token', JSON.stringify(token));
     localStorage.setItem('session', JSON.stringify(session));
     console.log("ROLA " + JSON.stringify(session));
-    if (session.user_role == 2) {
+    if (session.user_role === "ADMIN") {
       router.push({ name: 'adminhome' });
-    } else if (session.user_role == 3) {
+    } else if (session.user_role === "REVIW") {
       router.push({ name: 'reviewer_home' });
     } else {
       router.push({ name: 'student_home' });

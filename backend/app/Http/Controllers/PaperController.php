@@ -5,7 +5,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Paper;
-
+use App\Models\UserHasPaper;
+use Illuminate\Support\Facades\Auth;
 class PaperController extends Controller
 {
 
@@ -64,15 +65,17 @@ class PaperController extends Controller
         return response()->json($essays, 200);
     }
 
-    public function updatePaper(Request $request, $id)
+    public function updatePaper(Request $request, $id, $userId)
     {
+        Log::info('Request Data:', $request->all());
+
         $request->validate([
             'name' => 'required|string|max:255',
             'abstract_lang1' => 'nullable|string',
             'abstract_lang2' => 'nullable|string',
             'keywords_lang1' => 'nullable|string',
             'keywords_lang2' => 'nullable|string',
-            'section_id' => 'required|exists:section,idsection',
+            'section_id' => 'required',
             'files' => 'required|array|min:2|max:2',
             'files.*' => 'file|mimes:pdf,docx|max:10240',
         ]);
@@ -89,8 +92,9 @@ class PaperController extends Controller
         $paper->keywords_lang1 = $request->keywords_lang1;
         $paper->keywords_lang2 = $request->keywords_lang2;
         $paper->section_idsection = $request->section_id;
+        $paper->paper_status_idpaper_status = 2; // upravená
+        $paper->reupload_datetime = now();
 
-        $userId = auth()->id();
         $files = $request->file('files');
         $newFilePaths = [];
 
@@ -120,7 +124,7 @@ class PaperController extends Controller
         ]);
     }
 
-    public function uploadPaper(Request $request)
+    public function uploadPaper(Request $request, $userId)
     {
     try {
         Log::info('Starting uploadPaper method.');
@@ -132,14 +136,14 @@ class PaperController extends Controller
             'abstract_lang2' => 'nullable|string',
             'keywords_lang1' => 'nullable|string',
             'keywords_lang2' => 'nullable|string',
-            'section_id' => 'required|exists:section,idsection',
+            'section_id' => 'required',
+            'conference_id' => 'required',
             'files' => 'required|array|min:2|max:2',
             'files.*' => 'file|mimes:pdf,docx|max:10240', // zatial max 10mb, mozme zmenit
         ]);
 
         Log::info('Validation passed.');
 
-        $userId = auth()->id(); // ? auth()->id() : 1; // Dont do this, len pre debug.
         Log::info('Authenticated user ID:', ['user_id' => $userId]);
 
         if (!$userId) {
@@ -178,17 +182,26 @@ class PaperController extends Controller
             'keywords_lang1' => $request->input('keywords_lang1'),
             'keywords_lang2' => $request->input('keywords_lang2'),
             'section_idsection' => $request->input('section_id'),
-            'path_filesystem' => json_encode($filePaths), // File paths as JSON
+            'conference_idconference' => $request->input('conference_id'),
+            'paper_status_idpaper_status' => 1, // uploaded
+            'path_filesystem' => json_encode($filePaths),
             'upload_datetime' => now(),
         ]);
 
         Log::info('Paper record created successfully.', ['paper_id' => $paper->idpaper]);
+        $paper->users()->attach($userId);
+        $conference = $paper->conference;
+
+        if ($conference && !$conference->users->contains($userId)) {
+            $conference->users()->attach($userId);
+        }
 
         return response()->json([
             'message' => 'Paper uploaded successfully.',
             'paper_id' => $paper->idpaper,
             'file_paths' => $filePaths,
         ]);
+
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Validation error:', ['errors' => $e->errors()]);
             return response()->json(['message' => 'Validation failed.', 'errors' => $e->errors()], 422);
@@ -198,27 +211,6 @@ class PaperController extends Controller
         }
     }
 
-    public function downloadPaper(Request $request, $id)
-    {
-        $paper = Paper::find($id);
-
-        $storage_path = 'storage/app/public/';
-        $file = $paper->pdf_filename;
-        $full_path = $storage_path.$paper->path_filesystem_pdf;
-
-        $headers = array(
-            'Content-Type: application/pdf',
-          );
-
-        if (!$paper || !Storage::exists($full_path)) {
-            return response()->json(['message' => 'Paper not found.'], 404);
-        }
-
-
-        return response()->download($full_path, $file, $headers);
-    }
-
-
     public function deletePaper($id) // Mazanie "Papers" (usermode, nie pre adminov)
     {
         $paper = Paper::find($id);
@@ -227,7 +219,6 @@ class PaperController extends Controller
             return response()->json(['message' => 'Paper not found'], 404);
         }
 
-        $userId = auth()->id();
         $isAuthorized = $paper->users()->where('iduser', $userId)->exists();
 
         if (!$isAuthorized) {
@@ -248,42 +239,32 @@ class PaperController extends Controller
         return response()->json(['message' => 'Paper deleted successfully']);
     }
 
-    public function getPapersByUser($userId)
-    {
-    $papers = Paper::where('user_id', $userId)->pluck('name', 'idpaper');
-
-    if ($papers->isEmpty()) {
-        return response()->json(['message' => 'No papers found for this user.'], 404);
-    }
-
-    return response()->json([
-        'message' => 'Papers retrieved successfully.',
-        'papers' => $papers, // mená a IDčká paperov.
-    ]);
-    }   
 
     public function getPaperById($id)
     {
-    $paper = Paper::find($id);
+        $paper = Paper::find($id);
 
-    if (!$paper) {
-        return response()->json(['message' => 'Paper not found.'], 404);
+        if (!$paper) {
+            return response()->json(['message' => 'Paper not found.'], 404);
+        }
+
+        return response()->json([
+            'message' => 'Paper retrieved successfully.',
+            'paper' => $paper,
+        ]);
     }
 
-    return response()->json([
-        'message' => 'Paper retrieved successfully.',
-        'paper' => $paper, // Celý paper pre editing.
-    ]);
-    }
-
-    function getEssaysByStudent($studentId) {
+    function getPapersByStudent($userId) {
+        if (!$userId) {
+            return response()->json(['error' => 'User not authenticated'], 401);
+        }
         return Paper::with([
                 'conference:abbreviation,idconference',
                 'section:text,idsection',
                 'review.status:status_desc,idreview_status'
             ])
-            ->whereHas('users', function ($query) use ($studentId) {
-                $query->where('user_iduser', $studentId);
+            ->whereHas('users', function ($query) use ($userId) {
+                $query->where('user_iduser', $userId);
             })
             ->get()
             ->map(function ($paper) {
@@ -300,7 +281,7 @@ class PaperController extends Controller
             });
     }
 
-    public function getReviewByEssay($essayID)
+    public function getReviewByPaper($essayID)
 {
     $essay = Paper::with(['review.status'])->find($essayID);
 
@@ -316,6 +297,62 @@ class PaperController extends Controller
         'review' => $essay->review,
         'status' => $essay->review->status,
     ], 200);
+}
+
+public function getUserPapers($userId)
+{
+    $userPapers = UserHasPaper::with([
+        'paper' => function ($query) {
+            $query->select('idpaper', 'name', 'keywords_lang1', 'keywords_lang2', 'conference_idconference', 'section_idsection', 'review_idreview');
+        },
+        'paper.conference' => function ($query) {
+            $query->select('idconference', 'abbreviation');
+        },
+        'paper.section' => function ($query) {
+            $query->select('idsection', 'text');
+        },
+        'paper.review' => function ($query) {
+            $query->select('idreview', 'review_status_idreview_status');
+        },
+        'paper.review.status' => function ($query) {
+            $query->select('idreview_status', 'status_desc');
+        }
+    ])
+    ->where('user_iduser', $userId)
+    ->get();
+
+    return $userPapers;
+}
+
+
+
+public function getPapersAvailable($conferenceID, $sectionID)
+{
+    $papers = Paper::select('idpaper', 'name')
+        ->whereNull('review_idreview')
+        ->where('section_idsection', $sectionID)
+        ->where('conference_idconference', $conferenceID)
+        ->get();
+
+    return response()->json($papers);
+}
+
+
+public function download($id)
+{
+    $paper = Paper::find($id);
+
+    if (!$paper) {
+        return response()->json(['message' => 'Paper not found'], 404);
+    }
+
+    $filePaths = json_decode($paper->path_filesystem, true);
+
+    if (!$filePaths || !is_array($filePaths)) {
+        return response()->json(['message' => 'No files available for download'], 404);
+    }
+
+    return response()->json(['files' => $filePaths], 200);
 }
 
 }

@@ -4,22 +4,67 @@ import { useRoute } from "vue-router";
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import MaterialInput from "@/components/MaterialInput.vue";
 import setMaterialInput from "@/assets/js/material-input";
+import axiosInstance from '@/axios';
 
 const facultyId = ref(null);
 const route = useRoute();
+const facultyName = ref("");
+const facultyCode = ref("");
+const uniId = ref("");
+
+async function handleUpdate(id) {
+  if (!facultyName.value || !facultyCode.value) {
+    console.log("Error: Missing required fields");
+    return;
+  }
+
+  const data = new FormData();
+  data.append("code", facultyCode.value);
+  data.append("name", facultyName.value);
+  data.append("university_iduniversity", uniId.value);
+
+  console.log("ID: ", id);
+  try {
+    console.log("Sending request to server...");
+
+    const response = await axiosInstance.post(`/faculties/update/${id}`, data, {
+      headers: {
+      "Content-Type": "multipart/form-data",
+      },      
+    });
+
+    console.log("Response:", response.data);
+  } catch (error) {
+    console.error("Error while submitting form:", error);
+  }
+}
+
+async function fetchEditInfo(id){
+  try {
+    const response = await axiosInstance.get(`/faculties/getfaculty/${id.value}`);
+    console.log("Fetched EditInfo Data:", response.data);
+    facultyName.value = response.data.name;
+    facultyCode.value = response.data.code;
+    uniId.value = response.data.university_iduniversity;
+    //console.log("Fetched Name:", universityName.value);
+  } catch (error) {
+    console.error("Error fetching EditInfo:", error);
+  }
+}
 
 onMounted(() => {
   setMaterialInput();
   facultyId.value = route.params.id;
+  fetchEditInfo(facultyId);
 });
 </script>
 
 <template>
   <BaseLayout
-    title="Vytvoriť Fakultu"
+    title="Upraviť Fakultu"
     :breadcrumb="[ 
       { label: 'Správca Univerzít', route: '/pages/landing-pages/admin-control-panel/uni-manager' },
-      { label: 'Vytvoriť Fakultu' }
+      { label: 'Upraviť Fakultu' }
     ]"
   >
     <div class="container">
@@ -34,8 +79,9 @@ onMounted(() => {
                     id="fac-title"
                     class="input-group-static mt-2"
                     label="NÁZOV FAKULTY"
-                    type="name"
+                    type="text"
                     placeholder="Názov Fakulty"
+                    v-model="facultyName"
                   />
                 </div>
 
@@ -44,14 +90,15 @@ onMounted(() => {
                     id="fac-code"
                     class="input-group-static mt-2"
                     label="SKRÁTENÝ NÁZOV FAKULTY"
-                    type="name"
+                    type="text"
                     placeholder="Skratka Fakulty"
+                    v-model="facultyCode"
                   />
                 </div>
 
                 <div class="d-flex justify-content-center mt-3">
-                  <button class="btn btn-success">
-                    Vytvoriť Fakultu
+                  <button class="btn btn-success" @click="handleUpdate(facultyId)">
+                    Upraviť Fakultu
                   </button>
                 </div>
               </div>

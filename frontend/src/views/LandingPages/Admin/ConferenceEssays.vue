@@ -5,47 +5,126 @@ import ListCard from "./components/ListCard.vue";
 import axiosInstance from '@/axios';
 import { useRoute } from "vue-router";
 
-
-
-onMounted(() => {
-  fetchEssaysByConference();
-});
-
 const route = useRoute();
-const conferenceId = route.params.id;
-console.log("Conference ID:", conferenceId);
 const input = ref("");
 const essays = ref([]);
 
-
 const fetchEssaysByConference = async (conferenceId) => {
   try {
-    const response = await axiosInstance.get(`/conferences/${conferenceId}/essays`);
+    const response = await axiosInstance.get(`/papers/conference/${conferenceId}`);
     essays.value = response.data;
+    console.log(essays.value);
   } catch (error) {
     console.error('Error fetching essays:', error);
   }
 };
 
 const filteredEssays = computed(() => {
+  if(input.value){
   return essays.filter(essay =>
     essay.essay.toLowerCase().includes(input.value.toLowerCase())
   );
+  }
+  return essays;
 });
 
-function handleDownload(id) {
-  //tu bude logika pre stiahnutie konrétnej práce
+async function handleDownload(id) {
+  try {
+    const response = await axiosInstance.get(`/papers/download/${id}`);
+    const { files } = response.data;
+
+    if (!files || files.length === 0) {
+      console.error("No files available for download.");
+      return;
+    }
+
+    files.forEach((filePath) => {
+      const baseUrl = window.location.origin;
+      const link = document.createElement("a");
+      link.href = `${baseUrl}/storage/${filePath}`;
+      link.download = filePath.split("/").pop();
+      link.target = "_blank";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  } catch (error) {
+    console.error("Error downloading files:", error);
+  }
 }
 
-function allDownload() {
-  //tu bude logika pre stiahnutie všetkých prác
+async function allDownload(id) {
+  try {
+    console.log("Requesting bulk download...");
+
+    const response = await axiosInstance.get(`/conferences/download-all/${id}`, {
+      responseType: 'blob',
+    });
+
+    const blob = response.data;
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `conference_${id}_papers.zip`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    console.log("Download started.");
+  } catch (error) {
+    console.error("Error during bulk download:", error);
+  }
 }
-function acceptedDownload() {
-  //tu bude logika pre stiahnutie schválených prác
+async function acceptedDownload(id) {
+  try {
+    console.log("Requesting bulk download of approved papers...");
+
+    const response = await axiosInstance.get(`/conferences/download-approved/${id}`, {
+      responseType: 'blob',
+    });
+
+    const blob = response.data;
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `conference_${id}_approved_papers.zip`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    console.log("Download started.");
+  } catch (error) {
+    console.error("Error during bulk download:", error);
+  }
 }
-function rejectedDownload() {
-  //tu bude logika pre stiahnutie neschválených prác
+async function rejectedDownload(id) {
+  try {
+    console.log("Requesting bulk download of refused papers...");
+
+    const response = await axiosInstance.get(`/conferences/download-refused/${id}`, {
+      responseType: 'blob',
+    });
+
+    const blob = response.data;
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `conference_${id}_refused_papers.zip`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    console.log("Download started.");
+  } catch (error) {
+    console.error("Error during bulk download:", error);
+  }
 }
+
+onMounted(() => {
+  const conferenceId = route.params.id;
+  console.log("Conference ID:", conferenceId);
+  fetchEssaysByConference(conferenceId);
+});
 </script>
 
 <template>
@@ -76,19 +155,19 @@ function rejectedDownload() {
   </div>
   <div class="col-6 d-flex justify-content-end align-items-center">
     <button 
-      @click="allDownload" 
+      @click="allDownload(route.params.id)" 
       class="btn btn-info ms-2"
     >
       Stiahnuť Všetky
     </button>
     <button 
-      @click="acceptedDownload" 
+      @click="acceptedDownload(route.params.id)" 
       class="btn btn-success ms-2"
     >
       Stiahnuť Schválené
     </button>
     <button 
-      @click="rejectedDownload" 
+      @click="rejectedDownload(route.params.id)" 
       class="btn btn-danger ms-2"
     >
       Stiahnuť Neschválené
@@ -98,27 +177,27 @@ function rejectedDownload() {
 
 
     <div class="container mb-4">
-      <div
+      <!--<div
         v-for="(essay, idessay) in essays"
         :key="idessay"
       >
-      <div class="col-12">
-    <div v-for="essay in essays" :key="essay.idessay" class="d-flex align-items-center">
+      <div class="col-12">-->
+    <div v-for="essay in essays" :key="essay.idpaper" class="d-flex align-items-center">
       <div class="flex-grow-1">
         <ListCard
           class="px-lg-1 mt-lg-0 mt-4 p-4"
           height="h-100"
           :icon="{ component: 'receipt_long', color: 'success' }"
-          :title="essay.essay"
-          :description="essay.info"
-          :handleEdit="() => handleDownload(essay.idessay)"
+          :title="essay.name"
+          :description="essay.keywords_lang2"
+          :handleEdit="() => handleDownload(essay.idpaper)"
           :buttonText="'Stiahnuť'"
         />
       </div>
     </div>
   </div>
-      </div>
-    </div>
+     <!-- </div>
+    </div>-->
   </BaseLayout>
 </template>
 

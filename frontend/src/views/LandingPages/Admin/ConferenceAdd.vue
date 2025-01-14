@@ -2,12 +2,10 @@
 import { ref, watch, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 
-// Sections
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import MaterialInput from "@/components/MaterialInput.vue";
 import axiosInstance from '@/axios';
 
-// Hooks
 import setMaterialInput from "@/assets/js/material-input";
 
 const router = useRouter();
@@ -28,6 +26,9 @@ const entriesForSections = ref([
 
 const conferenceTitle = ref("");
 
+const successMessage = ref('');
+const errorMessage = ref('');
+
 onMounted(() => {
   setMaterialInput();
   fetchCountries();
@@ -35,89 +36,32 @@ onMounted(() => {
 });
 
 
-
-//PRIDÁVANIE SEKCIÍ + SLEDOVANIE ICH DOSTUPNOSTI
 const addRow = () => {
   if (availableSectionsCount.value > entriesForSections.value.length) {
-    entriesForSections.value.push({ idSection: "" }); // Pridáme riadok, ak sú k dispozícii voľné sekcie
+    entriesForSections.value.push({ idSection: "" });
   }
 };
 
-// Počet dostupných sekcií
 const availableSectionsCount = computed(() => sections.value.length);
 
-// Kontrola, či je možné pridať ďalšiu sekciu
 const canAddSection = computed(() => {
-  return entriesForSections.value.length < availableSectionsCount.value;
+  console.log(JSON.stringify(entriesForSections.value));
+  return entriesForSections.value.every(section => section.idSection !== "")
+    && entriesForSections.value.length < availableSectionsCount.value;
 });
 
 const getAvailableSections = (index) => {
   const selectedSections = entriesForSections.value.map(entry => entry.idSection);
-  // Filtrovanie sekcií na základe už vybraných sekcií v entriesForSections
   return sections.value.filter(section => !selectedSections.includes(section.idsection) || section.idsection === entriesForSections.value[index].idSection);
 };
 
-
-//WATCHERY
-watch(selectedUniversity, async (newUniversity) => {
-  if (newUniversity) {
-    console.log("UNIVERZITA " + newUniversity);
-  }
-});
-
 watch(selectedCountry, async (newCountry) => {
   if (newCountry) {
-    console.log("KRAJINA " + newCountry);
     universities.value = [];
     selectedUniversity.value = "";
-    await fetchUniversities();
+    fetchUniversities();
   }
 });
-
-watch([submissionFrom, submissionTo], ([newFrom, newTo]) => {
-  const submissionFromDate = newFrom ? new Date(newFrom) : null;
-  const submissionToDate = newTo ? new Date(newTo) : null;
-  const conferenceFromDate = conferenceFrom.value ? new Date(conferenceFrom.value) : null;
-  const conferenceToDate = conferenceTo.value ? new Date(conferenceTo.value) : null;
-
-
-  if (submissionFromDate && submissionToDate && submissionFromDate > submissionToDate) {
-    console.error("Submission 'from' date cannot be after submission 'to' date.");
-  }
-
-
-  if (conferenceFromDate && conferenceToDate) {
-    if (submissionFromDate && submissionFromDate < conferenceFromDate) {
-      console.error("Submission 'from' date must be on or after the conference 'from' date.");
-    }
-    if (submissionToDate && submissionToDate > conferenceToDate) {
-      console.error("Submission 'to' date must be on or before the conference 'to' date.");
-    }
-  } else {
-    console.error("Conference dates are not set correctly.");
-  }
-});
-
-watch([conferenceFrom, conferenceTo], ([newFrom, newTo]) => {
-  const conferenceFromDate = newFrom ? new Date(newFrom) : null;
-  const conferenceToDate = newTo ? new Date(newTo) : null;
-  const submissionFromDate = submissionFrom.value ? new Date(submissionFrom.value) : null;
-  const submissionToDate = submissionTo.value ? new Date(submissionTo.value) : null;
-
-
-  if (conferenceFromDate && conferenceToDate && conferenceFromDate > conferenceToDate) {
-    console.error("Conference 'from' date cannot be after conference 'to' date.");
-  }
-
-
-  if (submissionFromDate && conferenceFromDate && submissionFromDate < conferenceFromDate) {
-    console.error("Submission 'from' date must be on or after the conference 'from' date.");
-  }
-  if (submissionToDate && conferenceToDate && submissionToDate > conferenceToDate) {
-    console.error("Submission 'to' date must be on or before the conference 'to' date.");
-  }
-});
-
 
 const fetchCountries = async () => {
   try {
@@ -128,7 +72,6 @@ const fetchCountries = async () => {
     console.error('Error fetching countries:', error.message);
   }
 };
-
 
 const fetchUniversities = async () => {
   if (!selectedCountry.value) return;
@@ -143,9 +86,9 @@ const fetchUniversities = async () => {
 
 const fetchSections = async () => {
   try {
-    const response = await axiosInstance.get('/sections');
+    const response = await axiosInstance.get('/sections/get-all-sections');
     sections.value = response.data;
-    console.log("SEKCIE " + response)
+    console.log("SEKCIE " + JSON.stringify(sections.value))
   } catch (error) {
     console.error("Error fetching sections:", error);
   }
@@ -153,24 +96,35 @@ const fetchSections = async () => {
 
 async function createConference() {
   try {
-    console.log(entriesForSections.value.map(entry => entry.idSection));
-    console.log("sub " + submissionFrom.value)
-    const response = await axiosInstance.post('/createConf', {
-      title: conferenceTitle.value,
-      country: selectedCountry.value,
-      university: selectedUniversity.value,
-      description: description.value,
-      submissionFrom: submissionFrom.value,
-      submissionTo: submissionTo.value,
-      conferenceFrom: conferenceFrom.value,
-      conferenceTo: conferenceTo.value,
-      sections: entriesForSections.value.map(entry => entry.idSection),
-    });
 
-    router.push({ name: 'conferenceman' });
+    const formatDate = (dateString) => {
+      return `${dateString} 00:00:00`;
+    };
 
+    const submissionFrom2 = formatDate(submissionFrom.value);
+    const submissionTo2 = formatDate(submissionTo.value);
+
+    if (new Date(submissionFrom2) > new Date(submissionTo2) || (conferenceFrom.value > conferenceTo.value)) {
+      errorMessage.value = 'Skontrolujte dátumy';
+    } else {
+      console.log(entriesForSections.value.map(entry => entry.idSection));
+      console.log("sub " + submissionFrom.value)
+      const response = await axiosInstance.post('/createConf', {
+        title: conferenceTitle.value,
+        country: selectedCountry.value,
+        university: selectedUniversity.value,
+        description: description.value,
+        submissionFrom: submissionFrom.value,
+        submissionTo: submissionTo.value,
+        conferenceFrom: conferenceFrom.value,
+        conferenceTo: conferenceTo.value,
+        sections: entriesForSections.value.map(entry => entry.idSection),
+      });
+
+      router.push({ name: 'conferenceman' });
+    }
   } catch (error) {
-    console.error(error.message);
+    errorMessage.value = "Konferencia sa nepridala, skontrolujte formulár, či všetky polia sú vyplnené, alebo ste nezadali zlé dátumy";
   }
 }
 
@@ -208,6 +162,7 @@ async function createConference() {
                   <label for="university" class="form-label" style="color: #4CAF50;">Organizuje Univerzita</label>
                   <select id="university" class="form-select" style="box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);"
                     v-model="selectedUniversity">
+                    <option value="" disabled selected>Vyberte univerzitu podľa zadanej krajiny</option>
                     <option v-for="university in universities" :key="university.iduniversity"
                       :value="university.iduniversity">
                       {{ university.name }}
@@ -285,6 +240,8 @@ async function createConference() {
                     Vytvoriť Konferenciu
                   </button>
                 </div>
+                <p v-if="successMessage" class="text-success mt-2">{{ successMessage }}</p>
+                <p v-if="errorMessage" class="text-danger mt-2">{{ errorMessage }}</p>
               </div>
             </div>
           </div>

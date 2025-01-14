@@ -3,11 +3,9 @@ import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import axiosInstance from '@/axios';
 import { useRouter } from "vue-router";
-// Sections
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import MaterialInput from "@/components/MaterialInput.vue";
 
-// Hooks
 import setMaterialInput from "@/assets/js/material-input";
 
 onMounted(() => {
@@ -19,7 +17,6 @@ onMounted(() => {
 });
 
 const route = useRoute();
-const router = useRouter();
 const conferenceId = route.params.id;
 
 const countries = ref([]);
@@ -35,8 +32,10 @@ const conferenceTo = ref('');
 
 const sections = ref([]);
 const allSections = ref([]);
-const entriesForSections = ref([
-]);
+const entriesForSections = ref([]);
+
+const successMessage = ref('');
+const errorMessage = ref('');
 
 const fetchConference = async () => {
   try {
@@ -82,68 +81,59 @@ const fetchUniversities = async () => {
 
 const fetchSections = async () => {
   try {
-    const response = await axiosInstance.get('/sections');
-
-    if (Array.isArray(response.data)) {
-      allSections.value = response.data;
-    } else {
-      console.error("No sections found");
-    }
+    const response = await axiosInstance.get('/sections/get-all-sections');
+    allSections.value = response.data;
   } catch (error) {
     console.error("Error fetching sections:", error);
   }
 };
 
-
-//PRIDÁVANIE SEKCIÍ + SLEDOVANIE ICH DOSTUPNOSTI
 const addRow = () => {
   if (availableSectionsCount.value > entriesForSections.value.length) {
-    entriesForSections.value.push({ idSection: "" }); // Pridáme riadok, ak sú k dispozícii voľné sekcie
+    entriesForSections.value.push({ idSection: "" });
   }
 };
 
-// Počet dostupných sekcií
-const availableSectionsCount = computed(() => allSections.value.length);
-
-// Kontrola, či je možné pridať ďalšiu sekciu
 const canAddSection = computed(() => {
-  return entriesForSections.value.length < availableSectionsCount.value;
+  return entriesForSections.value.every(section => section.idSection !== "")
+    && entriesForSections.value.length < availableSectionsCount.value;
 });
+
+const availableSectionsCount = computed(() => allSections.value.length);
 
 const getAvailableSections = (index) => {
   const selectedSections = entriesForSections.value.map(entry => entry.idSection);
-  // Filtrovanie sekcií na základe už vybraných sekcií v entriesForSections
   return allSections.value.filter(section => !selectedSections.includes(section.idsection) || section.idsection === entriesForSections.value[index].idSection);
 };
 
-
-async function Conference() {
+async function updateConference() {
   try {
     const formatDate = (dateString) => {
-      const date = new Date(dateString);
-      date.setHours(0, 0, 0, 0);
-      return date.toISOString().slice(0, 19).replace('T', ' ');
+      return `${dateString} 00:00:00`;
     };
 
-    var submissionFrom2 = formatDate(submissionFrom.value);
-    var submissionTo2 = formatDate(submissionTo.value);
+    const submissionFrom2 = formatDate(submissionFrom.value);
+    const submissionTo2 = formatDate(submissionTo.value);
 
-    const response = await axiosInstance.put(`/conference/${conferenceId}`, {
-      title: title.value,
-      country: selectedCountry.value,
-      university: selectedUniversity.value,
-      description: description.value,
-      submissionFrom: submissionFrom2,
-      submissionTo: submissionTo2,
-      conferenceFrom: conferenceFrom.value,
-      conferenceTo: conferenceTo.value,
-      sections: entriesForSections.value.map(entry => entry.idSection),
-    });
+    if (new Date(submissionFrom2) > new Date(submissionTo2) || (conferenceFrom.value > conferenceTo.value)) {
+      errorMessage.value = 'Skontrolujte dátumy';
+    } else {
+      const response = await axiosInstance.put(`/conference/update/${conferenceId}`, {
+        title: title.value,
+        country: selectedCountry.value,
+        university: selectedUniversity.value,
+        description: description.value,
+        submissionFrom: submissionFrom2,
+        submissionTo: submissionTo2,
+        conferenceFrom: conferenceFrom.value,
+        conferenceTo: conferenceTo.value,
+        sections: entriesForSections.value.map(entry => entry.idSection),
+      });
 
-    console.log(response.data);
-    router.push({ name: "conferenceman" });
+      location.reload();
+    }
   } catch (error) {
-    console.error(error.message);
+    errorMessage.value = "Konferencia sa nezmenila, skontrolujte formulár, či všetky polia sú vyplnené, alebo ste nezadali zlé dátumy";
   }
 }
 
@@ -245,10 +235,12 @@ async function Conference() {
               </div>
 
               <div class="d-flex justify-content-center">
-                <button class="btn btn-success" @click="Conference">
+                <button class="btn btn-success" @click="updateConference">
                   Upraviť Konferenciu
                 </button>
               </div>
+              <p v-if="successMessage" class="text-success mt-2">{{ successMessage }}</p>
+              <p v-if="errorMessage" class="text-danger mt-2">{{ errorMessage }}</p>
 
             </div>
           </div>

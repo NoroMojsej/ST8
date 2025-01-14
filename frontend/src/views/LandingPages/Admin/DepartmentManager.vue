@@ -4,24 +4,37 @@ import { useRoute } from "vue-router";
 import { useRouter } from "vue-router";
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import ListCard from "./components/ListCard.vue";
+import axiosInstance from '@/axios';
 
 const route = useRoute();
 const router = useRouter();
 const facultyId = ref(null);
 
-const department = ref([
-  { id: 1, dep: "Katedra 1", desc: "Popis" },
-  { id: 2, dep: "Katedra 2", desc: "Popis" },
-  { id: 3, dep: "Katedra 3", desc: "Popis" },
-  { id: 4, dep: "Katedra 4", desc: "Popis" },
-]);
+const departments = ref([]);
+const errorMessage = ref("");
+
+const fetchDepartments = async () => {
+  try {
+    const response = await axiosInstance.get(`/departments/${facultyId.value}`);
+    departments.value = response.data;
+    console.log("Fetched Faculty Data:", departments.value);
+  } catch (error) {
+    errorMessage.value = "Failed to fetch Faculties. Please try again.";
+    console.error("Error fetching Faculties:", error);
+  }
+};
 
 onMounted(() => {
   facultyId.value = route.params.id;
+  fetchDepartments();
 });
 
 function handleEdit(id) {
   router.push({ name: "departmentedit", params: { id } });
+}
+
+function handleCreate(id) {
+  router.push({ name: "departmentadd", params: { id } });
 }
 </script>
 
@@ -36,8 +49,8 @@ function handleEdit(id) {
     <div class="container mb-4">
       <div
         class="row mb-3"
-        v-for="dep in department"
-        :key="dep.id"
+        v-for="dep in departments"
+        :key="dep.iddepartment"
       >
         <div class="col-12">
           <div class="d-flex align-items-center">
@@ -46,18 +59,18 @@ function handleEdit(id) {
                 class="px-lg-1 mt-lg-0 mt-4 p-4"
                 height="h-100"
                 :icon="{ component: 'school', color: 'success' }"
-                :title="dep.dep"
-                :description="dep.desc"
-                :handleEdit="() => handleEdit(dep.id)"
+                :title="dep.code"
+                :description="dep.name"
+                :handleEdit="() => handleEdit(dep.iddepartment)"
               />
         </div>
       </div>
     </div>
     </div>
     <div class="d-flex justify-content-center">
-    <Router-Link :to="{ name: 'departmentadd' }" class="btn btn-success">
-      Pridať Katedru
-    </Router-Link>
+      <button class="btn btn-success" @click="handleCreate(facultyId)">
+        Pridať Katedru
+      </button>
     </div>
     </div>
   </BaseLayout>

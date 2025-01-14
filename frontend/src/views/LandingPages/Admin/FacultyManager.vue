@@ -1,20 +1,32 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
 import { useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import ListCard from "./components/ListCard.vue";
+import axiosInstance from '@/axios';
 
-const route = useRoute();
-const router = useRouter();
 const schoolId = ref(null);
 
-const faculty = ref([
-  { id: 1, fac: "Fakulta 1", desc: "Popis" },
-  { id: 2, fac: "Fakulta 2", desc: "Popis" },
-  { id: 3, fac: "Fakulta 3", desc: "Popis" },
-  { id: 4, fac: "Fakulta 4", desc: "Popis" },
-]);
+const facluties = ref([]);
+const errorMessage = ref("");
+const route = useRoute();
+const router = useRouter();
+
+function handleCreate(id) {
+  router.push({ name: "facultyadd", params: { id } });
+}
+
+const fetchFaculties = async () => {
+  try {
+    const response = await axiosInstance.get(`/faculties/${schoolId.value}`);
+    facluties.value = response.data;
+    console.log("Fetched Faculty Data:", facluties.value);
+  } catch (error) {
+    errorMessage.value = "Failed to fetch Faculties. Please try again.";
+    console.error("Error fetching Faculties:", error);
+  }
+};
 
 function handleEdit(id) {
   router.push({ name: "facultyedit", params: { id } });
@@ -25,6 +37,7 @@ function departmentView(id) {
 
 onMounted(() => {
   schoolId.value = route.params.id;
+  fetchFaculties();
 });
 </script>
 
@@ -39,8 +52,8 @@ onMounted(() => {
     <div class="container mb-4">
       <div
         class="row mb-3"
-        v-for="fac in faculty"
-        :key="fac.id"
+        v-for="fac in facluties"
+        :key="fac.idfaculty"
       >
         <div class="col-12">
           <div class="d-flex align-items-center">
@@ -49,13 +62,13 @@ onMounted(() => {
                 class="px-lg-1 mt-lg-0 mt-4 p-4"
                 height="h-100"
                 :icon="{ component: 'school', color: 'success' }"
-                :title="fac.fac"
-                :description="fac.desc"
-                :handleEdit="() => handleEdit(fac.id)"
+                :title="fac.code"
+                :description="fac.name"
+                :handleEdit="() => handleEdit(fac.idfaculty)"
                 :buttonText="'Upraviť'"
                 :optionalButton="{
                   text: 'Katedry',
-                  onClick: () => departmentView(fac.id),
+                  onClick: () => departmentView(fac.idfaculty),
                   color: 'info'
                 }"
               />
@@ -63,10 +76,10 @@ onMounted(() => {
       </div>
     </div>
   </div>
-    <div class="d-flex justify-content-center">
-    <Router-Link :to="{ name: 'facultyadd' }" class="btn btn-success">
-      Pridať Fakultu
-    </Router-Link>
+      <div class="d-flex justify-content-center">
+      <button class="btn btn-success" @click="handleCreate(schoolId)">
+        Pridať Fakultu
+      </button>
     </div>
     </div>
   </BaseLayout>

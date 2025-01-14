@@ -4,17 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\University;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class UniversityController extends Controller
 {
 
-    public function index()
+    public function getAllUniversities()
     {
         $universities = University::all();
         return response()->json($universities);
     }
 
-    public function getByCountry($countryId)
+    public function getUniversityByCountry($countryId)
     {
         $universities = University::where('country_idcountry', $countryId)->get();
 
@@ -25,8 +26,9 @@ class UniversityController extends Controller
         return response()->json($universities);
     }
 
-    public function GetById($id)
+    public function getById($id)
     {
+        Log::info('Fetching university with id: ' . $id);
         $university = University::find($id);
 
         if (!$university) {
@@ -39,10 +41,10 @@ class UniversityController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'required|string|max:10',
+            'name' => 'required|string|max:200',
+            'code' => 'required|string|max:20',
             'country_idcountry' => 'required|integer',
-            'valid_from' => 'required|date',
+            'valid_from' => 'nullable|date',
             'valid_to' => 'nullable|date|after_or_equal:valid_from',
         ]);
 

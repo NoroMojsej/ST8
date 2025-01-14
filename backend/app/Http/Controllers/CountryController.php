@@ -7,10 +7,9 @@ use Illuminate\Http\Request;
 
 class CountryController extends Controller
 {
-    // Fetch all countries from the database
-    public function countries()
+    public function getAllcountries()
     {
-        $countries = Country::select('idcountry', 'name')->get(); // Get only necessary fields like id and name
+        $countries = Country::select('idcountry', 'name')->get();
         return response()->json($countries);
     }
 }

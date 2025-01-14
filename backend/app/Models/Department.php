@@ -11,6 +11,9 @@ class Department extends Model
     protected $table = 'department';
     protected $primaryKey = 'iddepartment';
 
+    const CREATED_AT = 'created_on';
+    const UPDATED_AT = 'updated_on';
+
     protected $fillable = [
         'code', 'name', 'valid_from', 'valid_to', 'faculty_idfaculty', 'created_on', 'updated_on',
     ];

@@ -1,8 +1,9 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import MaterialInput from "@/components/MaterialInput.vue";
 import MaterialButton from "@/components/MaterialButton.vue";
+import { useRoute } from "vue-router";
 import axiosInstance from '@/axios'; 
 
 const formData = ref({
@@ -14,9 +15,19 @@ const formData = ref({
   section_id: "",
 });
 
+const route = useRoute();
 const uploadedFiles = ref([]);
 const errorMessage = ref("");
 const successMessage = ref("");
+const conferenceId = ref(null);
+const sections = ref([]);
+const closeDate = ref(new Date("2035-12-20T23:59:00"));
+
+async function fetchConfData(conferenceId) {
+  const response_conference = await axiosInstance.get(`/conferences/${conferenceId.value}`);
+  console.log(response_conference.data);
+  closeDate.value = new Date(response_conference.data.submissions_to);
+}
 
 function handleFileChange(event) {
   const files = Array.from(event.target.files);
@@ -40,9 +51,17 @@ function handleFileChange(event) {
   errorMessage.value = "";
 }
 
+const isAfterCloseDate = computed(() => new Date() > closeDate.value);
+const isUploadAllowed = computed(() => !isAfterCloseDate.value);
+
 async function handleSubmit() {
   errorMessage.value = "";
   successMessage.value = "";
+
+  if (!isUploadAllowed.value) {
+    errorMessage.value = "Nahrávanie nie je povolené. Skontrolujte čas uzávierky.";
+    return;
+  }
 
   if (!formData.value.name || !formData.value.section_id) {
     errorMessage.value = "Prosím vyplňte všetky povinné polia.";
@@ -57,6 +76,7 @@ async function handleSubmit() {
   data.append("keywords_lang1", formData.value.keywords_lang1);
   data.append("keywords_lang2", formData.value.keywords_lang2);
   data.append("section_id", formData.value.section_id);
+  data.append("conference_id", conferenceId.value);
 
   const fileInput = document.querySelector("#file-upload");
   const files = fileInput?.files;
@@ -78,8 +98,15 @@ async function handleSubmit() {
 
   try {
     console.log("Sending request to server...");
-    const response = await axiosInstance.post("/upload-paper", data, {
-      headers: { "Content-Type": "multipart/form-data" },
+    const token = JSON.parse(localStorage.getItem('auth_token')); // Get the token from localStorage
+    const session = JSON.parse(localStorage.getItem('session'));
+    if(!token)
+      console.error("No token found.");
+
+    const response = await axiosInstance.post(`/upload-paper/${session?.user_id}`, data, {
+      headers: {
+      "Content-Type": "multipart/form-data",
+      },      
     });
 
     successMessage.value = response.data.message;
@@ -91,8 +118,38 @@ async function handleSubmit() {
 }
 
 import setMaterialInput from "@/assets/js/material-input";
+
+async function fetchSections() {
+  try {
+    console.log("ConfId: ", conferenceId.value);
+    const response = await axiosInstance.get(`/sections/${conferenceId.value}`);
+    sections.value = response.data;
+    console.log("Found sections: ", sections.value);    
+  } catch (error) {
+    console.error('Chyba pri načítaní sekcií:', error);
+  }
+}
+
+const formattedCloseDate = computed(() => {
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  };
+  return closeDate.value
+    ? closeDate.value.toLocaleString("sk-SK", options)
+    : new Date("2024-12-20T23:59:00").toLocaleString("sk-SK", options);
+});
+
 onMounted(() => {
   setMaterialInput();
+  conferenceId.value = route.params.id;
+  fetchConfData(conferenceId);
+  fetchSections();
 });
 </script>
 
@@ -175,16 +232,18 @@ onMounted(() => {
                     v-model="formData.section_id"
                   >
                     <option selected disabled>Vyberte sekciu</option>
-                    <option value="1">Kat1</option>
-                    <option value="2">Kat2</option>
-                    <option value="3">Kat3</option>
-                    <option value="4">Kat4</option>
+                    <option v-for="section in sections" :key="section.idsection" :value="section.idsection">
+                      {{ section.text }}
+                    </option>
                   </select>
                 </div>
               </div>
 
               <div class="file-upload-section mt-4 p-4 rounded shadow-sm bg-white text-center">
                 <label for="file-upload" class="form-label d-block mb-3">Nahrajte 2 súbory (PDF a DOCX)</label>
+                <p class="text-danger">
+                  Termín odovzdania: {{ formattedCloseDate }}
+                </p>
 
                 <input
                   type="file"

@@ -27,18 +27,20 @@ const labelsGradesItems = [
 
 const yesnoItems = ref([]);
 const labelsYesNoItems = [
-  "Práca zodpovedá šablóne",
-  "Chýba názov práce",
-  "Chýba meno autora",
-  "Chýba emailová adresa",
-  "Chýba abstrakt",
-  "Abstrakt nespĺňa rozsah",
-  "Chýbajú kľúčové slová",
-  "Chýba 'Úvod', 'Výsledky', 'Záver'",
-  "Chýbajú zdroje",
-  "Chýbajú referencie",
-  "Chýbajú referencie obrázkov",
-  "Obrázkom chýba popis",
+  "Zorientovanie sa študenta v danej problematike, predovšetkým analýzou domácej a zahraničnej literatúry",
+  "Práca zodpovedá šablóne určenej pre ŠVK",
+  "Chýba názov práce v slovenskom alebo anglickom jazyku",
+  "Chýba meno autora alebo školiteľa",
+  "Chýba pracovná emailová adresa autora alebo školiteľa",
+  "Chýba abstrakt v slovenskom alebo anglickom jazyku",
+  "Abstrakt nespĺňa rozsah 100 - 150 slov",
+  "Chýbajú kľúčové slová v slovenskom alebo v anglickom jazyku",
+  "Chýba 'Úvod', 'Výsledky a diskusia' alebo 'Záver'",
+  "Nie sú uvedené zdroje a použitá literatúra",
+  "V texte chýbajú referencie na zoznam bibliografie",
+  "V texte chýbajú referencie na použité obrázky alebo tabuľky",
+  "Obrázkom alebo tabuľkám chýba popis",
+  "Chýba meno autora alebo školiteľa",
 ];
 
 const descriptions = ref({
@@ -59,7 +61,6 @@ async function fetchEssayReview(essayID) {
   try {
     const response = await axiosInstance.get(`/papers/${essayID}/review`);
     reviewData.value = response.data.review;
-
     grades.value = labelsGradesItems.map((label, index) => ({
       label,
       value: reviewData.value[`grade${index + 1}`], // Z databázy získa hodnotu pre daný index

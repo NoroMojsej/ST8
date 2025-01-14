@@ -4,13 +4,70 @@ import { useRoute } from "vue-router";
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import MaterialInput from "@/components/MaterialInput.vue";
 import setMaterialInput from "@/assets/js/material-input";
+import axiosInstance from '@/axios';
 
 const universityId = ref(null);
 const route = useRoute();
+const selectedCountry = ref("");
+const universityName = ref("");
+const universityCode = ref("");
+const countries = ref([]);
+
+async function handleUpdate(id) {
+  if (!universityName.value || !universityCode.value || !selectedCountry) {
+    console.log("Error: Missing required fields");
+    return;
+  }
+
+  const data = new FormData();
+  data.append("code", universityCode.value);
+  data.append("name", universityName.value);
+  data.append("country_idcountry", selectedCountry.value);
+
+  console.log("ID: ", id);
+  try {
+    console.log("Sending request to server...");
+
+    const response = await axiosInstance.post(`/universities/update/${id}`, data, {
+      headers: {
+      "Content-Type": "multipart/form-data",
+      },      
+    });
+
+    console.log("Response:", response.data);
+  } catch (error) {
+    console.error("Error while submitting form:", error);
+  }
+}
+
+async function fetchEditInfo(id){
+  try {
+    const response = await axiosInstance.get(`/universities/university/${id.value}`);
+    console.log("Fetched EditInfo Data:", response.data);
+    universityName.value = response.data.name;
+    universityCode.value = response.data.code;
+    selectedCountry.value = response.data.country_idcountry;
+    //console.log("Fetched Name:", universityName.value);
+  } catch (error) {
+    console.error("Error fetching EditInfo:", error);
+  }
+}
+
+const fetchCountries = async () => {
+  try {
+    const response = await axiosInstance.get("/countries");
+    countries.value = response.data;
+    console.log("Fetched countries Data:", countries.value);
+  } catch (error) {
+    console.error("Error fetching universities:", error);
+  }
+};
 
 onMounted(() => {
   setMaterialInput();
   universityId.value = route.params.id;
+  fetchCountries();
+  fetchEditInfo(universityId);
 });
 </script>
 
@@ -34,8 +91,9 @@ onMounted(() => {
                     id="uni-title"
                     class="input-group-static mt-2"
                     label="NÁZOV UNIVERZITY"
-                    type="name"
+                    type="text"
                     placeholder="Názov Univerzity"
+                    v-model="universityName"
                   />
                 </div>
 
@@ -44,8 +102,9 @@ onMounted(() => {
                     id="uni-code"
                     class="input-group-static mt-2"
                     label="SKRÁTENÝ NÁZOV UNIVERZITY"
-                    type="name"
+                    type="text"
                     placeholder="Skratka Univerzity"
+                    v-model="universityCode"
                   />
                 </div>
 
@@ -55,18 +114,17 @@ onMounted(() => {
                     id="country"
                     class="form-select"
                     style="box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);"
+                    v-model="selectedCountry"
                   >
                     <option value="" disabled selected>Vyberte krajinu</option>
-                    <option value="university1">Krajina 1</option>
-                    <option value="university2">Krajina 2</option>
-                    <option value="university3">Krajina 3</option>
-                    <option value="university4">Krajina 4</option>
+                    <option v-for="country in countries" :key="country.idcountry" :value="country.idcountry">
+                      {{ country.name }}
+                    </option>
                   </select>
                 </div>
 
-
                 <div class="d-flex justify-content-center mt-3">
-                  <button class="btn btn-success">
+                  <button class="btn btn-success" @click="handleUpdate(universityId)">
                     Upraviť Univerzitu
                   </button>
                 </div>
