@@ -44,9 +44,9 @@ const session = JSON.parse(localStorage.getItem('session'));
 console.log("Session data:", session);
 
 const getLink = computed(() => {
-  if (session.user_role == 2) {
+  if (session.user_role === "ADMIN") {
     return { name: 'adminhome' };
-  } else if (session.user_role == 3) {
+  } else if (session.user_role === "REVIW") {
     return { name: 'reviewer_home' };
   } else {
     return { name: 'student_home' };
