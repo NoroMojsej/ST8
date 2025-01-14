@@ -24,9 +24,27 @@ class PaperController extends Controller
         return response()->json($papers, 200);
     }
 
+    public function getAllPapersAndTheirReviewByAssignedUserIdToReview($reviewerId)
+    {
+        $papers = Paper::whereHas('review', function ($query) use ($reviewerId) {
+                $query->where('user_iduser', $reviewerId);
+            })
+            ->whereHas('conference', function ($query) {
+                $query->where('take_place_from', '>', now()); 
+            })
+            ->join('paper_status', 'paper.paper_status_idpaper_status', '=', 'paper_status.idpaper_status')
+            ->with('review', 'conference')
+            ->get();
+
+        return response()->json($papers, 200);
+    }
+
+
+
+
     public function getPapersByConference($conferenceId)
     {
-        $papers = Paper::where('conference_idconference', $conferenceId)->get();
+        $papers = Paper::where('conference_idconference',    $conferenceId)->get();
         return response()->json($papers);
     }
 
@@ -193,7 +211,7 @@ class PaperController extends Controller
         }
     }
 
-    public function deletePaper($id, $userId) // Mazanie "Papers" (usermode, nie pre adminov)
+    public function deletePaper($id) // Mazanie "Papers" (usermode, nie pre adminov)
     {
         $paper = Paper::find($id);
 
@@ -320,7 +338,7 @@ public function getPapersAvailable($conferenceID, $sectionID)
 }
 
 
-public function download($id)
+public function downloadPaper($id)
 {
     $paper = Paper::find($id);
 

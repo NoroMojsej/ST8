@@ -47,6 +47,7 @@ Route::get('/universities/{countryId}', [UniversityController::class, 'getUniver
 //Route::get('/departments/{facultyId}', [DepartmentController::class, 'getDepartments']);
 Route::get('/reviews/get-all-reviews', [ReviewController::class, 'getAllReviews']);
 Route::get('/reviews/get-review/{id}', [ReviewController::class, 'getReviewById']);
+Route::post('/reviews/create-review', [ReviewController::class, 'createReview']);
 Route::post('/reviews/save-review', [ReviewController::class, 'saveReview']);
 Route::post('/reviews/delete-review', [ReviewController::class, 'deleteReview']);
 Route::get('/conferences', [ConferenceController::class, 'index']);
@@ -61,6 +62,7 @@ Route::get('/conferences/{conferenceId}/papers/{paperId}/download', [ConferenceC
 Route::put('/conference/{conferenceId}', [ConferenceController::class, 'update']);
 Route::get('/papers/get-all-papers', [PaperController::class, 'getAllPapers']);
 Route::get('/papers/get-all-papers-and-their-review', [PaperController::class, 'getAllPapersAndTheirReview']);
+Route::get('/papers/get-all-papers-and-their-review-by-assigned-userid-to-review/{assignedUserIdToReview}', [PaperController::class, 'getAllPapersAndTheirReviewByAssignedUserIdToReview']);
 Route::get('/papers/available/{idConference}/{idSection}', [PaperController::class, 'getPapersAvailable']);
 Route::post('/papers/assign/{userId}', [ReviewController::class, 'createReviewAndUpdatePaper']);  
 Route::get('/papers/{idEssay}', [PaperController::class, 'getPaperById']);
@@ -69,6 +71,7 @@ Route::get('/papers/student/{studentId}', [PaperController::class, 'getUserPaper
 Route::get('/papers/student/{studentId}/conference/{conferenceId}', [PaperController::class, 'getEssaysByStudentAndConference']);
 Route::put('/papers/update/{essayId}', [PaperController::class, 'updateEssayByID']);
 Route::post('/papers/update/{essayId}/upload-files', [PaperController::class, 'uploadFiles']);
+Route::get('/papers/download-paper/{paperId}', [PaperController::class, 'downloadPaper']);
 Route::get('/sections/get-all-sections', [SectionController::class, 'getAllSections']);
 Route::post('/sections/save-section', [SectionController::class, 'saveSection']);
 Route::post('/sections/delete-section', [SectionController::class, 'deleteSection']);
