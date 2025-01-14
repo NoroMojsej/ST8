@@ -39,8 +39,9 @@ async function handleDownload(id) {
     }
 
     files.forEach((filePath) => {
+      const baseUrl = window.location.origin;
       const link = document.createElement("a");
-      link.href = `http://127.0.0.1:8000/storage/${filePath}`;
+      link.href = `${baseUrl}/storage/${filePath}`;
       link.download = filePath.split("/").pop();
       link.target = "_blank";
       document.body.appendChild(link);
