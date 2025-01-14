@@ -8,7 +8,7 @@ const sections = ref([]);
 
 const getAllSections = async () => {
   try {
-    const response = await axiosInstance.post('/sections/get-all-sections', {
+    const response = await axiosInstance.get('/sections/get-all-sections', {
       headers: {
         'Content-Type': 'application/json',
       },
