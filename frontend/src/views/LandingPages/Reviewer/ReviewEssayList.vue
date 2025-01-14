@@ -74,7 +74,7 @@ function handleGrade(id) {
 
 async function handleDownload(confid, id) {
   try {
-    const response = await axiosInstance.get(`/papers/download-paper/${id}`, {
+    const response = await axiosInstance.get(`/conferences/${confid}/papers/${id}/download`, {
       responseType: 'blob',
     });
     const blob = response.data;

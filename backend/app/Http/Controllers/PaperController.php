@@ -337,22 +337,4 @@ public function getPapersAvailable($conferenceID, $sectionID)
     return response()->json($papers);
 }
 
-
-public function downloadPaper($id)
-{
-    $paper = Paper::find($id);
-
-    if (!$paper) {
-        return response()->json(['message' => 'Paper not found'], 404);
-    }
-
-    $filePaths = json_decode($paper->path_filesystem, true);
-
-    if (!$filePaths || !is_array($filePaths)) {
-        return response()->json(['message' => 'No files available for download'], 404);
-    }
-
-    return response()->json(['files' => $filePaths], 200);
-}
-
 }
