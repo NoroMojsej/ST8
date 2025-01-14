@@ -3,42 +3,17 @@ import { ref, computed } from "vue";
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
 import ListCard from "../Admin/components/ListCard.vue";
 import { useRouter } from "vue-router";
-import { useRoute } from "vue-router";
 import axiosInstance from '@/axios';
 
 const papers = ref([]);
-const route = useRoute();
-
-
 
 const getAllPapersAndTheirReview = async () => {
   try {
-    const session = JSON.parse(localStorage.getItem('session'));
-    console.log("Logged in user:", session.user_id);
-
-    let apiRouteBasedOnLoggedUserRole = null;
-    if(session.user_role == 'REVIW'){
-      //reviewer logged in
-      console.log('Getting papers for reviewer with user id: '+ session.user_id);
-      apiRouteBasedOnLoggedUserRole = '/papers/get-all-papers-and-their-review-by-assigned-userid-to-review/' + session.user_id;
-    }else {
-      //default: do nothing
-      console.log('Doing Nothing');
-      return null;
-    }
-    
-    
-    
-    
-
-    
-    const response = await axiosInstance.get(apiRouteBasedOnLoggedUserRole, {
+    const response = await axiosInstance.get('/papers/get-all-papers-and-their-review', {
       headers: {
         'Content-Type': 'application/json',
       },
     });
-
-    
 
     console.log('Papers retrieved successfully:', response.data);
 
@@ -46,9 +21,8 @@ const getAllPapersAndTheirReview = async () => {
     papers.value = response.data.map(paper => ({
       id: paper.idpaper,
       paper: paper.name,
-      conference_id: paper.conference_idconference,
-      review_id: paper.review.idreview,
-      info: paper.status_desc ? paper.status_desc : 'No status available',
+      review_id: paper.review ? paper.review.idreview : 'new',
+      info: paper.keywords_lang1,
       isEditing: false,
     }));
     // console.log(response.data[index].review.idreview);
@@ -61,6 +35,12 @@ getAllPapersAndTheirReview();
 
 const router = useRouter();
 const input = ref("");
+// const papers = [
+//   { id: 1, paper: "Práca 1", info: "desc" },
+//   { id: 2, paper: "Práca 2", info: "desc" },
+//   { id: 3, paper: "Práca 3", info: "desc" },
+//   { id: 4, paper: "Práca 4", info: "desc" },
+// ];
 
 const filteredPapers = computed(() => {
   return papers.value.filter(paper =>
@@ -71,25 +51,9 @@ const filteredPapers = computed(() => {
 function handleGrade(id) {
     router.push({ name: "evaluation", params: { id } });
 }
-
-async function handleDownload(confid, id) {
-  try {
-    const response = await axiosInstance.get(`/papers/download-paper/${id}`, {
-      responseType: 'blob',
-    });
-    const blob = response.data;
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `conference_${confid}_paper_${id}_files.zip`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);    
-  } catch (error) {
-    console.error("Error downloading files:", error);
-  }
+function handleDownload(id) {
+ //logika pre stiahnutie práce
 }
-
 </script>
 
 <template>
@@ -138,7 +102,7 @@ async function handleDownload(confid, id) {
                 :buttonText="'Hodnotiť'"
                 :optionalButton="{
                   text: 'Stiahnuť',
-                  onClick: () => handleDownload(paper.conference_id, paper.id),
+                  onClick: () => handleDownload(paper.id),
                   color: 'info'
                 }"
               />
