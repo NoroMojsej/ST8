@@ -37,7 +37,7 @@ const getAllPapersAndTheirReview = async () => {
     console.log("Logged in user:", session.user_id);
 
     let apiRouteBasedOnLoggedUserRole = null;
-    if(session.user_role == 3){
+    if(session.user_role == 'REVIW'){
       //reviewer logged in
       console.log('Getting papers for reviewer with user id: '+ session.user_id);
       apiRouteBasedOnLoggedUserRole = '/papers/get-all-papers-and-their-review-by-assigned-userid-to-review/' + session.user_id;
