@@ -148,14 +148,11 @@ th.question-table {
 }
 
 .form-check {
-  display: flex !important;
-  justify-content: center !important;
+  padding: 0px !important;
+  text-align: center !important; 
 }
 
 .question {
-  align-items: center !important;
-  align-content: center !important;
-  display: flex !important;
-  justify-content: center !important;
+  text-align: center !important;
 }
 </style>
