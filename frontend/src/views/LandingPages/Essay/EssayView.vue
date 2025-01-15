@@ -98,10 +98,7 @@ async function handleSubmit() {
 
   try {
     console.log("Sending request to server...");
-    const token = JSON.parse(localStorage.getItem('auth_token')); // Get the token from localStorage
     const session = JSON.parse(localStorage.getItem('session'));
-    if(!token)
-      console.error("No token found.");
 
     const response = await axiosInstance.post(`/upload-paper/${session?.user_id}`, data, {
       headers: {

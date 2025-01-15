@@ -3,30 +3,6 @@ import InfoCardCustom from "../../examples/cards/infoCards/InfoCardCustom.vue";
 
 // sections
 import BaseLayout from "@/layouts/sections/components/BaseLayout.vue";
-import { useRouter } from 'vue-router';
-import { onMounted } from "vue";
-
-onMounted(() => {
-  const router = useRouter(); 
-  const authorizedToken = localStorage.getItem('auth_token');
-
-  console.log("Checking session...");
-
-  if (!authorizedToken) {
-    console.log("No session found. Redirecting to homepage.");
-    router.push('/');
-  } else {
-    try {
-      const session = JSON.parse(authorizedToken);
-      console.log("Session found:", session); 
-
-      console.log("StudentHomeView", session);
-    } catch (error) {
-      console.error("Error parsing session data:", error);
-      router.push('/');
-    }
-  }
-});
 
 </script>
 

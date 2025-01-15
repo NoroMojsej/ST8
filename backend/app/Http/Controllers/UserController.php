@@ -34,7 +34,7 @@ class UserController extends Controller
         }
     }
 
-    public function update(Request $request, int $iduser)
+    public function updateUser(Request $request, int $iduser)
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',

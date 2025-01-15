@@ -1,8 +1,9 @@
  <script setup>
 
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 import { ref, watch, computed } from "vue";
 import { useWindowsWidth } from "../../assets/js/useWindowsWidth";
+import axiosInstance from '@/axios';
 
 const props = defineProps({
   action: {
@@ -40,6 +41,7 @@ const props = defineProps({
   }
 });
 
+const router = useRouter();
 const session = JSON.parse(localStorage.getItem('session'));
 console.log("Session data:", session);
 
@@ -53,15 +55,18 @@ const getLink = computed(() => {
   }
 });
 
-function logout() {
-  localStorage.removeItem('session');
-  if (location.pathname === '/') {
-    console.log('You are at the root path');
-    location.reload();
-  } else {
-    console.log('You are not at the root path');
-  }
-  console.log("User logged out");
+async function logout() {
+
+  const response = await axiosInstance.post('/logout');
+
+    localStorage.removeItem('session');
+    localStorage.removeItem('auth_token');
+    
+    if (location.pathname === '/') {
+      location.reload();
+    } else {
+      router.push({ name: 'home' });
+    }
 }
 
 let textDark = ref(props.darkText);
@@ -131,9 +136,9 @@ watch(
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">
-            <RouterLink :to="{ name: 'home' }" class="dropdown-item border-radius-md" @click="logout">
+            <div class="dropdown-item border-radius-md" @click="logout">
               <span> <i class="bi bi-arrow-bar-right"></i> Odhlásiť sa </span>
-            </RouterLink>
+            </div>
           </a>
         </li>
       </ul>
@@ -163,9 +168,9 @@ watch(
               </RouterLink>
             </a>
             <a class="dropdown-item" href="#">
-              <RouterLink :to="{ name: 'home' }" class="dropdown-item border-radius-md" @click="logout">
+              <div class="dropdown-item border-radius-md" @click="logout">
                 <span> <i class="bi bi-arrow-bar-right"></i> Odhlásiť sa</span>
-              </RouterLink>
+              </div>
             </a>
           </div>
         </li>

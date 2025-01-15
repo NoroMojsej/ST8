@@ -146,7 +146,7 @@ const onFacultyChange = () => {
 
 // Načítanie univerzít podľa vybranej krajiny
 const loadDepartments = async () => {
-  if (!selectedFaculty.value) return; // Ak nie je krajina vybraná, nič neponúkame
+  if (!selectedFaculty.value) return;
   isLoadingDepartments.value = true;
   try {
     const response = await axiosInstance.get(`/departments/${selectedFaculty.value}`);
@@ -161,12 +161,8 @@ const loadDepartments = async () => {
   }
 };
 
-// Handle login request
 const register = async () => {
   errorMessage.value = '';
-  console.log("Country ID " + selectedCountry.value);
-  console.log("pswd - " + password.value);
-  console.log("DEGREES " + selectedDegrees.value)
   try {
     const response = await axiosInstance.post('/register', {
       degrees: selectedDegrees.value,
@@ -182,13 +178,9 @@ const register = async () => {
 
     const session = response.data.session;
     const token = response.data.access_token;
-    console.log('Session data:', session);
-    console.log('Token data:', token);
 
-    //uloženie session ako JSON String
     localStorage.setItem('session', JSON.stringify(session));
-    localStorage.setItem('auth_token', JSON.stringify(token));
-
+    localStorage.setItem('auth_token', token);
 
     router.push({ name: 'student_home' });
 

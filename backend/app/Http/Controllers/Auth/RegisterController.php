@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -34,7 +35,7 @@ class RegisterController extends Controller
             'department_iddepartment' => $request->department,
             'created_on' => now(),
             'updated_on' => now(),
-            'role_idrole' => $request->role_idrole ?? 1,
+            'role_idrole' => $request->role_idrole ?? Role::where('code', 'STDNT')->value('idrole'),
         ]);
 
         $user->degrees()->attach($request->degrees);

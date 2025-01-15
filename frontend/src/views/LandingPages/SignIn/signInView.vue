@@ -33,17 +33,18 @@ const login = async () => {
       email: email.value,
       password: password.value,
     });
-
-    const token = response.data.access_token;
+    const token = response.data.access_token; // Získa priamo access_token
     const session = response.data.session;
-    localStorage.setItem('auth_token', JSON.stringify(token));
+    localStorage.setItem('auth_token', token);
     localStorage.setItem('session', JSON.stringify(session));
-    console.log("ROLA " + JSON.stringify(session));
     if (session.user_role === "ADMIN") {
+      console.log("SOM ADMIN");
       router.push({ name: 'adminhome' });
     } else if (session.user_role === "REVIW") {
+      console.log("SOM REVIW");
       router.push({ name: 'reviewer_home' });
     } else {
+      console.log("SOM STUDENT");
       router.push({ name: 'student_home' });
     }
   } catch (error) {
