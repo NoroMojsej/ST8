@@ -1,0 +1,1 @@
+INSERT INTO `paper_status` (`idpaper_status`, `status`, `status_desc`, `valid_from`, `valid_to`, `created_on`, `updated_on`) VALUES ('1', 'UP', 'Práca je odovzdaná', NULL, NULL, NULL, NULL), ('2', 'YY', 'Práca je upravená', NULL, NULL, NULL, NULL)
